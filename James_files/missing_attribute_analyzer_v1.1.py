@@ -9,11 +9,10 @@ import queue
 import time
 
 num_worker_threads = 2  # Adjust to desired number of threads
-out_path = 'C:/Users/Owner/Documents/VERUM/Network stuff/testresults.csv'  # designate your own output path
-# network_path = "/export/home/cmorris5/Downloads" #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
+out_path = 'C:/Users/Owner/Documents/VERUM/Network stuff/testresults2.csv'  # designate your own output path
+network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 
-infile = open('C:/Users/Owner/Documents/VERUM/Network stuff/data_without_dimacs_or_bhoslib.csv',
-              mode='rb')  # designate the location of the CSV file to read
+infile = open('C:/Users/Owner/Documents/VERUM/Network stuff/data_without_dimacs_bhoslib_or_temp.csv')  # designate the location of the CSV file to read
 reader = csv.reader(infile)
 mydict = dict((rows[0], rows[1:]) for rows in reader)
 infile.close()
@@ -22,7 +21,7 @@ queueAtt = []  # A list that contains a list of graphs and number corresponding 
 incompleteGraphs = []  # used to store incomplete graph names and attribute numbers
 completeGraphs = []  # used to store complete graphs
 
-outfile = open(out_path, 'wb')
+outfile = open(out_path, 'w')
 writer = csv.writer(outfile)
 header = mydict['Graph']
 completeRow = True
@@ -47,6 +46,7 @@ for keys in mydict:
 
 outfile.close()
 
+print('incomplete graphs: ', incompleteGraphs)
 
 # searches a list (incompleteGraphs) for a string(graph name) and the numbers that follow(attributes to calculate)
 def queueCal(g):
