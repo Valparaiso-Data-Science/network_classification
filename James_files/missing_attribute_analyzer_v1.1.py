@@ -46,7 +46,7 @@ for keys in mydict:
 
 outfile.close()
 
-print('incomplete graphs: ', incompleteGraphs)
+#print('incomplete graphs: ', incompleteGraphs)
 
 # searches a list (incompleteGraphs) for a string(graph name) and the numbers that follow(attributes to calculate)
 def queueCal(g):
@@ -113,8 +113,12 @@ def doCalculation(g):
                     mydict[g[0]][g[1]] = nx.average_clustering(graph)
                 elif g[1] is 12:  # Frac Closed Triangles (dont know formula)
                     mydict[g[0]][g[1]] = 'na'
-                elif g[1] is 13:
-                    mydict[g[0]][g[1]] = 'na'  # nx.k_core(graph)
+                elif g[1] is 13:  #creates a new graph that is the max k-core, and then takes the min degree of that core, aka k
+                    new_graph = graph.copy()
+                    new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops
+                    k_core = nx.k_core(new_graph)
+                    newDict = dict(nx.degree(k_core))
+                    mydict[g[0]][g[1]] = dictMin(newDict)
                 elif g[
                     1] is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
                     mydict[g[0]][g[1]] = 'na'
