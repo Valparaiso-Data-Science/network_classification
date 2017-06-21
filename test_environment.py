@@ -1,5 +1,5 @@
 import sys
-import os
+import os_kdesk
 
 REQUIRED_PYTHON = "python3"
 
