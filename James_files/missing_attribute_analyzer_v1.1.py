@@ -10,7 +10,8 @@ import time
 
 num_worker_threads = 2  # Adjust to desired number of threads
 out_path = 'C:/Users/Owner/Documents/VERUM/Network stuff/testresults2.csv'  # designate your own output path
-network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
+#network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
+network_path = 'F:/VERUM/Network_Repository_files' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 
 infile = open('C:/Users/Owner/Documents/VERUM/Network stuff/data_without_dimacs_bhoslib_or_temp.csv')  # designate the location of the CSV file to read
 reader = csv.reader(infile)
@@ -115,7 +116,7 @@ def doCalculation(g):
                     mydict[g[0]][g[1]] = 'na'
                 elif g[1] is 13:  #creates a new graph that is the max k-core, and then takes the min degree of that core, aka k
                     new_graph = graph.copy()
-                    new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops
+                    new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops - this might alter the max k-core
                     k_core = nx.k_core(new_graph)
                     newDict = dict(nx.degree(k_core))
                     mydict[g[0]][g[1]] = dictMin(newDict)
