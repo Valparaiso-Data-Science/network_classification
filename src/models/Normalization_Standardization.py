@@ -20,8 +20,7 @@ from sklearn.pipeline import make_pipeline
 import matplotlib.pyplot as plt
 
 def main(args):
-    net = pd.read_csv('~/PycharmProjects/network_classification/data/interim/data_without_dimacs_or_bhoslib.csv')
-
+    net = pd.read_csv('~/PycharmProjects/network_classification/data/interim/data_without_dimacs_or_bhoslib.csv', index_col = 0)
     # getting rid of cheminformatics for fun?
     if args.minus_chem:
         net = net[net['Collection'] != 'Cheminformatics']
