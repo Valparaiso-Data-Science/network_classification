@@ -1,22 +1,22 @@
-'''
-notes about this process:
-    -I used the imputer to hastily fix the NaNs (right now it is using most frequent strategy)- this will be changed once we find
-    a way to calculate all the missing values.
-    -Eventually I plan to use the argument parser to select which columns (statistics) to look at. Right now it drops Graph,
-    Collection, and Chromatic Number.
-    -I also want to use arguments to specify whether you want a cross tabulation of kmeans alg or tsne plot or both. right now it
-    just does a tsne plot
-    -Obviously the paths will have to be changed to run on other machines.
-    --Emma
-'''
+#notes:
+    #-this program was created as a way to test how normalize vs standard scaler affected clustering (kmeans)
+    #-I used the imputer to hastily fix the NaNs (right now it is using most frequent strategy)- this will be changed once we find
+    #a way to calculate all the missing values.
+    #-Eventually I plan to use the argument parser to select which columns (statistics) to look at. Right now it drops Graph,
+    #Collection, and Chromatic Number. You can specify whether or not you want to keep cheminformatics.
+    #---cheminformatics will be rescaled shortly
+    #-Obviously the paths will have to be changed to run on other machines.
+    #
+    #--Emma
+
 
 import argparse
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import Normalizer, Imputer, StandardScaler, RobustScaler
+from sklearn.preprocessing import Normalizer, Imputer, StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.pipeline import make_pipeline
-from sklearn.manifold import TSNE
+
 import matplotlib.pyplot as plt
 
 def main(args):
@@ -27,17 +27,6 @@ def main(args):
         net = net[net['Collection'] != 'Cheminformatics']
     if args.chem:
         net = net[net['Collection'] == 'Cheminformatics']
-
-    #i need a list of the collections as numbers-useful in coloring tsne
-    graph_categories = []
-    all_categories = net['Collection'].values
-    #creates a list of the existing categories, no repeats
-    for category in all_categories:
-        if not category in graph_categories:
-            graph_categories.append( category )
-    #re-assigns each collection name in all_categories to an integer, corresponding with its position in graph_categories
-    for i in range(len( all_categories )):
-        all_categories[i] = graph_categories.index( all_categories[i] )
 
 
     net_copy = pd.DataFrame.copy(net) #copy used for categories in the crosstab section
@@ -57,33 +46,23 @@ def main(args):
     elif args.do_ss:
         print('Standardizing')
         standard_scale = StandardScaler()
-    #robust = RobustScaler()
 
-    tsne = TSNE()
+    kmeans = KMeans(n_clusters=10)
 
     if args.do_norm:
-            pipeline = make_pipeline(imp, normalize, tsne)
+            pipeline = make_pipeline(imp, normalize, kmeans)
 
     elif args.do_ss:
-            pipeline = make_pipeline(imp, standard_scale, tsne)
+            pipeline = make_pipeline(imp, standard_scale, kmeans)
 
 
-    if args.do_tsne:
-        tsne_features = pipeline.fit_transform(net_array)
-        xs = tsne_features[:,0]
-        ys = tsne_features[:,1]
-        plt.scatter(xs, ys, c=all_categories)
-        plt.show()
-
-
-
-    #labels = pipeline.predict(net_array)
+    labels = pipeline.predict(net_array)
 
     #cross tabulation:
-    #net_ct = pd.DataFrame({'Labels':labels, 'Collection':net_copy['Collection']})
-    #ct = pd.crosstab(net_ct['Labels'], net_ct['Collection'])
+    net_ct = pd.DataFrame({'Labels':labels, 'Collection':net_copy['Collection']})
+    ct = pd.crosstab(net_ct['Labels'], net_ct['Collection'])
 
-    #print(ct)
+    print(ct)
 
         #ct.to_csv('~/PycharmProjects/network_classification/models/normalize_crosstab_all_data.csv')
 
@@ -97,7 +76,6 @@ if __name__=="__main__":
     parser.add_argument('-s', action="store_true", dest="do_ss", default=False, help='Use standard scaler on data')
     parser.add_argument('-ch', action='store_true', dest='minus_chem', default=False, help='Removes cheminformatics')
     parser.add_argument('-k', action='store_true', dest='do_kmeans', default=False, help='Do kmeans clustering')
-    parser.add_argument('-t', action='store_true', dest='do_tsne', default=False, help='Do TSNE visualization')
     parser.add_argument('-c', action='store_true', dest='chem', default=False, help='Only cheminformatics')
 
     args=parser.parse_args()
