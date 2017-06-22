@@ -1,6 +1,6 @@
 #this program makes a tSNE visualization of data
 #now it imputes, but it will soon not have to do so because james will finish cleaning data up
-#currently using normalization
+#currently using MinMaxScaler and learning rate of 1000.
 
 import pandas as pd
 from sklearn.manifold import TSNE
