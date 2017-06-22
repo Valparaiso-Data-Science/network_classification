@@ -55,7 +55,7 @@ def main(args):
     elif args.do_ss:
             pipeline = make_pipeline(imp, standard_scale, kmeans)
 
-
+    pipeline.fit(net_array)
     labels = pipeline.predict(net_array)
 
     #cross tabulation:
