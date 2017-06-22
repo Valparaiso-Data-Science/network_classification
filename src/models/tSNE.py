@@ -5,7 +5,7 @@
 import pandas as pd
 from sklearn.manifold import TSNE
 import numpy as np
-from sklearn.preprocessing import Normalizer, Imputer
+from sklearn.preprocessing import MinMaxScaler, Imputer
 from sklearn.pipeline import make_pipeline
 import matplotlib.pyplot as plt
 
@@ -33,11 +33,11 @@ del net['Chromatic Number']
 
 net_array = net.values
 
-norm = Normalizer()
+min_max_scale = MinMaxScaler()
 imp = Imputer(missing_values='NaN', strategy='most_frequent', axis=0)
 tsne = TSNE()
 
-pipeline = make_pipeline(imp, norm, tsne)
+pipeline = make_pipeline(imp, min_max_scale, tsne)
 
 
 tsne_features = pipeline.fit_transform(net_array)
@@ -47,5 +47,5 @@ ys = tsne_features[:,1]
 plt.scatter(xs, ys, c=all_categories)
 plt.show()
 
-#df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : all_categories, "Category Name":all_cat_names})
-#df.to_csv('~/PycharmProjects/network_classification/src/models/tsne_data_for_plot_new.csv')
+df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : all_categories, "Category Name":all_cat_names})
+df.to_csv('~/PycharmProjects/network_classification/src/models/tsne_plot_data_minmaxscale.csv')

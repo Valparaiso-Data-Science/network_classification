@@ -13,7 +13,7 @@
 import argparse
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import Normalizer, Imputer, StandardScaler
+from sklearn.preprocessing import Normalizer, Imputer, StandardScaler, MinMaxScaler
 from sklearn.cluster import KMeans
 from sklearn.pipeline import make_pipeline
 
@@ -39,17 +39,16 @@ def main(args):
 
     imp = Imputer(missing_values='NaN', strategy='most_frequent', axis=0)
 
-    if args.do_norm:
-        print('Normalizing')
-        normalize = Normalizer()
-    elif args.do_ss:
-        print('Standardizing')
+
+    if args.do_ss:
         standard_scale = StandardScaler()
+    elif args.do_mms:
+        min_max_scale = MinMaxScaler()
 
     kmeans = KMeans(n_clusters=10)
 
-    if args.do_norm:
-            pipeline = make_pipeline(imp, normalize, kmeans)
+    if args.do_mms:
+            pipeline = make_pipeline(imp, min_max_scale, kmeans)
 
     elif args.do_ss:
             pipeline = make_pipeline(imp, standard_scale, kmeans)
@@ -59,7 +58,7 @@ def main(args):
 
     #cross tabulation:
     net_ct = pd.DataFrame({'Labels':labels, 'Collection':net_copy['Collection']})
-    ct = pd.crosstab(net_ct['Labels'], net_ct['Collection'])
+    ct = pd.crosstab( net_ct['Collection'], net_ct['Labels'])
 
     print(ct)
 
@@ -71,7 +70,7 @@ if __name__=="__main__":
     parser=argparse.ArgumentParser(description='Command line graph inference', add_help=True)
 
 
-    parser.add_argument('-n', action="store_true", dest="do_norm", default=False, help='Use normalization on data')
+    parser.add_argument('-m', action="store_true", dest="do_mms", default=False, help='Use minmax scaler on data')
     parser.add_argument('-s', action="store_true", dest="do_ss", default=False, help='Use standard scaler on data')
     parser.add_argument('-ch', action='store_true', dest='minus_chem', default=False, help='Removes cheminformatics')
     parser.add_argument('-k', action='store_true', dest='do_kmeans', default=False, help='Do kmeans clustering')
