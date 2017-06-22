@@ -47,5 +47,5 @@ ys = tsne_features[:,1]
 plt.scatter(xs, ys, c=all_categories)
 plt.show()
 
-df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : all_categories, "Category Name":all_cat_names})
-df.to_csv('~/PycharmProjects/network_classification/src/models/tsne_plot_data_minmaxscale.csv')
+#df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : all_categories, "Category Name":all_cat_names})
+#df.to_csv('~/PycharmProjects/network_classification/src/models/tsne_plot_data_minmaxscale.csv')
