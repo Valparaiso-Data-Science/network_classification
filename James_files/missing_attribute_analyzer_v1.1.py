@@ -8,10 +8,11 @@ import threading
 import queue
 import time
 
-num_worker_threads = 2  # Adjust to desired number of threads
+num_worker_threads = 3  # Adjust to desired number of threads  (number of cores minus 1)
 out_path = 'C:/Users/Owner/Documents/VERUM/Network stuff/testresults2.csv'  # designate your own output path
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
-network_path = 'F:/VERUM/Network_Repository_files' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
+#the path above is from James' laptop
+network_path = 'F:/VERUM/Network_Repository_files' #This is James' external hard drive
 
 infile = open('C:/Users/Owner/Documents/VERUM/Network stuff/data_without_dimacs_bhoslib_or_temp.csv')  # designate the location of the CSV file to read
 reader = csv.reader(infile)
@@ -22,7 +23,7 @@ queueAtt = []  # A list that contains a list of graphs and number corresponding 
 incompleteGraphs = []  # used to store incomplete graph names and attribute numbers
 completeGraphs = []  # used to store complete graphs
 
-outfile = open(out_path, 'w')
+outfile = open(out_path, 'w', newline= '')
 writer = csv.writer(outfile)
 header = mydict['Graph']
 completeRow = True
@@ -98,7 +99,7 @@ def doCalculation(g):
                     mydict[g[0]][g[1]] = dictMin(newDict)
                 elif g[1] is 6:
                     newDict = dict(nx.degree(graph))
-                    mydict[g[0]][g[1]] = dictAverage(newDict)
+                    mydict[g[0]][g[1]] = dictAverage(newDict) #this returns a decimal, while the network repository calculation rounds down
                 elif g[1] is 7:
                     mydict[g[0]][g[1]] = nx.degree_assortativity_coefficient(graph)
                 elif g[1] is 8:
@@ -106,7 +107,7 @@ def doCalculation(g):
                     mydict[g[0]][g[1]] = dictTotal(newDict)
                 elif g[1] is 9:
                     newDict = dict(nx.triangles(graph))
-                    mydict[g[0]][g[1]] = dictAverage(newDict)
+                    mydict[g[0]][g[1]] = dictAverage(newDict) #this returns a decimal, while the network repository calculation rounds down
                 elif g[1] is 10:
                     newDict = dict(nx.triangles(graph))
                     mydict[g[0]][g[1]] = dictMax(newDict)
@@ -119,7 +120,7 @@ def doCalculation(g):
                     new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops - this might alter the max k-core
                     k_core = nx.k_core(new_graph)
                     newDict = dict(nx.degree(k_core))
-                    mydict[g[0]][g[1]] = dictMin(newDict)
+                    mydict[g[0]][g[1]] = dictMin(newDict) + 1 # there are different ways of representing k-core number, NetRep. adds 1
                 elif g[
                     1] is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
                     mydict[g[0]][g[1]] = 'na'
