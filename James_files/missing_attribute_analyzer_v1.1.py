@@ -23,7 +23,7 @@ queueAtt = []  # A list that contains a list of graphs and number corresponding 
 incompleteGraphs = []  # used to store incomplete graph names and attribute numbers
 completeGraphs = []  # used to store complete graphs
 
-outfile = open(out_path, 'w')
+outfile = open(out_path, 'w', newline= '')
 writer = csv.writer(outfile)
 header = mydict['Graph']
 completeRow = True
