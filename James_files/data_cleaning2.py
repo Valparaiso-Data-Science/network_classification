@@ -16,7 +16,7 @@ for graph in nan_graphs:
     df = df[df['Graph'] != graph]
 
 #removes the categories that are not as helpful in clustering
-categories_to_exclude = [ 'DIMACS', 'DIMACS10', 'BHOSLIB', 'Temporal Reachability Networks', 'Dynamic Networks']
+categories_to_exclude = [ 'DIMACS', 'DIMACS10', 'BHOSLIB', 'Temporal Reachability', 'Dynamic Networks']
 for name in categories_to_exclude:
     df = df[df['Collection'] != name]
 
