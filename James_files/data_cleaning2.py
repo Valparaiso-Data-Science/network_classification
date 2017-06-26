@@ -26,4 +26,4 @@ for i in df.index:
 
 print(df.info())
 
-df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/data/interim/clean_data.csv' )
+#df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/data/interim/clean_data.csv' )
