@@ -25,3 +25,5 @@ for i in df.index:
    df.loc[i, 'Average triangles'] = df.loc[i, 'Total triangles'] / df.loc[i, 'Nodes']
 
 print(df.info())
+
+df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/data/interim/clean_data.csv' )
