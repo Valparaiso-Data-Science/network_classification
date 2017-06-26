@@ -5,28 +5,27 @@ from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
 import matplotlib.pyplot as plt
 
-#read file
+# Read file
 net = pd.read_csv('/Users/adrianaortiz/Downloads/new_tsne_data.csv')
 
-#take out cheminformatics
-#net = net[net['Category Name']!='Cheminformatics']
+# Take out Remporal Reachability and Dynamic Networks
 net = net[net['Category Name'] != 'Temporal Reachability']
 net = net[net['Category Name'] != 'Dynamic Networks']
 
-#make a copy of the data
+# Make a copy of the data
 net_new = pd.DataFrame.copy(net)
 
-#delete categorical columns
+# Delete categorical columns
 del net_new['Category Name']
 del net_new['Graph Name']
 del net_new['Category Number']
 del net_new['Unnamed: 0']
 
-#create array of new data (only numerical columns)
+# Create array of new data (only numerical columns)
 net_array = net_new.values
 
 #**************************
-#getting inertia graph
+# Getting inertia graph
 #**************************
 ks = range(1, 20)
 inertias = []
@@ -49,10 +48,10 @@ plt.xticks(ks)
 plt.show()
 
 #**************************
-# creating plot of kmeans
+# Creating plot of kmeans
 # using tsne data with bokeh
 #**************************
-#create KMeans with 10 clusters and fit data to model
+# Create KMeans with 10 clusters and fit data to model
 kmeans = KMeans(n_clusters = 8)
 kmeans.fit_transform(net_array)
 labels = kmeans.predict(net_array)
@@ -62,43 +61,48 @@ centroids = kmeans.cluster_centers_
 centroids_x = centroids[:,0]
 centroids_y = centroids[:,1]
 
-# create cross tabulation and print
+# Create cross tabulation and print
 df1 = pd.DataFrame({'labels':labels, 'Collection':net['Category Name']})
 ct = pd.crosstab(df1['Collection'], df1['labels'])
 print(ct)
 
-# assign the columns of net_array
+# Assign the columns of net_array
 xs = net_array[:,0]
 ys = net_array[:, 1]
+
+# Get category and graph names for new dataframe
 category = net['Category Name']
 names = net['Graph Name']
 
-# get all categories without repetitions
+# Get all categories without repetitions
 all_categories = category.unique().tolist()
 
 data = {'x': xs, 'y': ys, 'Category Name' : category, 'Graph': names}
 
-# create new dataframe
+# Create new pandas dataframe
 df=pd.DataFrame(data)
 
-# create hover tool
+# Create hover tool
 hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 
-# creating the scatter plot of the x and y coordinates
-p=figure()
+# Creating the scatter plot of the x and y coordinates
+p=figure(title = 't-SNE ', plot_width=1000)
 
-# color the plot by collection
+# Color the plot by collection
 for i, graph in enumerate(all_categories):
     source = ColumnDataSource(df[df['Category Name'] == graph])
-    p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i])
+    p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
 
-# creating scatter plot of centroids
-p.square_cross(centroids_x, centroids_y, color='black')
+# Creating scatter plot of centroids
+p.square_cross(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
+
+# Add tools and interactive legend
 p.add_tools(hover)
+p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
-# save file and show plot
+# Save file and show plot
 output_file('kmeans_centroids_plot.html')
 show(p)
 
