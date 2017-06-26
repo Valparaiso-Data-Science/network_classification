@@ -86,16 +86,16 @@ hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 
 # creating the scatter plot of the x and y coordinates
-p=figure()
+p=figure(title = 't-SNE ', plot_width=1000)
 
 # color the plot by collection
 for i, graph in enumerate(all_categories):
     source = ColumnDataSource(df[df['Category Name'] == graph])
-    p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i])
+    p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i], size=8, legend = graph)
 
 # creating scatter plot of centroids
-p.square_cross(centroids_x, centroids_y, color='black')
 p.add_tools(hover)
+p.square_cross(centroids_x, centroids_y, color='black', size=12, legend = 'Centroid')
 p.legend.click_policy="hide"
 
 # save file and show plot
