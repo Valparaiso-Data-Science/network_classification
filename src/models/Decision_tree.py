@@ -6,7 +6,8 @@ from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import RandomizedSearchCV, train_test_split
 
 
-df = pd.read_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data.csv', index_col=0)
+#df = pd.read_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data.csv', index_col=0)
+df = pd.read_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv', index_col=0) #Data with down-sampled Cheminfo
 X = df.drop(['Graph', 'Collection'], axis=1).values
 y = df['Collection'].values
 # Setup the parameters and distributions to sample from: param_dist
@@ -39,4 +40,4 @@ tree2.fit(X_train, y_train)
 #print( tree2.decision_path(X_train))
 #tree2.decision_path(X_train)
 
-export_graphviz(tree2, out_file='full_clean_data_tree.dot')
+#export_graphviz(tree2, out_file='full_cleandata_tree.dot')
