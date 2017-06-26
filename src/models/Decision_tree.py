@@ -40,6 +40,9 @@ cv_scores = cross_val_score(tree2, X_train, y_train, cv = 5)
 print('average cv score: ', np.mean( cv_scores ))
 
 tree2.fit(X_train, y_train)
+tree2.predict(X_test)
+test_score = tree2.score(X_test, y_test)
+print('test_score: ', test_score)
 #print( tree2.decision_path(X_train))
 #tree2.decision_path(X_train)
 
