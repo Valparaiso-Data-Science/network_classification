@@ -24,7 +24,7 @@ param_dist2 = {"max_depth": np.arange(5, 30),
               "criterion": ["gini", "entropy"]}
 
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
 
 # Instantiate a Decision Tree classifier: tree
 tree = DecisionTreeClassifier()
@@ -43,7 +43,7 @@ tree = DecisionTreeClassifier()
 
 tree2 = DecisionTreeClassifier( criterion='entropy', max_depth=24, max_features=8, min_samples_leaf=1)
 
-cv_scores = cross_val_score(tree2, X_train, y_train, cv = 10)
+cv_scores = cross_val_score(tree2, X_train, y_train, cv = 5)
 print('average cv score from training set: ', np.mean( cv_scores ))
 
 tree2.fit(X_train, y_train)
