@@ -126,6 +126,9 @@ def doCalculation(g):
                     mydict[g[0]][g[1]] = 'na'
                 elif g[1] is 15:  # Cant find Chromatic number in nx, will have to calculate upper bound?
                     mydict[g[0]][g[1]] = 'na'
+                elif g[1] is 15:
+                    #find number of connected components
+                    mydict[g[0]][g[1]] = nx.number_connected_components(graph)
                 else:
                     mydict[g[0]][g[1]] = 'missing'
 

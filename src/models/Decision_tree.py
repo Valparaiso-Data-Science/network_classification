@@ -5,10 +5,8 @@ from scipy.stats import randint
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import RandomizedSearchCV, GridSearchCV, train_test_split, cross_val_score
 
-
-#df = pd.read_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data.csv', index_col=0)
-#df = pd.read_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv', index_col=0) #--- Data with down-sampled Cheminfo
-df = pd.read_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv', index_col=0) #---- Data downsampled and scaled
+infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
+df = pd.read_csv(infile, index_col=0)
 
 X = df.drop(['Graph', 'Collection'], axis=1).values
 y = df['Collection'].values
