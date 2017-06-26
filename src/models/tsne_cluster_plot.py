@@ -10,18 +10,14 @@ category = tsne['Category Name']
 x = tsne['x']
 y = tsne['y']
 names = tsne['Graph']
-idx = tsne.index.tolist()
+data = {'x': x, 'y': y, 'Category Name' : category, 'Graph': names}
 
-
-d = {'x': x, 'y': y, 'Category Name' : category}
-e = {'x': x, 'y': y, 'Category Name' : category, 'Graph': names}
-f = {'x': x, 'y': y, 'Category Name' : category, 'Graph': names, 'index': idx}
-
-df=pd.DataFrame(f)
+#create new dataframe
+df=pd.DataFrame(data)
 
 #creating hover tool
 hover = HoverTool()
-hover.tooltips = [("Category", "@{Category Name}"), ("Graph", "@index")]
+hover.tooltips = [("Category", "@{Category Name}")]
 
 #creating the scatter plot
 p =Scatter(x='x', y='y', color='Category Name', marker='Category Name', title='t-SNE using MinMaxScale',plot_width=1100, data = df)
