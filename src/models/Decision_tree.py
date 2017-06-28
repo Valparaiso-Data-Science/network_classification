@@ -18,6 +18,7 @@ names = ['Biological Networks','Collaboration Networks',
 #for name in names:
    # df = df[df['Collection'] != name ]
 
+#To be removed later, once there is a file that already has this
 collections = np.unique( df.Collection.values )
 for collection in collections:
     size = len( df[ df.Collection == collection ] )

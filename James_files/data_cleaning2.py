@@ -33,4 +33,5 @@ for collection in collections:
 
 print(df.info())
 
-#df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/data/interim/clean_data.csv' )
+#df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data.csv' )
+#df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_without_small_collections.csv' )
