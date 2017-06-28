@@ -39,4 +39,4 @@ chem_3_new = chem_3.sample(frac = 0.2, random_state=42)
 new_chem = pd.concat([chem_0_new, chem_1_new, chem_2_new, chem_3_new])
 del new_chem['Labels']
 
-new_chem.to_csv('~/PycharmProjects/network_classification/src/data/downsampled_chem.csv')
+#new_chem.to_csv('~/PycharmProjects/network_classification/src/data/downsampled_chem.csv')

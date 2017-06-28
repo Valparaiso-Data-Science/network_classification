@@ -6,7 +6,7 @@ from bokeh.palettes import d3
 import matplotlib.pyplot as plt
 
 # Read file
-net = pd.read_csv('/Users/adrianaortiz/Downloads/new_tsne_data.csv')
+net = pd.read_csv('~/PycharmProjects/network_classification/src/data//new_tsne_data.csv')
 
 # Take out Remporal Reachability and Dynamic Networks
 net = net[net['Category Name'] != 'Temporal Reachability']
@@ -22,7 +22,7 @@ del net_new['Category Number']
 del net_new['Unnamed: 0']
 
 # Create array of new data (only numerical columns)
-net_array = net_new.values
+net_array = net_new.val
 
 #**************************
 # Getting inertia graph
