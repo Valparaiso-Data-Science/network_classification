@@ -1,16 +1,5 @@
 import pandas as pd
 import numpy as np
-
-
-class model:
-
-    def __init__(self, model ):
-        self.model = model()
-
-    def test(self):
-        print( self.model, '"this is a test"')
-
-
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
