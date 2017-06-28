@@ -24,6 +24,13 @@ for name in categories_to_exclude:
 for i in df.index:
    df.loc[i, 'Average triangles'] = df.loc[i, 'Total triangles'] / df.loc[i, 'Nodes']
 
+collections = np.unique( df.Collection.values )
+for collection in collections:
+    size = len( df[ df.Collection == collection ] )
+    if size < 10:
+        print(collection, ' collection is of size ', size)
+        df = df[ df.Collection != collection ]
+
 print(df.info())
 
 #df.to_csv( 'C:/Users/Owner/Documents/VERUM/Network stuff/git/data/interim/clean_data.csv' )
