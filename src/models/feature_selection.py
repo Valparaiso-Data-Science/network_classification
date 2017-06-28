@@ -2,8 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_selection import SelectFromModel, SelectKBest, RFE
 from sklearn.linear_model import LogisticRegression, Lasso
-from sklearn.svm import SVC
-import matplotlib.pyplot as plt
+from sklearn.svm import LinearSVC
 
 # Read file
 df = pd.read_csv('~/Downloads/network_classification/src/data/clean_data_with_new_chem.csv', index_col='Unnamed: 0')
@@ -24,25 +23,38 @@ Y = df_array[:, 0]
 # Number of important features we want to extract
 num_of_features = 6
 
+# Create various models to compare
 #*******************************************
 # Create Logistic Regression Model with RFE
 #*******************************************
-model1 = LogisticRegression()
-rfe1 = RFE(model1, num_of_features)
-fit1 = rfe1.fit(X, Y)
-print("Num Features: " + str(fit1.n_features_))
-print("Selected Features: " + str(fit1.support_))
-print("Feature Ranking: " + str(fit1.ranking_))
+model_1 = LogisticRegression()
+rfe_1 = RFE(model_1, num_of_features)
+fit_1 = rfe_1.fit(X, Y)
+print("Num Features: " + str(fit_1.n_features_))
+print("Selected Features: " + str(fit_1.support_))
+print("Feature Ranking: " + str(fit_1.ranking_))
 
 #*******************************************
 # Create Lasso Regression Model with RFE
 #*******************************************
-model2 = Lasso(alpha = 0.1)
-rfe2 = RFE(model2, num_of_features)
-fit2 = rfe2.fit(X, Y)
-print("Num Features: " + str(fit2.n_features_))
-print("Selected Features: " + str(fit2.support_))
-print("Feature Ranking: " + str(fit2.ranking_))
+model_2 = Lasso(alpha = 0.1)
+rfe_2 = RFE(model_2, num_of_features)
+fit_2 = rfe_2.fit(X, Y)
+print("Num Features: " + str(fit_2.n_features_))
+print("Selected Features: " + str(fit_2.support_))
+print("Feature Ranking: " + str(fit_2.ranking_))
+
+#*******************************************
+# Create SVM Model with RFE
+#*******************************************
+#use svc linear
+model_3 = LinearSVC()
+rfe_3 = RFE(model_3, num_of_features)
+fit_3 = rfe_3.fit(X, Y)
+print("Num Features: " + str(fit_3.n_features_))
+print("Selected Features: " + str(fit_3.support_))
+print("Feature Ranking: " + str(fit_3.ranking_))
+
 
 # Print all the keys
 print(df.keys())
