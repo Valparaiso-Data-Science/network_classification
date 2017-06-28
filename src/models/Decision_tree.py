@@ -15,9 +15,14 @@ names = ['Biological Networks','Collaboration Networks',
          'Social Networks', 'Technological Networks', 'Web Graphs'
          #'Facebook Networks', 'Brain Networks', 'Cheminformatics', 'Retweet Networks'
  ]
-for name in names:
-    df = df[df['Collection'] != name ]
+#for name in names:
+   # df = df[df['Collection'] != name ]
 
+collections = np.unique( df.Collection.values )
+for collection in collections:
+    size = len( df[ df.Collection == collection ] )
+    if size < 10:
+        df = df[ df.Collection != collection ]
 
 X = df.drop(['Graph', 'Collection'], axis=1).values
 y = df['Collection'].values
