@@ -12,7 +12,7 @@ class model:
 
 
 from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
+from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
@@ -33,7 +33,7 @@ y = df['Collection'].values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
 
 
-model = SVC()  # -- change this for the model you want to use
+model = LinearSVC()  # -- change this for the model you want to use
 
 model.fit( X_train, y_train )
 y_pred = model.predict( X_test )
