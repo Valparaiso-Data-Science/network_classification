@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from scipy.stats import randint
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 from sklearn.model_selection import RandomizedSearchCV, GridSearchCV, train_test_split, cross_val_score
@@ -8,8 +7,23 @@ from sklearn.model_selection import RandomizedSearchCV, GridSearchCV, train_test
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
+# This adjusts the dataframe so that we only look at four distinct collections, by removing ones we don't want
+names = ['Biological Networks','Collaboration Networks',
+         'Ecology Networks', 'Infrastructure Networks',
+         'Interaction Networks', 'Massive Network Data',
+         'Recommendation Networks', 'Scientific Computing',
+         'Social Networks', 'Technological Networks', 'Web Graphs'
+         #'Facebook Networks', 'Brain Networks', 'Cheminformatics', 'Retweet Networks'
+ ]
+for name in names:
+    df = df[df['Collection'] != name ]
+
+
 X = df.drop(['Graph', 'Collection'], axis=1).values
 y = df['Collection'].values
+
+
+
 # Setup the parameters and distributions to sample from: param_dist
 # This one sets up the parameters for the Randomized Search
 param_dist = {"max_depth": [20, None],
@@ -18,13 +32,13 @@ param_dist = {"max_depth": [20, None],
               "criterion": ["gini", "entropy"]}
 
 # This sets up the parameters for the Grid Search
-param_dist2 = {"max_depth": np.arange(5, 30),
+param_dist2 = {"max_depth": np.arange(2, 25),
               "max_features": np.arange(1,14),
               "min_samples_leaf": np.arange(1, 20),
               "criterion": ["gini", "entropy"]}
 
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
 
 # Instantiate a Decision Tree classifier: used for the Random/Grid Search
 tree = DecisionTreeClassifier()
