@@ -26,13 +26,13 @@ y = df['Collection'].values
 
 # Setup the parameters and distributions to sample from: param_dist
 # This one sets up the parameters for the Randomized Search
-param_dist = {"max_depth": [20, None],
+param_dist_rand = {"max_depth": [20, None],
               "max_features": randint(1, 9),
               "min_samples_leaf": randint(1, 9),
               "criterion": ["gini", "entropy"]}
 
 # This sets up the parameters for the Grid Search
-param_dist2 = {"max_depth": np.arange(2, 25),
+param_dist_grid = {"max_depth": np.arange(2, 25),
               "max_features": np.arange(1,14),
               "min_samples_leaf": np.arange(1, 20),
               "criterion": ["gini", "entropy"]}
@@ -43,9 +43,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
 # Instantiate a Decision Tree classifier: used for the Random/Grid Search
 tree = DecisionTreeClassifier()
 
-# Instantiate the RandomizedSearchCV object: tree_cv ---- These are commented out as they are only used to determine the best parameters
-#tree_cv = RandomizedSearchCV(tree, param_dist, cv= 5)
-#tree_cv = GridSearchCV(tree, param_dist2, cv= 5)
+#  ---- The following lines are commented out as they are only used to determine the best parameters
+# Instantiate the RandomizedSearchCV object: tree_cv
+#tree_cv = RandomizedSearchCV(tree, param_dist_rand, cv= 5)
+#tree_cv = GridSearchCV(tree, param_dist_grid, cv= 5)
 
 # Fit it to the data
 #tree_cv.fit(X_train, y_train)
