@@ -6,7 +6,7 @@ from bokeh.palettes import d3
 import matplotlib.pyplot as plt
 
 # Read file
-net = pd.read_csv('/Users/adrianaortiz/Downloads/new_tsne_data.csv')
+net = pd.read_csv('~/PycharmProjects/network_classification/src/data//new_tsne_data.csv')
 
 # Take out Remporal Reachability and Dynamic Networks
 net = net[net['Category Name'] != 'Temporal Reachability']
