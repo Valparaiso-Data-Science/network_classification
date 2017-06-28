@@ -27,6 +27,8 @@ del net['Collection']
 
 samples = net.values
 
+
+#intrinsic dimension calculation:
 pca = PCA()
 pca.fit(samples)
 features = range(pca.n_components_)
@@ -43,9 +45,7 @@ pca_dr = PCA(n_components=2)
 pca_dr.fit(samples)
 transformed = pca_dr.transform(samples)
 
-#plot data in only 2 dimensions
-
-
+#plot data in only 2 dimensions-trying to visualize data to gain insight
 
 xs = transformed[:,0]
 ys = transformed[:,1]
