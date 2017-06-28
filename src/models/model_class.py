@@ -13,7 +13,7 @@ class model:
 
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC, LinearSVC
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
@@ -39,4 +39,5 @@ model.fit( X_train, y_train )
 y_pred = model.predict( X_test )
 
 print(classification_report(y_test, y_pred))
+print(confusion_matrix(y_test, y_pred))
 print('score: ', model.score(X_test, y_test))
