@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.tree import DecisionTreeClassifier
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
@@ -22,7 +23,7 @@ y = df['Collection'].values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
 
 
-model = LinearSVC()  # -- change this for the model you want to use
+model = DecisionTreeClassifier()  # -- change this for the model you want to use
 
 model.fit( X_train, y_train )
 y_pred = model.predict( X_test )
