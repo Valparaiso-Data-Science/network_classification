@@ -22,7 +22,7 @@ del net_new['Category Number']
 del net_new['Unnamed: 0']
 
 # Create array of new data (only numerical columns)
-net_array = net_new.values
+net_array = net_new.val
 
 #**************************
 # Getting inertia graph
