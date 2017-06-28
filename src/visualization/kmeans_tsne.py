@@ -49,9 +49,9 @@ plt.show()
 
 #**************************
 # Creating plot of kmeans
-# using tsne data with bokeh
+# using tsne data in bokeh
 #**************************
-# Create KMeans with 10 clusters and fit data to model
+# Create KMeans with 8 clusters and fit data to model
 kmeans = KMeans(n_clusters = 8)
 kmeans.fit_transform(net_array)
 labels = kmeans.predict(net_array)
@@ -86,16 +86,16 @@ df=pd.DataFrame(data)
 hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 
-# Creating the scatter plot of the x and y coordinates
+# Creating the figure for the scatter plot
 p=figure(title = 't-SNE ', plot_width=1000)
 
-# Color the plot by collection
+# Create scatter points and color the plot by collection
 for i, graph in enumerate(all_categories):
     source = ColumnDataSource(df[df['Category Name'] == graph])
     p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
 
-# Creating scatter plot of centroids
-p.square_cross(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
+# Creating scatter points of centroids
+p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
 
 # Add tools and interactive legend
 p.add_tools(hover)
