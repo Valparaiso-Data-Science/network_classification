@@ -18,10 +18,17 @@ from sklearn.metrics import classification_report
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
+# -- gets rid of small collections -- in the future we will import a file that already has this, so we will delete this block later
+collections = np.unique( df.Collection.values )
+for collection in collections:
+    size = len( df[ df.Collection == collection ] )
+    if size < 10:
+        df = df[ df.Collection != collection ]
+
 X = df.drop(['Graph', 'Collection'], axis=1).values
 y = df['Collection'].values
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
 
 
 model = SVC()  # -- change this for the model you want to use

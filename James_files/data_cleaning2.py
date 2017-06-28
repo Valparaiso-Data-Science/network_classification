@@ -28,7 +28,7 @@ collections = np.unique( df.Collection.values )
 for collection in collections:
     size = len( df[ df.Collection == collection ] )
     if size < 10:
-        print(collection, ' collection is of size ', size)
+        #print(collection, ' collection is of size ', size)
         df = df[ df.Collection != collection ]
 
 print(df.info())
