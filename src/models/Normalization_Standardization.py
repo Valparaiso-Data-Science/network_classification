@@ -1,7 +1,5 @@
 #notes:
     #-this program was created as a way to test how normalize vs standard scaler affected clustering (kmeans)
-    #-I used the imputer to hastily fix the NaNs (right now it is using most frequent strategy)- this will be changed once we find
-    #a way to calculate all the missing values.
     #-Eventually I plan to use the argument parser to select which columns (statistics) to look at. Right now it drops Graph,
     #Collection, and Chromatic Number. You can specify whether or not you want to keep cheminformatics.
     #---cheminformatics will be rescaled shortly
@@ -20,7 +18,7 @@ from sklearn.pipeline import make_pipeline
 import matplotlib.pyplot as plt
 
 def main(args):
-    net = pd.read_csv('~/PycharmProjects/network_classification/data/interim/data_without_dimacs_or_bhoslib.csv', index_col = 0)
+    net = pd.read_csv('~/PycharmProjects/network_classification/src/data/clean_data_with_new_chem.csv', index_col = 0)
     # getting rid of cheminformatics for fun?
     if args.minus_chem:
         net = net[net['Collection'] != 'Cheminformatics']
@@ -33,7 +31,7 @@ def main(args):
 
     del net['Graph']
     del net['Collection']
-    del net['Chromatic Number']
+
 
     net_array = net.values
 
@@ -45,7 +43,7 @@ def main(args):
     elif args.do_mms:
         min_max_scale = MinMaxScaler()
 
-    kmeans = KMeans(n_clusters=10)
+    kmeans = KMeans(n_clusters=4)
 
     if args.do_mms:
             pipeline = make_pipeline(imp, min_max_scale, kmeans)
