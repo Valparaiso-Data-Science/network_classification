@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.feature_selection import SelectFromModel, SelectKBest, RFE
-from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
+from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression, RandomizedLasso, RandomizedLogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
@@ -21,12 +21,13 @@ col_names = df.keys()
 
 # Create array of the values and define X and Y
 df_array = df.values
-X = df_array[:, 0:14]
+X = df_array[:, 1:14]
 Y = df_array[:, 0]
 
 # Number of important features we want to extract
 num_of_features = 8
 
+# RFE method
 # Create various models to compare
 #*******************************************
 # Create Logistic Regression Model with RFE
@@ -95,13 +96,35 @@ print("Num Features: " + str(fit_5.n_features_))
 print("Selected Features: " + str(fit_5.support_))
 print("Feature Ranking: " + str(fit_5.ranking_))
 
+
 # Print all the keys
-fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_, fit_4.ranking_, fit_5.ranking_, fit_6.ranking_]
+fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_, fit_4.ranking_, fit_5.ranking_, fit_6.ranking_,
+            ]
 for i, fit in enumerate(fit_list):
     print("\nFit " + str(i+1))
     for i, val in enumerate(fit):
         if val == True:
-            print(col_names[i])
+            print(col_names[i+1])
+
+
+# Stability Selection Method
+# *******************************************
+#  Create Randomized Lasso Regression Model with RFE
+# *******************************************
+model_7 = RandomizedLasso(alpha=0.1)
+model_7.fit(X, Y)
+print("\nRandomized Lasso Regression")
+print("Features sorted by their score:")
+print(sorted(zip(map(lambda x: round(x, 4), model_7.scores_), col_names), reverse=True))
+
+# *******************************************
+#  Create Randomized Logistic Regression Model with RFE
+# *******************************************
+model_8 = RandomizedLogisticRegression()
+model_8.fit(X, Y)
+print("\nRandomized Logistic Regression")
+print("Features sorted by their score:")
+print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), reverse=True))
 
 
 
