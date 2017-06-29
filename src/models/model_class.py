@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
@@ -24,6 +24,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
 
 
 model = DecisionTreeClassifier()  # -- change this for the model you want to use
+
+cvscores = cross_val_score(model, X, y, cv = 5)
+print('cv scores: ', cvscores)
+print('cv average: ', np.mean(cvscores))
 
 model.fit( X_train, y_train )
 y_pred = model.predict( X_test )
