@@ -23,6 +23,9 @@ collection_names = list(pca['Collection'])
 pca['Collection'] = pca['Collection'].astype('category')
 pca['Collection'] = pca['Collection'].cat.codes
 
+collection_num = pca['Collection']
+
+del pca['Collection']
 del pca['Graph']
 
 #graph_categories = []
@@ -52,7 +55,7 @@ pca_array = pca.values
 #min_max_scale = MinMaxScaler()
 #imp = Imputer(missing_values='NaN', strategy='most_frequent', axis=0)
 
-tsne = TSNE()
+tsne = TSNE(random_state=987)
 
 #pipeline = make_pipeline(min_max_scale, tsne)
 #tsne_features = pipeline.fit_transform(net_array)
@@ -61,8 +64,8 @@ tsne_features = tsne.fit_transform(pca_array)
 xs = tsne_features[:,0]
 ys = tsne_features[:,1]
 
-plt.scatter(xs, ys, c=pca['Collection'])
-plt.show()
+#plt.scatter(xs, ys, c=collection_num)
+#plt.show()
 
 #df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : pca['Collection'], "Category Name":collection_names, "Graph Name": graph_names})
 #df.to_csv('~/PycharmProjects/network_classification/src/data/pca_tsne_data.csv')
