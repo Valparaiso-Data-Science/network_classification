@@ -1,8 +1,10 @@
 import pandas as pd
 import numpy as np
 from sklearn.feature_selection import SelectFromModel, SelectKBest, RFE
-from sklearn.linear_model import LogisticRegression, Lasso
+from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
 from sklearn.svm import LinearSVC
+from sklearn.cluster import KMeans
+from sklearn import tree
 
 # Read file
 df = pd.read_csv('~/Downloads/network_classification/src/data/clean_data_with_new_chem.csv', index_col='Unnamed: 0')
@@ -32,7 +34,7 @@ num_of_features = 6
 model_1 = LogisticRegression()
 rfe_1 = RFE(model_1, num_of_features)
 fit_1 = rfe_1.fit(X, Y)
-print("Logistic Regression")
+print("\nLogistic Regression")
 print("Num Features: " + str(fit_1.n_features_))
 print("Selected Features: " + str(fit_1.support_))
 print("Feature Ranking: " + str(fit_1.ranking_))
@@ -43,7 +45,7 @@ print("Feature Ranking: " + str(fit_1.ranking_))
 model_2 = Lasso(alpha = 0.1)
 rfe_2 = RFE(model_2, num_of_features)
 fit_2 = rfe_2.fit(X, Y)
-print("Lasso Regression")
+print("\nLasso Regression")
 print("Num Features: " + str(fit_2.n_features_))
 print("Selected Features: " + str(fit_2.support_))
 print("Feature Ranking: " + str(fit_2.ranking_))
@@ -55,17 +57,38 @@ print("Feature Ranking: " + str(fit_2.ranking_))
 model_3 = LinearSVC()
 rfe_3 = RFE(model_3, num_of_features)
 fit_3 = rfe_3.fit(X, Y)
-print("Linear SVC")
+print("\nLinear SVC")
 print("Num Features: " + str(fit_3.n_features_))
 print("Selected Features: " + str(fit_3.support_))
 print("Feature Ranking: " + str(fit_3.ranking_))
 
+#*******************************************
+# Create Linear Regression Model with RFE
+#*******************************************
+model_4 = LinearRegression()
+rfe_4 = RFE(model_4, num_of_features)
+fit_4 = rfe_4.fit(X, Y)
+print("\nLinear Regression")
+print("Num Features: " + str(fit_4.n_features_))
+print("Selected Features: " + str(fit_4.support_))
+print("Feature Ranking: " + str(fit_4.ranking_))
+
+#*******************************************
+# Create Decision Tree Model with RFE
+#*******************************************
+model_5 = tree.DecisionTreeClassifier()
+rfe_5 = RFE(model_5, num_of_features)
+fit_5 = rfe_5.fit(X, Y)
+print("\nDecision Tree")
+print("Num Features: " + str(fit_5.n_features_))
+print("Selected Features: " + str(fit_5.support_))
+print("Feature Ranking: " + str(fit_5.ranking_))
 
 
 # Print all the keys
-fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_]
+fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_, fit_4.ranking_, fit_5.ranking_]
 for i, fit in enumerate(fit_list):
-    print("Fit " + str(i+1))
+    print("\nFit " + str(i+1))
     for i, val in enumerate(fit):
         if val == True:
             print(col_names[i])
