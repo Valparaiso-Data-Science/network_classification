@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.feature_selection import SelectFromModel, SelectKBest, RFE
 from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression
 from sklearn.svm import LinearSVC
-from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
 
 # Read file
@@ -25,7 +25,7 @@ X = df_array[:, 0:14]
 Y = df_array[:, 0]
 
 # Number of important features we want to extract
-num_of_features = 6
+num_of_features = 8
 
 # Create various models to compare
 #*******************************************
@@ -84,9 +84,19 @@ print("Num Features: " + str(fit_5.n_features_))
 print("Selected Features: " + str(fit_5.support_))
 print("Feature Ranking: " + str(fit_5.ranking_))
 
+#*******************************************
+# Create Random Forest Model with RFE
+#*******************************************
+model_6 = RandomForestClassifier()
+rfe_6 = RFE(model_6, num_of_features)
+fit_6 = rfe_6.fit(X, Y)
+print("\nRandom Forest")
+print("Num Features: " + str(fit_5.n_features_))
+print("Selected Features: " + str(fit_5.support_))
+print("Feature Ranking: " + str(fit_5.ranking_))
 
 # Print all the keys
-fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_, fit_4.ranking_, fit_5.ranking_]
+fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_, fit_4.ranking_, fit_5.ranking_, fit_6.ranking_]
 for i, fit in enumerate(fit_list):
     print("\nFit " + str(i+1))
     for i, val in enumerate(fit):
