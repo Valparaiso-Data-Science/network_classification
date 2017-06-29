@@ -10,15 +10,18 @@ from sklearn.pipeline import make_pipeline
 import matplotlib.pyplot as plt
 
 
-net = pd.read_csv('~/PycharmProjects/network_classification/src/data/clean_data_with_new_chem.csv')
+
+#net = pd.read_csv('~/PycharmProjects/network_classification/src/data/clean_data_with_new_chem.csv')
 
 #data for use with pca file:
 pca = pd.read_csv('~/PycharmProjects/network_classification/src/data/pca_for_tsne.csv')
 #i need a list of the collections as numbers-useful in coloring tsne
-
+graph_names = list(pca['Graph'])
 collection_names = list(pca['Collection'])
 pca['Collection'] = pca['Collection'].astype('category')
 pca['Collection'] = pca['Collection'].cat.codes
+
+del pca['Graph']
 
 #graph_categories = []
 #all_categories = net['Collection'].values
@@ -59,5 +62,5 @@ ys = tsne_features[:,1]
 plt.scatter(xs, ys, c=pca['Collection'])
 plt.show()
 
-#df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : all_categories, "Category Name":all_cat_names, "Graph Name": all_graph_names})
-#df.to_csv('~/PycharmProjects/network_classification/src/models/new_tsne_data.csv')
+#df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : pca['Collection'], "Category Name":collection_names, "Graph Name": graph_names})
+#df.to_csv('~/PycharmProjects/network_classification/src/data/pca_tsne_data.csv')
