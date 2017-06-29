@@ -27,7 +27,6 @@ del net['Collection']
 
 samples = net.values
 
-
 #intrinsic dimension calculation:
 #pca = PCA()
 #pca.fit(samples)
@@ -67,5 +66,7 @@ transformed = pca_id.transform(samples)
 
 df = pd.DataFrame(transformed)
 df['Collection'] = all_cat_names
+df['Graph'] = all_graph_names
+print(df)
 
 #df.to_csv('~/PycharmProjects/network_classification/src/data/pca_for_tsne.csv')
