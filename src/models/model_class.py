@@ -11,9 +11,10 @@ df = pd.read_csv(infile, index_col=0)
 
 # -- gets rid of small collections -- in the future we will import a file that already has this, so we will delete this block later
 collections = np.unique( df.Collection.values )
+dropoff = 10 #only looks at collections with more than dropoff graphs
 for collection in collections:
     size = len( df[ df.Collection == collection ] )
-    if size < 20:
+    if size < dropoff:
         df = df[ df.Collection != collection ]
 
 
@@ -25,7 +26,9 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.3)
 
 model = DecisionTreeClassifier()  # -- change this for the model you want to use
 
-cvscores = cross_val_score(model, X, y, cv = 5)
+k = 5
+cvscores = cross_val_score(model, X, y, cv = k)
+print(k, '-fold cross validation')
 print('cv scores: ', cvscores)
 print('cv average: ', np.mean(cvscores))
 
@@ -34,4 +37,4 @@ y_pred = model.predict( X_test )
 
 print(classification_report(y_test, y_pred))
 print(confusion_matrix(y_test, y_pred))
-print('score: ', model.score(X_test, y_test))
+print('score of prediction: ', model.score(X_test, y_test))
