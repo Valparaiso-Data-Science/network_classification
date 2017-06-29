@@ -16,7 +16,7 @@ from bokeh.palettes import d3
 #net = pd.read_csv('~/PycharmProjects/network_classification/src/data/clean_data_with_new_chem.csv')
 
 #data for use with pca file:
-pca = pd.read_csv('~/PycharmProjects/network_classification/src/data/pca_for_tsne.csv')
+pca = pd.read_csv('~/PycharmProjects/network_classification/src/data/TEST_pca_for_tsne.csv', index_col=0)
 #i need a list of the collections as numbers-useful in coloring tsne
 graph_names = list(pca['Graph'])
 collection_names = list(pca['Collection'])
