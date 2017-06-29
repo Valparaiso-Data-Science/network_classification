@@ -27,11 +27,10 @@ del net['Collection']
 
 samples = net.values
 
-
 #intrinsic dimension calculation:
-pca = PCA()
-pca.fit(samples)
-features = range(pca.n_components_)
+#pca = PCA()
+#pca.fit(samples)
+#features = range(pca.n_components_)
 
 #plot the feature variance to find intrinsic dimension
 #plt.bar(features, pca.explained_variance_)
@@ -41,14 +40,33 @@ features = range(pca.n_components_)
 #plt.show()
 
 
-pca_dr = PCA(n_components=2)
-pca_dr.fit(samples)
-transformed = pca_dr.transform(samples)
+#Only 2 dimensions to see if we can visualize it-turned out badly, our data can't be
+#reduced well to only 2 dimensions (surprise, surprise)
+
+#pca_dr = PCA(n_components=2)
+#pca_dr.fit(samples)
+#transformed = pca_dr.transform(samples)
 
 #plot data in only 2 dimensions-trying to visualize data to gain insight
 
-xs = transformed[:,0]
-ys = transformed[:,1]
+#xs = transformed[:,0]
+#ys = transformed[:,1]
 
-plt.scatter(xs, ys, c=all_categories)
-plt.show()
+#plt.scatter(xs, ys, c=all_categories)
+#plt.show()
+
+
+#Let's try the intrinsic dimension, 5
+
+pca_id = PCA(n_components=5)
+pca_id.fit(samples)
+transformed = pca_id.transform(samples)
+
+#print(transformed.shape) it worked!
+
+df = pd.DataFrame(transformed)
+df['Collection'] = all_cat_names
+df['Graph'] = all_graph_names
+print(df)
+
+#df.to_csv('~/PycharmProjects/network_classification/src/data/pca_for_tsne.csv')
