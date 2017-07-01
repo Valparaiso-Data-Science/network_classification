@@ -19,8 +19,15 @@ for collection in collections:
     if size < dropoff:
         df = df[ df.Collection != collection ]
 
-
-X = df.drop(['Graph', 'Collection'], axis=1).values
+drop_list = ['Graph', 'Collection',
+            'Nodes',
+             #'Edges', 'Density',
+             'Maximum degree', #'Minimum degree', 'Average degree', 'Assortativity',
+             'Total triangles',
+             'Average triangles', 'Maximum triangles', #'Avg. clustering coef.', 'Frac. closed triangles',
+             'Maximum k-core', 'Max. clique (lb)'
+            ]
+X = df.drop(drop_list, axis=1).values
 y = df['Collection'].values
 split = .25 # -- percent of data to hold for test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = split)
