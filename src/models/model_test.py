@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
@@ -19,9 +19,11 @@ def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.
 
     X = df.drop(dropList, axis=1).values
     y = df['Collection'].values
+    print('Excluding categories: ', dropList)
 
-    cvscores = cross_val_score(model, X, y, cv = cv)
-    print(cv, '-fold cross validation')
+    iterator = StratifiedKFold(n_splits = cv, shuffle = True, random_state = 42)
+    cvscores = cross_val_score(model, X, y, cv = iterator)
+    print(cv, '-fold stratified cross validation')
     print('cv scores: ', cvscores)
     print('cv average: ', np.mean(cvscores))
 
@@ -41,12 +43,12 @@ df = pd.read_csv(infile, index_col=0)
 
 #collections to remove from model
 remove = ['Graph', 'Collection',
-            'Nodes',
-             #'Edges', 'Density',
-             'Maximum degree', #'Minimum degree', 'Average degree', 'Assortativity',
-             'Total triangles',
-             'Average triangles', 'Maximum triangles', #'Avg. clustering coef.', 'Frac. closed triangles',
-             'Maximum k-core', 'Max. clique (lb)'
+            'Nodes','Edges',
+            #'Density',
+             #'Maximum degree', #'Minimum degree', 'Average degree', 'Assortativity',
+             #'Total triangles',
+             #'Average triangles', 'Maximum triangles', #'Avg. clustering coef.', 'Frac. closed triangles',
+             #'Maximum k-core', 'Max. clique (lb)'
             ]
 
 
