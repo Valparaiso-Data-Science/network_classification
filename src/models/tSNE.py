@@ -13,61 +13,38 @@ from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
 
 
-#net = pd.read_csv('~/PycharmProjects/network_classification/src/data/clean_data_with_new_chem.csv')
+net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 #data for use with pca file:
-pca = pd.read_csv('~/PycharmProjects/network_classification/src/data/TEST_pca_for_tsne.csv', index_col=0)
+#pca = pd.read_csv('~/PycharmProjects/network_classification/src/data/pca_for_tsne.csv', index_col=0)
+
 #i need a list of the collections as numbers-useful in coloring tsne
-graph_names = list(pca['Graph'])
-collection_names = list(pca['Collection'])
-pca['Collection'] = pca['Collection'].astype('category')
-pca['Collection'] = pca['Collection'].cat.codes
+graph_names = list(net['Graph'])
+collection_names = list(net['Collection'])
+net['Collection'] = net['Collection'].astype('category')
+net['Collection'] = net['Collection'].cat.codes
 
-collection_num = pca['Collection']
+collection_num = net['Collection']
 
-del pca['Collection']
-del pca['Graph']
+del net['Collection']
+del net['Graph']
 
-#graph_categories = []
-#all_categories = net['Collection'].values
+#pca_array = pca.values
+net_array = net.values
 
-#all_cat_names = list(net['Collection'].values)
-
-
-#creates a list of the existing categories, no repeats
-#for category in all_categories:
-#    if not category in graph_categories:
-#        graph_categories.append( category )
-#re-assigns each collection name in all_categories to an integer, corresponding with its position in graph_categories
-#for i in range(len( all_categories )):
-#    all_categories[i] = graph_categories.index( all_categories[i] )
-
-#all_graph_names = list(net['Graph'])
-
-#del net['Graph']
-#del net['Collection']
-
-
-#net_array = net.values
-pca_array = pca.values
-
-#commented out scaler for pca stuff
-#min_max_scale = MinMaxScaler()
-#imp = Imputer(missing_values='NaN', strategy='most_frequent', axis=0)
 
 tsne = TSNE(random_state=987)
 
-#pipeline = make_pipeline(min_max_scale, tsne)
-#tsne_features = pipeline.fit_transform(net_array)
 
-tsne_features = tsne.fit_transform(pca_array)
+
+tsne_features = tsne.fit_transform(net_array)
 xs = tsne_features[:,0]
 ys = tsne_features[:,1]
 
 #plt.scatter(xs, ys, c=collection_num)
 #plt.show()
 
-#df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : pca['Collection'], "Category Name":collection_names, "Graph Name": graph_names})
+#df = pd.DataFrame({"x" : xs, "y" : ys, "Category Number" : net['Collection'], "Category Name":collection_names, "Graph Name": graph_names})
 #df.to_csv('~/PycharmProjects/network_classification/src/data/pca_tsne_data.csv')
 
 data = {'x':xs, 'y':ys, 'Collection':collection_names, 'Graph':graph_names}
@@ -78,7 +55,7 @@ hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Collection}")]
 
 # Creating the scatter plot of the x and y coordinates
-p=figure(title = 'PCA t-SNE ', plot_width=1000)
+p=figure(title = 't-SNE ', plot_width=1000)
 
 # Color the plot by collection
 category = df['Collection']
@@ -96,5 +73,5 @@ p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-output_file('pca_tsne_plot.html')
+output_file('tsne_plot.html')
 show(p)
