@@ -13,10 +13,10 @@ df = pd.read_csv(infile, index_col=0)
 
 # -- gets rid of small collections -- in the future we will import a file that already has this, so we will delete this block later
 collections = np.unique( df.Collection.values )
-dropoff = 0 #only looks at collections with more than dropoff graphs
+cutoff = 0 #only looks at collections with more than dropoff graphs
 for collection in collections:
     size = len( df[ df.Collection == collection ] )
-    if size < dropoff:
+    if size < cutoff:
         df = df[ df.Collection != collection ]
 
 drop_list = ['Graph', 'Collection',
@@ -35,7 +35,17 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = split)
 
 model = DecisionTreeClassifier()  # -- change this for the model you want to use
 
-def modelFitTest(model, X, y, split=.25, cv=4):
+def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.25, cv=4):
+
+
+    collections = np.unique(df.Collection.values)
+    for collection in collections:
+        size = len(df[df.Collection == collection])
+        if size < minSize:
+            df = df[df.Collection != collection]
+
+    X = df.drop(dropList, axis=1).values
+    y = df['Collection'].values
 
     cvscores = cross_val_score(model, X, y, cv = cv)
     print(cv, '-fold cross validation')
