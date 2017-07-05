@@ -35,17 +35,19 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = split)
 
 model = DecisionTreeClassifier()  # -- change this for the model you want to use
 
-k = 4
-cvscores = cross_val_score(model, X, y, cv = k)
-print(k, '-fold cross validation')
-print('cv scores: ', cvscores)
-print('cv average: ', np.mean(cvscores))
+def modelFitTest(model, X, y, split=.25, cv=4):
 
-model.fit( X_train, y_train )
-y_pred = model.predict( X_test )
+    cvscores = cross_val_score(model, X, y, cv = cv)
+    print(cv, '-fold cross validation')
+    print('cv scores: ', cvscores)
+    print('cv average: ', np.mean(cvscores))
 
-print('Test size: ', split)
-print(classification_report(y_test, y_pred))
-print('Confusion matrix')
-print(confusion_matrix(y_test, y_pred))
-print('score of prediction: ', model.score(X_test, y_test))
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split)
+    model.fit( X_train, y_train )
+    y_pred = model.predict( X_test )
+
+    print('Test size: ', split)
+    print(classification_report(y_test, y_pred))
+    print('Confusion matrix')
+    print(confusion_matrix(y_test, y_pred))
+    print('score of prediction: ', model.score(X_test, y_test))
