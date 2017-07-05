@@ -50,6 +50,7 @@ plt.plot(ks, inertias, '-o')
 plt.xlabel('number of clusters, k')
 plt.ylabel('inertia')
 plt.xticks(ks)
+# Uncomment to show inertia graph
 #plt.show()
 
 #**************************
