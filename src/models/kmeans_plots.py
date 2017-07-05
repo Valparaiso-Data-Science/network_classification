@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
-net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv')
+net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 collection = list(net['Collection'])
 graph = list(net['Graph'])
