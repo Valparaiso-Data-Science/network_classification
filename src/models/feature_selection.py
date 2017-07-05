@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
 
 # Read file
-df = pd.read_csv('~/Downloads/network_classification/src/data/clean_data_with_new_chem.csv', index_col='Unnamed: 0')
+df = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col='Unnamed: 0')
 
 # Delete categorical column
 del df['Graph']
@@ -25,7 +25,7 @@ X = df_array[:, 1:14]
 Y = df_array[:, 0]
 
 # Number of important features we want to extract
-num_of_features = 8
+num_of_features = 1
 
 # RFE method
 # Create various models to compare
@@ -98,10 +98,12 @@ print("Feature Ranking: " + str(fit_5.ranking_))
 
 
 # Print all the keys
+model_list = ["Logistic Regression", "Lasso Regression", "Linear SVC", "Linear Regression",
+              "Decision Tree", "Random Forest"]
 fit_list = [fit_1.ranking_, fit_2.ranking_, fit_3.ranking_, fit_4.ranking_, fit_5.ranking_, fit_6.ranking_,
             ]
 for i, fit in enumerate(fit_list):
-    print("\nFit " + str(i+1))
+    print("\nMost Important Features in " + model_list[i] + ": ")
     for i, val in enumerate(fit):
         if val == True:
             print(col_names[i+1])
@@ -125,7 +127,6 @@ model_8.fit(X, Y)
 print("\nRandomized Logistic Regression")
 print("Features sorted by their score:")
 print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), reverse=True))
-
 
 
 # Temporarily here; probably will delete this chunk of code later

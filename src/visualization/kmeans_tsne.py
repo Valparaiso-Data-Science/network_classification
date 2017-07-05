@@ -6,23 +6,25 @@ from bokeh.palettes import d3
 import matplotlib.pyplot as plt
 
 # Read file
-net = pd.read_csv('~/PycharmProjects/network_classification/src/data/new_tsne_data.csv')
-
-# Take out Remporal Reachability and Dynamic Networks
-net = net[net['Category Name'] != 'Temporal Reachability']
-net = net[net['Category Name'] != 'Dynamic Networks']
+tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
+scaled = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 # Make a copy of the data
-net_new = pd.DataFrame.copy(net)
+tsne_new = pd.DataFrame.copy(tsne_data)
+scaled_new = pd.DataFrame.copy(scaled)
 
 # Delete categorical columns
-del net_new['Category Name']
-del net_new['Graph Name']
-del net_new['Category Number']
-del net_new['Unnamed: 0']
+del tsne_new['Category Name']
+del tsne_new['Graph Name']
+del tsne_new['Category Number']
+del scaled_new['Graph']
+del scaled_new['Collection']
+del scaled_new['Nodes']
+del scaled_new['Edges']
 
-# Create array of new data (only numerical columns)
-net_array = net_new.val
+# Create array of data (only numerical columns)
+tsne_array = tsne_new.values
+scaled_array = scaled_new.values
 
 #**************************
 # Getting inertia graph
@@ -35,7 +37,7 @@ for k in ks:
     model = KMeans(n_clusters=k)
 
     # Fit model to samples
-    model.fit(net_array)
+    model.fit(tsne_array)
 
     # Append the inertia to the list of inertias
     inertias.append(model.inertia_)
@@ -45,7 +47,7 @@ plt.plot(ks, inertias, '-o')
 plt.xlabel('number of clusters, k')
 plt.ylabel('inertia')
 plt.xticks(ks)
-plt.show()
+#plt.show()
 
 #**************************
 # Creating plot of kmeans
@@ -53,8 +55,8 @@ plt.show()
 #**************************
 # Create KMeans with 8 clusters and fit data to model
 kmeans = KMeans(n_clusters = 8)
-kmeans.fit_transform(net_array)
-labels = kmeans.predict(net_array)
+kmeans.fit_transform(tsne_array)
+labels = kmeans.predict(tsne_array)
 centroids = kmeans.cluster_centers_
 
 # Assign the columns of centroids: centroids_x, centroids_y
@@ -62,17 +64,32 @@ centroids_x = centroids[:,0]
 centroids_y = centroids[:,1]
 
 # Create cross tabulation and print
-df1 = pd.DataFrame({'labels':labels, 'Collection':net['Category Name']})
+df1 = pd.DataFrame({'labels':labels, 'Collection':tsne_data['Category Name']})
+print("Crosstab for t-SNE data:\n")
 ct = pd.crosstab(df1['Collection'], df1['labels'])
 print(ct)
 
-# Assign the columns of net_array
-xs = net_array[:,0]
-ys = net_array[:, 1]
+# Create second KMeans with scaled data
+kmeans.fit_transform(scaled_array)
+labels = kmeans.predict(scaled_array)
+centroids = kmeans.cluster_centers_
+
+# Assign the columns of centroids: centroids_x, centroids_y
+centroids_x_scaled = centroids[:,0]
+centroids_y_scaled = centroids[:,1]
+
+df2 = pd.DataFrame({'labels':labels, 'Collection':scaled['Collection']})
+print("\nCrosstab for scaled data:\n")
+ct = pd.crosstab(df2['Collection'], df2['labels'])
+print(ct)
+
+# Assign the columns of tsne_array
+xs = tsne_array[:,0]
+ys = tsne_array[:, 1]
 
 # Get category and graph names for new dataframe
-category = net['Category Name']
-names = net['Graph Name']
+category = tsne_data['Category Name']
+names = tsne_data['Graph Name']
 
 # Get all categories without repetitions
 all_categories = category.unique().tolist()
