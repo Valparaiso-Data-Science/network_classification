@@ -21,3 +21,19 @@ labels = kmeans.fit_predict(net_array)
 #net_ct = pd.DataFrame({'Labels':labels, 'Collection':collection})
 #ct = pd.crosstab( net_ct['Collection'], net_ct['Labels'])
 #print(ct)
+
+#************
+# SEPARATING LABELS
+#************
+
+net['Label'] = labels
+
+c0 = net[net['Label']==0]
+c1 = net[net['Label']==1]
+c2 = net[net['Label']==2]
+c3 = net[net['Label']==3]
+c4 = net[net['Label']==4]
+c5 = net[net['Label']==5]
+c6 = net[net['Label']==6]
+c7 = net[net['Label']==7]
+
