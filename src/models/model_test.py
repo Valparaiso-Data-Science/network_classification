@@ -15,6 +15,7 @@ def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.
         size = len(df[df.Collection == collection])
         if size < minSize:
             df = df[df.Collection != collection]
+    print('Using collections of size >', minSize)
 
     X = df.drop(dropList, axis=1).values
     y = df['Collection'].values
@@ -37,3 +38,39 @@ def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
+
+#collections to remove from model
+remove = ['Graph', 'Collection',
+            'Nodes',
+             #'Edges', 'Density',
+             'Maximum degree', #'Minimum degree', 'Average degree', 'Assortativity',
+             'Total triangles',
+             'Average triangles', 'Maximum triangles', #'Avg. clustering coef.', 'Frac. closed triangles',
+             'Maximum k-core', 'Max. clique (lb)'
+            ]
+
+
+print('Decision Tree')
+modelFitTest(DecisionTreeClassifier(), df, dropList=remove,)
+modelFitTest(DecisionTreeClassifier(), df, minSize=10, dropList=remove,)
+modelFitTest(DecisionTreeClassifier(), df, minSize=20, dropList=remove,)
+
+print('SVC')
+modelFitTest(SVC(), df, dropList=remove,)
+modelFitTest(SVC(), df, minSize=10, dropList=remove,)
+modelFitTest(SVC(), df, minSize=20, dropList=remove,)
+
+print('Linear SVC')
+modelFitTest(LinearSVC(), df, dropList=remove,)
+modelFitTest(LinearSVC(), df, minSize=10, dropList=remove,)
+modelFitTest(LinearSVC(), df, minSize=20, dropList=remove,)
+
+print('Gaussian Naive Bayes')
+modelFitTest(GaussianNB(), df, dropList=remove,)
+modelFitTest(GaussianNB(), df, minSize=10, dropList=remove,)
+modelFitTest(GaussianNB(), df, minSize=20, dropList=remove,)
+
+print('Logistic Regression')
+modelFitTest(LogisticRegression(), df, dropList=remove,)
+modelFitTest(LogisticRegression(), df, minSize=10, dropList=remove,)
+modelFitTest(LogisticRegression(), df, minSize=20, dropList=remove,)
