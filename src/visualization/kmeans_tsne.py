@@ -109,14 +109,14 @@ p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-#output_file('kmeans_centroids_plot.html')
-#show(p)
+output_file('kmeans_centroids_plot.html')
+show(p)
 
 
 
-#************************************
+#*******************************************
 # Running the same thing in a different file
-#************************************
+#*******************************************
 
 # Create second KMeans with raw data
 kmeans.fit_transform(raw_array)
@@ -133,34 +133,40 @@ print("\nCrosstab for raw data:\n")
 ct = pd.crosstab(df2['Collection'], df2['labels'])
 print(ct)
 
-
+# Get names of the columns
 column = raw_new.keys()
 
+# Create new data frame with the centroids data from the kmeans in raw data
 new_cent = pd.DataFrame(centroids, columns = column)
 new_cent['Collection'] = 'Centroid'
 new_cent['Graph'] = [1,2,3,4,5,6,7,8]
+
+# Rearranging the order of the columns
 new_cent = new_cent[['Graph', 'Collection', 'Nodes', 'Edges', 'Density', 'Maximum degree',
        'Minimum degree', 'Average degree', 'Assortativity', 'Total triangles',
        'Average triangles', 'Maximum triangles', 'Avg. clustering coef.',
        'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)']]
 
-
-#list = ['1', 'Centroid', centroids[0, 0], centroids[0, 1], centroids[0, 2], centroids[0, 3], centroids[0, 4], centroids[0, 5], centroids[0, 6], centroids[0, 7],
-# centroids[0, 8], centroids[0, 9], centroids[0, 10], centroids[0,11], centroids[0, 12], centroids[0, 13]]
-#print(list)
-
+# Concatenate raw data frame with centroids data frame
 raw_with_cent = pd.concat([raw, new_cent])
+
+# Create a copy of this data frame
 raw_with_cent_copy = pd.DataFrame.copy(raw_with_cent)
 
+# Delete categorical columns
 del raw_with_cent_copy['Graph']
 del raw_with_cent_copy['Collection']
-del raw_with_cent_copy['Nodes']
-del raw_with_cent_copy['Edges']
 
+# Delete Nodes and Edges (Will this make a change?)
+#del raw_with_cent_copy['Nodes']
+#del raw_with_cent_copy['Edges']
+
+# Get all the category names and graph names
 category_new = raw_with_cent['Collection']
 names_new = raw_with_cent['Graph']
 all_new_categories = category_new.unique().tolist()
 
+# Run tsne on the new data frame
 tsne = TSNE()
 tsne_features = tsne.fit_transform(raw_with_cent_copy.values)
 xs_new = tsne_features[:, 0]
@@ -184,12 +190,11 @@ for i, graph in enumerate(all_new_categories):
     p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
 
 
-
 # Add tools and interactive legend
 p.add_tools(hover)
 p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-#output_file('kmeans_centroids_plot.html')
+output_file('raw_data_kmeans_centroids_plot.html')
 show(p)
