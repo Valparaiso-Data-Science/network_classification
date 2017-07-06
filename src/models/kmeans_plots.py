@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-
+from bokeh.charts import BoxPlot, output_file, show
 
 net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
@@ -49,11 +49,18 @@ c7 = net[net['Label']==7]
 #plt.show()
 
 #names = {v:k for v, k in enumerate(columns)}
-i=0
+#i=0
 #attempting a for loop
-for name in columns:
-    plt.boxplot(c0.iloc[:,i].values)
-    i = i+1
-    plt.title('Label 0 ' + str(name))
-    plt.show()
+#for name in columns:
+#    plt.boxplot(c0.iloc[:,i].values)
+#    i = i+1
+#    plt.title('Label 0 ' + str(name))
+#    plt.show()
 
+#***************
+#Trying out Bokeh
+#***************
+#nodes by label:
+p = BoxPlot(net, values='Nodes', label='Label', title='Nodes by Label', color='Label')
+output_file('boxplot.html')
+show(p)
