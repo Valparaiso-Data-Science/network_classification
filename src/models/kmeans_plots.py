@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 
+
 net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 collection = list(net['Collection'])
@@ -11,11 +12,11 @@ del net['Graph']
 del net['Collection']
 net_array = net.values
 columns = net.columns
-kmeans = KMeans(n_clusters=8)
+kmeans = KMeans(n_clusters=8, random_state=42)
 labels = kmeans.fit_predict(net_array)
 
 #***************
-# TESTING TO SEE WHAT IS HAPPENING
+# TEST KMEANS
 #***************
 #print(labels)
 #net_ct = pd.DataFrame({'Labels':labels, 'Collection':collection})
@@ -55,5 +56,4 @@ for name in columns:
     i = i+1
     plt.title('Label 0 ' + str(name))
     plt.show()
-
 
