@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
+import scipy
 
 
 net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
@@ -33,8 +34,8 @@ del net['Graph']
 net_array = net.values
 
 
-tsne = TSNE(random_state=987)
-
+tsne = TSNE(metric=scipy.spatial.distance.canberra)
+#random_state=987 for snake
 
 
 tsne_features = tsne.fit_transform(net_array)
@@ -73,5 +74,5 @@ p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-output_file('tsne_plot.html')
+output_file('canberra_tsne_plot.html')
 show(p)
