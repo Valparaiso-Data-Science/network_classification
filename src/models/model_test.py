@@ -14,13 +14,20 @@ df = pd.read_csv(infile, index_col=0)
 
 #collections to remove from model
 remove = ['Graph', 'Collection',
-            #'Nodes',
-           'Edges',
-            #'Density', 'Maximum degree', 'Minimum degree', 'Average degree',
-             #'Assortativity',
-             #'Total triangles', 'Average triangles', 'Maximum triangles', 'Avg. clustering coef.',
-             #'Frac. closed triangles', 'Maximum k-core',
-             #'Max. clique (lb)'
+          # 'Nodes',
+          # 'Edges',
+           'Density',
+          # 'Maximum degree',
+          # 'Minimum degree',
+          # 'Average degree',
+          # 'Assortativity',
+          # 'Total triangles',
+          # 'Average triangles',
+          # 'Maximum triangles',
+          # 'Avg. clustering coef.',
+          # 'Frac. closed triangles',
+          # 'Maximum k-core',
+          # 'Max. clique (lb)'
             ]
 
 

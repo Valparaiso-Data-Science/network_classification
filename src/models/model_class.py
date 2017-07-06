@@ -1,25 +1,11 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
-from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression
+
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
-
-
-drop_list = ['Graph', 'Collection',
-            'Nodes',
-             #'Edges', 'Density',
-             'Maximum degree', #'Minimum degree', 'Average degree', 'Assortativity',
-             'Total triangles',
-             'Average triangles', 'Maximum triangles', #'Avg. clustering coef.', 'Frac. closed triangles',
-             'Maximum k-core', 'Max. clique (lb)'
-            ]
-
 
 def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.25, cv=4, feat_comp = False):
 
