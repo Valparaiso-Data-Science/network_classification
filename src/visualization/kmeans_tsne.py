@@ -9,6 +9,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.pipeline import make_pipeline
 
 # Read file
+
 tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
 raw = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
@@ -28,6 +29,7 @@ del raw_new['Collection']
 # Create array of data (only numerical columns)
 tsne_array = tsne_new.values
 raw_array = raw_new.values
+
 
 #**************************
 # Getting inertia graph
