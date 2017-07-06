@@ -21,7 +21,7 @@ drop_list = ['Graph', 'Collection',
             ]
 
 
-def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.25, cv=4):
+def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.25, cv=4, feat_comp = False):
 
 
     collections = np.unique(df.Collection.values)
@@ -38,15 +38,24 @@ def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.
     iterator = StratifiedKFold(n_splits = cv, shuffle = True, random_state = 42)
     cvscores = cross_val_score(model, X, y, cv = iterator)
     print(cv, '-fold stratified cross validation')
-    print('cv scores: ', cvscores)
-    print('cv average: ', np.mean(cvscores))
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split)
-    model.fit( X_train, y_train )
-    y_pred = model.predict( X_test )
+    if feat_comp == False:
+        print('cv scores: ', cvscores)
+        print('cv average: ', np.mean(cvscores))
 
-    print('Test size: ', split)
-    print(classification_report(y_test, y_pred))
-    print('Confusion matrix')
-    print(confusion_matrix(y_test, y_pred))
-    print('score of prediction: ', model.score(X_test, y_test))
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split)
+        model.fit( X_train, y_train )
+        y_pred = model.predict( X_test )
+
+        print('Test size: ', split)
+        print(classification_report(y_test, y_pred))
+        print('Confusion matrix')
+        print(confusion_matrix(y_test, y_pred))
+        print('score of prediction: ', model.score(X_test, y_test))
+
+    else:
+
+        #feature comparison -- compares the current cv average from input to the cv average from using all features
+        Xold = df.drop(['Graph', 'Collection'], axis = 1).values
+        oldCVscores = cross_val_score(model, Xold, y, cv = iterator)
+        print('New cv average - Old cv average = ', np.mean(cvscores) - np.mean(oldCVscores))
