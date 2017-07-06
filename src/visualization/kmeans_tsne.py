@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.cluster import KMeans
 from bokeh.plotting import figure, output_file, show
 from bokeh.models import HoverTool, ColumnDataSource
@@ -113,8 +114,8 @@ p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-output_file('kmeans_centroids_plot.html')
-show(p)
+#output_file('kmeans_centroids_plot.html')
+#show(p)
 
 
 
@@ -181,18 +182,44 @@ data_new = {'x': xs_new, 'y': ys_new, 'Category Name' : category_new, 'Graph': n
 # Create new pandas dataframe
 df_new = pd.DataFrame(data_new)
 
-# Create hover tool
+# Create new values that will use for label of centroids
+values = np.array([-1, -1, -1, -1, -1, -1, -1, -1])
+new_vals = np.append(np.array(labels), values)
+new_vals = pd.DataFrame(new_vals)
+
+# Add new column of labels to data frame
+df_new['Label'] = new_vals
+
+
+# Create hover tool for plot
 hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 
 # Creating the figure for the scatter plot
 p=figure(title = 'Scaled Data ', plot_width=1000)
 
+j=0
 # Create scatter points and color the plot by collection
 for i, graph in enumerate(all_new_categories):
     source = ColumnDataSource(df_new[df_new['Category Name'] == graph])
     if graph != 'Centroid':
-        p.circle(x = 'x', y = 'y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
+        if df_new.loc[j, 'Label'] == 0:
+            p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        elif df_new.loc[j, 'Label'] == 1:
+            p.triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        elif df_new.loc[j, 'Label'] == 2:
+            p.diamond(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        elif df_new.loc[j, 'Label'] == 3:
+            p.asterisk(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        elif df_new.loc[j, 'Label'] == 4:
+            p.cross(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        elif df_new.loc[j, 'Label'] == 5:
+            p.x(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        elif df_new.loc[j, 'Label'] == 6:
+            p.inverted_triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        else:
+            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+        j += 1
     else:
         p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
 

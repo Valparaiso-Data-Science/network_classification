@@ -6,6 +6,7 @@ from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
 from sklearn.model_selection import StratifiedKFold
+import numpy as np
 
 # Read file
 df = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col='Unnamed: 0')
@@ -26,7 +27,7 @@ X = df_array[:, 1:15]
 Y = df_array[:, 0]
 
 # Number of important features we want to extract
-num_of_features = 8
+num_of_features = 1
 
 # RFE method
 # Create various models to compare
@@ -78,7 +79,7 @@ print("Feature Ranking: " + str(fit_4.ranking_))
 #*******************************************
 # Create Decision Tree Model with RFE
 #*******************************************
-model_5 = tree.DecisionTreeClassifier()
+model_5 = tree.DecisionTreeClassifier(random_state=42)
 rfe_5 = RFE(model_5, num_of_features)
 fit_5 = rfe_5.fit(X, Y)
 print("\nDecision Tree")
@@ -89,7 +90,7 @@ print("Feature Ranking: " + str(fit_5.ranking_))
 #*******************************************
 # Create Random Forest Model with RFE
 #*******************************************
-model_6 = RandomForestClassifier()
+model_6 = RandomForestClassifier(random_state=42)
 rfe_6 = RFE(model_6, num_of_features)
 fit_6 = rfe_6.fit(X, Y)
 print("\nRandom Forest")
@@ -133,13 +134,24 @@ print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), revers
 #**************************************
 # RFECV feature selection
 #**************************************
-rfecv = RFECV(estimator=model_6, step=1, cv=8,
-              scoring='accuracy')
+# Can change the model and cv
+rfecv = RFECV(estimator = model_3, step = 1, cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
+              scoring = 'accuracy')
 rfecv.fit(X, Y)
 print("Optimal number of features : %d" % rfecv.n_features_)
+#print("Selected Features: " + str(rfecv.support_))
+print("Feature Ranking: " + str(rfecv.ranking_))
+
+# Get grid scores
+g_scores = rfecv.grid_scores_
+indices = np.argsort(g_scores)[::-1]
+print('Printing RFECV results:')
+for f in range(X.shape[1]):
+    print("%d. Number of features: %d, Grid_Score: %f" % (f + 1, indices[f]+1, g_scores[indices[f]]))
 
 # Plot number of features VS. cross-validation scores
 plt.figure()
+plt.title("RFECV - Linear SVC")
 plt.xlabel("Number of features selected")
 plt.ylabel("Cross validation score (nb of correct classifications)")
 plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
