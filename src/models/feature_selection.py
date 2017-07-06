@@ -1,10 +1,11 @@
 import pandas as pd
-import numpy as np
-from sklearn.feature_selection import SelectFromModel, SelectKBest, RFE
+import matplotlib.pyplot as plt
+from sklearn.feature_selection import SelectFromModel, SelectKBest, RFE, RFECV
 from sklearn.linear_model import LogisticRegression, Lasso, LinearRegression, RandomizedLasso, RandomizedLogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import tree
+from sklearn.model_selection import StratifiedKFold
 
 # Read file
 df = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col='Unnamed: 0')
@@ -25,7 +26,7 @@ X = df_array[:, 1:15]
 Y = df_array[:, 0]
 
 # Number of important features we want to extract
-num_of_features = 1
+num_of_features = 8
 
 # RFE method
 # Create various models to compare
@@ -113,7 +114,7 @@ for i, fit in enumerate(fit_list):
 # *******************************************
 #  Create Randomized Lasso Regression Model with RFE
 # *******************************************
-model_7 = RandomizedLasso(alpha=0.1)
+model_7 = RandomizedLasso(alpha=0.01)
 model_7.fit(X, Y)
 print("\nRandomized Lasso Regression")
 print("Features sorted by their score:")
@@ -129,15 +130,17 @@ print("Features sorted by their score:")
 print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), reverse=True))
 
 
-# Temporarily here; probably will delete this chunk of code later
-#******************
-# Select K Best
-#******************
-#test = SelectKBest(score_func=chi2, k=10)
-#fit = test.fit(X, Y)
-# summarize scores
-#np.set_printoptions(precision=3)
-#print(fit.scores_)
-#features = fit.transform(X)
-# summarize selected features
-#print(features[0:5,:])
+#**************************************
+# RFECV feature selection
+#**************************************
+rfecv = RFECV(estimator=model_6, step=1, cv=8,
+              scoring='accuracy')
+rfecv.fit(X, Y)
+print("Optimal number of features : %d" % rfecv.n_features_)
+
+# Plot number of features VS. cross-validation scores
+plt.figure()
+plt.xlabel("Number of features selected")
+plt.ylabel("Cross validation score (nb of correct classifications)")
+plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
+plt.show()

@@ -170,7 +170,7 @@ names_new = raw_with_cent['Graph']
 all_new_categories = category_new.unique().tolist()
 
 # Run tsne on the new data frame
-tsne = TSNE()
+tsne = TSNE(random_state=42)
 tsne_features = tsne.fit_transform(raw_with_cent_copy.values)
 xs_new = tsne_features[:, 0]
 ys_new = tsne_features[:, 1]
