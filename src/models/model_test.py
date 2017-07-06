@@ -6,6 +6,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 
 from git.src.models.model_class import modelFitTest
 
@@ -65,3 +66,10 @@ print('Logistic Regression')
 modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('Logistic Regression')
 modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+
+print('RandomForestClassifier')
+modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, dropList=remove, feat_comp=True)
+print('RandomForestClassifier')
+modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=True)
+print('RandomForestClassifier')
+modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=True)
