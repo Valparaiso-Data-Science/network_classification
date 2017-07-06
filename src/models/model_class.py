@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
@@ -11,14 +11,6 @@ infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxs
 df = pd.read_csv(infile, index_col=0)
 
 
-# -- gets rid of small collections -- in the future we will import a file that already has this, so we will delete this block later
-collections = np.unique( df.Collection.values )
-cutoff = 0 #only looks at collections with more than dropoff graphs
-for collection in collections:
-    size = len( df[ df.Collection == collection ] )
-    if size < cutoff:
-        df = df[ df.Collection != collection ]
-
 drop_list = ['Graph', 'Collection',
             'Nodes',
              #'Edges', 'Density',
@@ -27,13 +19,7 @@ drop_list = ['Graph', 'Collection',
              'Average triangles', 'Maximum triangles', #'Avg. clustering coef.', 'Frac. closed triangles',
              'Maximum k-core', 'Max. clique (lb)'
             ]
-X = df.drop(drop_list, axis=1).values
-y = df['Collection'].values
-split = .25 # -- percent of data to hold for test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = split)
 
-
-model = DecisionTreeClassifier()  # -- change this for the model you want to use
 
 def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.25, cv=4):
 
@@ -43,12 +29,15 @@ def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.
         size = len(df[df.Collection == collection])
         if size < minSize:
             df = df[df.Collection != collection]
+    print('Using collections of size >', minSize)
 
     X = df.drop(dropList, axis=1).values
     y = df['Collection'].values
+    print('Excluding categories: ', dropList)
 
-    cvscores = cross_val_score(model, X, y, cv = cv)
-    print(cv, '-fold cross validation')
+    iterator = StratifiedKFold(n_splits = cv, shuffle = True, random_state = 42)
+    cvscores = cross_val_score(model, X, y, cv = iterator)
+    print(cv, '-fold stratified cross validation')
     print('cv scores: ', cvscores)
     print('cv average: ', np.mean(cvscores))
 
