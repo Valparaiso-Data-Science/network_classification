@@ -16,14 +16,14 @@ df = pd.read_csv(infile, index_col=0)
 remove = ['Graph', 'Collection',
           # 'Nodes',
           # 'Edges',
-           'Density',
+          # 'Density',
           # 'Maximum degree',
-          # 'Minimum degree',
+           'Minimum degree',
           # 'Average degree',
-          # 'Assortativity',
+           'Assortativity',
           # 'Total triangles',
           # 'Average triangles',
-          # 'Maximum triangles',
+           'Maximum triangles',
           # 'Avg. clustering coef.',
           # 'Frac. closed triangles',
           # 'Maximum k-core',
@@ -32,36 +32,36 @@ remove = ['Graph', 'Collection',
 
 
 print('Decision Tree')
-modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, dropList=remove, feat_comp=True)
+modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
 print('Decision Tree')
-modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=True)
+modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('Decision Tree')
-modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=True)
+modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('SVC')
-modelFitTest(SVC(), df, cv=5, split=.3, dropList=remove, feat_comp=True)
+modelFitTest(SVC(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
 print('SVC')
-modelFitTest(SVC(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=True)
+modelFitTest(SVC(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('SVC')
-modelFitTest(SVC(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=True)
+modelFitTest(SVC(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Linear SVC')
-modelFitTest(LinearSVC(), df,cv=5, split=.3, dropList=remove, feat_comp=True)
+modelFitTest(LinearSVC(), df,cv=5, split=.3, dropList=remove, feat_comp=False)
 print('Linear SVC')
-modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=10, dropList=remove, feat_comp=True)
+modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('Linear SVC')
-modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=20, dropList=remove, feat_comp=True)
+modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.3, dropList=remove, feat_comp=True)
+modelFitTest(GaussianNB(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
 print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=True)
+modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=True)
+modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Logistic Regression')
-modelFitTest(LogisticRegression(), df, cv=5, split=.3, dropList=remove, feat_comp=True)
+modelFitTest(LogisticRegression(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
 print('Logistic Regression')
-modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=True)
+modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('Logistic Regression')
-modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=True)
+modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
