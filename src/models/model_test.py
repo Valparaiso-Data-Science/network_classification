@@ -6,6 +6,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 
 from git.src.models.model_class import modelFitTest
 
@@ -14,20 +15,20 @@ df = pd.read_csv(infile, index_col=0)
 
 #collections to remove from model
 remove = ['Graph', 'Collection',
-          # 'Nodes',
+           'Nodes',
           # 'Edges',
           # 'Density',
-          # 'Maximum degree',
-           'Minimum degree',
+           'Maximum degree',
+          # 'Minimum degree',
           # 'Average degree',
-           'Assortativity',
-          # 'Total triangles',
-          # 'Average triangles',
+          # 'Assortativity',
+           'Total triangles',
+           'Average triangles',
            'Maximum triangles',
           # 'Avg. clustering coef.',
           # 'Frac. closed triangles',
-          # 'Maximum k-core',
-          # 'Max. clique (lb)'
+           'Maximum k-core',
+           'Max. clique (lb)'
             ]
 
 
@@ -65,3 +66,10 @@ print('Logistic Regression')
 modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
 print('Logistic Regression')
 modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+
+print('RandomForestClassifier')
+modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
+print('RandomForestClassifier')
+modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+print('RandomForestClassifier')
+modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
