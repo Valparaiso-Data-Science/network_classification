@@ -29,6 +29,7 @@ del raw_new['Collection']
 tsne_array = tsne_new.values
 raw_array = raw_new.values
 
+
 #**************************
 # Getting inertia graph
 #**************************
@@ -52,6 +53,7 @@ plt.ylabel('inertia')
 plt.xticks(ks)
 # Uncomment to show inertia graph
 #plt.show()
+
 
 #**************************
 # Creating plot of kmeans
@@ -188,7 +190,10 @@ p=figure(title = 'Scaled Data ', plot_width=1000)
 # Create scatter points and color the plot by collection
 for i, graph in enumerate(all_new_categories):
     source = ColumnDataSource(df_new[df_new['Category Name'] == graph])
-    p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
+    if graph != 'Centroid':
+        p.circle(x = 'x', y = 'y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
+    else:
+        p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
 
 
 # Add tools and interactive legend

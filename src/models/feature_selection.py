@@ -21,7 +21,7 @@ col_names = df.keys()
 
 # Create array of the values and define X and Y
 df_array = df.values
-X = df_array[:, 1:14]
+X = df_array[:, 1:15]
 Y = df_array[:, 0]
 
 # Number of important features we want to extract
