@@ -6,11 +6,9 @@ from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.pipeline import make_pipeline
+
 
 # Read file
-
 tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
 raw = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
@@ -43,7 +41,8 @@ for k in ks:
     model = KMeans(n_clusters=k)
 
     # Fit model to samples
-    model.fit(tsne_array)
+    # Change to the data we need to check
+    model.fit(raw_array)
 
     # Append the inertia to the list of inertias
     inertias.append(model.inertia_)
@@ -62,7 +61,7 @@ plt.xticks(ks)
 # using tsne data in bokeh
 #**************************
 # Create KMeans with 8 clusters and fit data to model
-kmeans = KMeans(n_clusters = 8)
+kmeans = KMeans(n_clusters = 14)
 kmeans.fit_transform(tsne_array)
 labels = kmeans.predict(tsne_array)
 centroids = kmeans.cluster_centers_
@@ -118,7 +117,6 @@ p.legend.click_policy="hide"
 #show(p)
 
 
-
 #*******************************************
 # Running the same thing in a different file
 #*******************************************
@@ -138,13 +136,14 @@ print("\nCrosstab for raw data:\n")
 ct = pd.crosstab(df2['Collection'], df2['labels'])
 print(ct)
 
+
 # Get names of the columns
 column = raw_new.keys()
 
 # Create new data frame with the centroids data from the kmeans in raw data
 new_cent = pd.DataFrame(centroids, columns = column)
 new_cent['Collection'] = 'Centroid'
-new_cent['Graph'] = [1,2,3,4,5,6,7,8]
+new_cent['Graph'] = [0,1,2,3,4,5,6,7, 8,9,10,11,12,13]
 
 # Rearranging the order of the columns
 new_cent = new_cent[['Graph', 'Collection', 'Nodes', 'Edges', 'Density', 'Maximum degree',
@@ -198,31 +197,36 @@ hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 # Creating the figure for the scatter plot
 p=figure(title = 'Scaled Data ', plot_width=1000)
 
-j=0
+
 # Create scatter points and color the plot by collection
+j = 0 # To use in loop
 for i, graph in enumerate(all_new_categories):
     source = ColumnDataSource(df_new[df_new['Category Name'] == graph])
-    if graph != 'Centroid':
-        if df_new.loc[j, 'Label'] == 0:
-            p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        elif df_new.loc[j, 'Label'] == 1:
-            p.triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        elif df_new.loc[j, 'Label'] == 2:
-            p.diamond(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        elif df_new.loc[j, 'Label'] == 3:
-            p.asterisk(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        elif df_new.loc[j, 'Label'] == 4:
-            p.cross(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        elif df_new.loc[j, 'Label'] == 5:
-            p.x(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        elif df_new.loc[j, 'Label'] == 6:
-            p.inverted_triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        else:
-            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-        j += 1
-    else:
-        p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
+    p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
 
+#    if graph != 'Centroid':
+#        if (df_new['Label'][j] == 0).any():
+#            p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Label'][j] == 1).any():
+#            p.triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Label'][j] == 2).any():
+#            p.diamond(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Label'][j] == 3).any():
+#            p.asterisk(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Label'][j] == 4).any():
+#            p.cross(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Label'][j] == 5).any():
+#            p.x(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Label'][j] == 6).any():
+#            p.inverted_triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        else:
+#            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        j += 1
+#    else:
+        # Plot the centroids
+#        p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
+
+p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
 
 # Add tools and interactive legend
 p.add_tools(hover)
