@@ -18,58 +18,58 @@ remove = ['Graph', 'Collection',
            'Nodes',
           # 'Edges',
           # 'Density',
-           'Maximum degree',
+          # 'Maximum degree',
           # 'Minimum degree',
           # 'Average degree',
           # 'Assortativity',
            'Total triangles',
-           'Average triangles',
-           'Maximum triangles',
+          # 'Average triangles',
+          # 'Maximum triangles',
           # 'Avg. clustering coef.',
           # 'Frac. closed triangles',
-           'Maximum k-core',
+          # 'Maximum k-core',
            'Max. clique (lb)'
             ]
 
 
 print('Decision Tree')
 modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-print('Decision Tree')
-modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-print('Decision Tree')
-modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+##print('Decision Tree')
+##modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+##print('Decision Tree')
+##modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
-print('SVC')
-modelFitTest(SVC(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-print('SVC')
-modelFitTest(SVC(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-print('SVC')
-modelFitTest(SVC(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+#print('SVC')
+#modelFitTest(SVC(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
+#print('SVC')
+#modelFitTest(SVC(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+#print('SVC')
+#modelFitTest(SVC(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Linear SVC')
 modelFitTest(LinearSVC(), df,cv=5, split=.3, dropList=remove, feat_comp=False)
-print('Linear SVC')
-modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-print('Linear SVC')
-modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+#print('Linear SVC')
+#modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+#print('Linear SVC')
+#modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+modelFitTest(GaussianNB(), df, cv=5, split=.3, dropList=remove, feat_comp=True)
+#print('Gaussian Naive Bayes')
+#modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+#print('Gaussian Naive Bayes')
+#modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
-print('Logistic Regression')
-modelFitTest(LogisticRegression(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-print('Logistic Regression')
-modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-print('Logistic Regression')
-modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+#print('Logistic Regression')
+#modelFitTest(LogisticRegression(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
+#print('Logistic Regression')
+#modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+#print('Logistic Regression')
+#modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('RandomForestClassifier')
 modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-print('RandomForestClassifier')
-modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-print('RandomForestClassifier')
-modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+#print('RandomForestClassifier')
+#modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+#print('RandomForestClassifier')
+#modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
