@@ -7,7 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
-def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.25, cv=4, feat_comp = False):
+def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=.25, cv=4, feat_comp = False):
 
 
     collections = np.unique(df.Collection.values)
@@ -21,7 +21,8 @@ def modelFitTest(model, df, minSize=0, dropList=['Graph', 'Collection'], split=.
     y = df['Collection'].values
     print('Excluding categories: ', dropList)
 
-    iterator = StratifiedKFold(n_splits = cv, shuffle = True, random_state = 42)
+    iterator = StratifiedKFold(n_splits = cv, shuffle = True,# random_state = 42
+                                )
     cvscores = cross_val_score(model, X, y, cv = iterator)
     print(cv, '-fold stratified cross validation')
 
