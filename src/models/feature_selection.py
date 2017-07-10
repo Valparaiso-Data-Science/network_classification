@@ -135,7 +135,7 @@ print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), revers
 # RFECV feature selection
 #**************************************
 # Can change the model and cv
-rfecv = RFECV(estimator = model_3, step = 1, cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
+rfecv = RFECV(estimator = model_6, step = 1, cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
               scoring = 'accuracy')
 rfecv.fit(X, Y)
 print("Optimal number of features : %d" % rfecv.n_features_)
@@ -151,8 +151,8 @@ for f in range(X.shape[1]):
 
 # Plot number of features VS. cross-validation scores
 plt.figure()
-plt.title("RFECV - Linear SVC")
-plt.xlabel("Number of features selected")
-plt.ylabel("Cross validation score (nb of correct classifications)")
+plt.title("RFECV - Random Forest", {'size':'16'})
+plt.xlabel("Number of features selected", {'size':'11'})
+plt.ylabel("Cross validation score (nb of correct classifications)", {'size':'11'})
 plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
 plt.show()
