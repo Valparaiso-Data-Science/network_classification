@@ -1,8 +1,8 @@
 #notes:
+    #this program was used earlier in our process, but is now not useful
     #-this program was created as a way to test how normalize vs standard scaler affected clustering (kmeans)
     #-Eventually I plan to use the argument parser to select which columns (statistics) to look at. Right now it drops Graph,
     #Collection, and Chromatic Number. You can specify whether or not you want to keep cheminformatics.
-    #---cheminformatics will be rescaled shortly
     #-Obviously the paths will have to be changed to run on other machines.
     #
     #--Emma
