@@ -2,9 +2,10 @@ import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from bokeh.charts import BoxPlot, output_file, show
+from bokeh.layouts import  column, row
 from bokeh.models.widgets import Panel, Tabs
 
-net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
+net = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_greater_than_20.csv', index_col=0)
 
 collection = list(net['Collection'])
 graph = list(net['Graph'])
@@ -13,7 +14,7 @@ del net['Graph']
 del net['Collection']
 net_array = net.values
 columns = net.columns
-kmeans = KMeans(n_clusters=8, random_state=42)
+kmeans = KMeans(n_clusters=4, random_state=42)
 labels = kmeans.fit_predict(net_array)
 
 #***************
@@ -29,7 +30,8 @@ print(ct)
 #************
 
 net['Label'] = labels
-
+net['Collection'] = collection
+net['Graph'] = graph
 c0 = net[net['Label']==0]
 c1 = net[net['Label']==1]
 c2 = net[net['Label']==2]
@@ -39,6 +41,7 @@ c5 = net[net['Label']==5]
 c6 = net[net['Label']==6]
 c7 = net[net['Label']==7]
 
+print(c3)
 #***************
 # GENERATING PLOTS: BOKEH
 #***************
@@ -47,7 +50,7 @@ c7 = net[net['Label']==7]
 pNodes = BoxPlot(net, values='Nodes', label='Label', title='Nodes by Label', color='Label')
 tNodes = Panel(child=pNodes, title='Nodes')
 #edges by label:
-pEdges = BoxPlot(net, values='Edges', label='Label', title='Edges by Label', color='Label')
+pEdges = BoxPlot(net, values='Edges', label='Label', title='Edges', color='Label', plot_width=400, plot_height=400, legend=None)
 tEdges = Panel(child=pEdges, title='Edges')
 #density by label
 pDensity = BoxPlot(net, values='Density', label='Label', title='Density by Label', color='Label')
@@ -59,34 +62,42 @@ tMaxDeg = Panel(child=pMaxDeg, title='Maximum Degree')
 pMinDeg = BoxPlot(net, values='Minimum degree', label='Label', title='Minimum Degree by Label', color='Label')
 tMinDeg = Panel(child=pMinDeg, title='Minimum Degree')
 #avg degree by label
-pAvgDeg = BoxPlot(net, values='Average degree', label='Label', title='Average Degree by Label', color='Label')
+pAvgDeg = BoxPlot(net, values='Average degree', label='Label', title='Average Degree', color='Label', plot_width=400, plot_height=400, legend=None)
 tAvgDeg = Panel(child=pAvgDeg, title='Average Degree')
 #assortativity by label
-pAss = BoxPlot(net, values='Assortativity', label='Label', title='Assortativity by Label', color='Label')
+pAss = BoxPlot(net, values='Assortativity', label='Label', title='Assortativity', color='Label', plot_width=400, plot_height=400, legend=None)
 tAss = Panel(child=pAss, title='Assortativity')
 #total triangles by label
-pTotTri = BoxPlot(net, values='Total triangles', label='Label', title='Total Triangles by Label', color='Label')
+pTotTri = BoxPlot(net, values='Total triangles', label='Label', title='Total Triangles', color='Label')
 tTotTri = Panel(child=pTotTri, title='Total Triangles')
 #average triangles by label
-pAvgTri = BoxPlot(net, values='Average triangles', label='Label', title='Average Triangles by Label', color='Label')
+pAvgTri = BoxPlot(net, values='Average triangles', label='Label', title='Average Triangles', color='Label')
 tAvgTri = Panel(child=pAvgTri, title='Average Triangles')
 #maximum triangles by label
-pMaxTri = BoxPlot(net, values='Maximum triangles', label='Label', title='Maximum Triangles by Label', color='Label')
+pMaxTri = BoxPlot(net, values='Maximum triangles', label='Label', title='Maximum Triangles', color='Label')
 tMaxTri = Panel(child=pMaxTri, title='Maximum Triangles')
 #average clustering coefficient by label
-pAvgCC = BoxPlot(net, values='Avg. clustering coef.', label='Label', title='Average Clustering Coefficient by Label', color='Label')
+pAvgCC = BoxPlot(net, values='Avg. clustering coef.', label='Label', title='Average Clustering Coef.', color='Label', plot_width=400, plot_height=400, legend=None)
 tAvgCC = Panel(child=pAvgCC, title='Average Clustering Coef.')
 #fraction of closed triangles by label
-pFracCT = BoxPlot(net, values='Frac. closed triangles', label='Label', title='Fraction of Closed Triangles by Label', color='Label')
+pFracCT = BoxPlot(net, values='Frac. closed triangles', label='Label', title='Fraction of Closed Triangles', color='Label', plot_width=400, plot_height=400, legend=None)
 tFracCT = Panel(child=pFracCT, title='Frac. Closed Triangles')
 #maximum k-core by label
-pMaxK = BoxPlot(net, values='Maximum k-core', label='Label', title='Maximum k-core by Label', color='Label')
+pMaxK = BoxPlot(net, values='Maximum k-core', label='Label', title='Maximum k-core', color='Label')
 tMaxK = Panel(child=pMaxK, title='Max. k-Core')
 #maximum clique by label
-pMaxClique = BoxPlot(net, values='Max. clique (lb)', label='Label', title='Lower Bound of Maximum Clique by Label', color='Label')
+pMaxClique = BoxPlot(net, values='Max. clique (lb)', label='Label', title='Maximum Clique (lb)', color='Label', plot_width=400, plot_height=400, legend=None)
 tMaxClique = Panel(child=pMaxClique, title='Max. Clique (lb)')
 
-layout = Tabs(tabs=[tNodes, tEdges, tDensity, tMaxDeg, tMinDeg, tAvgDeg, tAss, tTotTri, tAvgTri, tMaxTri, tAvgCC, tFracCT, tMaxK, tMaxClique])
+#layout = Tabs(tabs=[tNodes, tEdges, tDensity, tMaxDeg, tMinDeg, tAvgDeg, tAss, tTotTri, tAvgTri, tMaxTri, tAvgCC, tFracCT, tMaxK, tMaxClique])
+#changing font sizes of six graphs
+pEdges.title.text_font_size = '20pt'
+pAvgDeg.title.text_font_size = '20pt'
+pAss.title.text_font_size = '20pt'
+pAvgCC.title.text_font_size = '20pt'
+pFracCT.title.text_font_size = '20pt'
+pMaxClique.title.text_font_size = '20pt'
 
-output_file('boxplot.html')
+layout = column(row(pEdges, pAvgDeg, pAss), row(pAvgCC, pFracCT, pMaxClique))
+output_file('boxplots.html')
 show(layout)
