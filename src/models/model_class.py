@@ -30,7 +30,7 @@ def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=
         print('cv scores: ', cvscores)
         print('cv average: ', np.mean(cvscores))
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split, stratify=y)
         model.fit( X_train, y_train )
         y_pred = model.predict( X_test )
 
@@ -46,3 +46,4 @@ def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=
         Xold = df.drop(['Graph', 'Collection'], axis = 1).values
         oldCVscores = cross_val_score(model, Xold, y, cv = iterator)
         print('New cv average - Old cv average = ', np.mean(cvscores) - np.mean(oldCVscores))
+        return np.mean(cvscores) - np.mean(oldCVscores)
