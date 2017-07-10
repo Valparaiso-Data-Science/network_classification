@@ -52,6 +52,7 @@ plt.plot(ks, inertias, '-o')
 plt.xlabel('number of clusters, k')
 plt.ylabel('inertia')
 plt.xticks(ks)
+
 # Uncomment to show inertia graph
 #plt.show()
 
@@ -61,7 +62,7 @@ plt.xticks(ks)
 # using tsne data in bokeh
 #**************************
 # Create KMeans with 8 clusters and fit data to model
-kmeans = KMeans(n_clusters = 14)
+kmeans = KMeans(n_clusters = 8)
 kmeans.fit_transform(tsne_array)
 labels = kmeans.predict(tsne_array)
 centroids = kmeans.cluster_centers_
@@ -105,7 +106,6 @@ for i, graph in enumerate(all_categories):
 
 # Creating scatter points of centroids
 p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
-#p.square(centroids_x_raw, centroids_y_raw, color = 'blue', size = 12, legend = 'Centroid for raw data')
 
 # Add tools and interactive legend
 p.add_tools(hover)
@@ -113,8 +113,8 @@ p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-#output_file('kmeans_centroids_plot.html')
-#show(p)
+output_file('kmeans_centroids_plot.html')
+show(p)
 
 
 #*******************************************
@@ -126,9 +126,6 @@ kmeans.fit_transform(raw_array)
 labels = kmeans.predict(raw_array)
 centroids = kmeans.cluster_centers_
 
-# Assign the columns of centroids: centroids_x, centroids_y
-centroids_x_raw = centroids[:,0]
-centroids_y_raw = centroids[:,1]
 
 # Create cross tabulation of raw data and print
 df2 = pd.DataFrame({'labels':labels, 'Collection':raw['Collection']})
@@ -143,7 +140,7 @@ column = raw_new.keys()
 # Create new data frame with the centroids data from the kmeans in raw data
 new_cent = pd.DataFrame(centroids, columns = column)
 new_cent['Collection'] = 'Centroid'
-new_cent['Graph'] = [0,1,2,3,4,5,6,7, 8,9,10,11,12,13]
+new_cent['Graph'] = [0,1,2,3,4,5,6,7]
 
 # Rearranging the order of the columns
 new_cent = new_cent[['Graph', 'Collection', 'Nodes', 'Edges', 'Density', 'Maximum degree',
@@ -169,6 +166,7 @@ del raw_with_cent_copy['Collection']
 category_new = raw_with_cent['Collection']
 names_new = raw_with_cent['Graph']
 all_new_categories = category_new.unique().tolist()
+
 
 # Run tsne on the new data frame
 tsne = TSNE(random_state=42)
