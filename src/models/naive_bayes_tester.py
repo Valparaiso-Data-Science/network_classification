@@ -28,10 +28,8 @@ toDrop = ['Graph', 'Collection',
           # 'Maximum k-core',
           # 'Max. clique (lb)'
             ]
-#for i in range(iterations):
-#    score = modelFitTest(GaussianNB, df, dropList=toDrop, cv=5, feat_comp=True)
-#    maxTri_assort_minDeg_scores.append(score)
-#
-#print(maxTri_assort_minDeg_scores)
+for i in range(iterations):
+    score = modelFitTest(GaussianNB(), df, dropList=toDrop, cv=5, feat_comp=True)
+    maxTri_assort_minDeg_scores.append(score)
 
-print(modelFitTest(GaussianNB, df, feat_comp=True))
+print(maxTri_assort_minDeg_scores)
