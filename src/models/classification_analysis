@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
-def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'], split=.25, cv=4, prnt=True):
+def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'], cv=5, prnt=True):
 
 
     collections = np.unique(df.Collection.values)
@@ -51,4 +51,12 @@ allNameDict = {'Name' : df.Graph.values, 'Count' : np.zeros( len(df.Graph.values
 order = ['Name', 'Count']
 all_names = pd.DataFrame(allNameDict, columns=order, copy=True)
 
+model =  DecisionTreeClassifier()
+repeat = 2
+for i in range( repeat ):
+    mislabeled = get_mislabeled_graphs(model, df, prnt=False)
+    for graph in mislabeled.Name.values:
+        print(all_names[ all_names.Name == graph ].iloc[0][1])
+        all_names[ all_names.Name == graph ].iloc[0][1] += 1
 
+print(all_names)
