@@ -53,7 +53,11 @@ def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'
         cv_pred = cross_val_predict(model, X, y, cv=iterator)
         cv_results_dict = {'Name' : names, 'Actual' : y, 'Predicted' : cv_pred}
         results = pd.DataFrame(cv_results_dict, columns = column_order, copy=True)
-        print(confusion_matrix(y, cv_pred))
+
+        if prnt == True:
+            print(classification_report(y, cv_pred))
+            print(confusion_matrix(y, cv_pred))
+
         return results[ results.Actual != results.Predicted ]
 
 
