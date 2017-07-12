@@ -1,0 +1,62 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict, StratifiedKFold
+from sklearn.svm import SVC, LinearSVC
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+
+infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
+df = pd.read_csv(infile, index_col=0)
+
+def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'], cv=5, prnt=True):
+
+
+    collections = np.unique(df.Collection.values)
+    for collection in collections:
+        size = len(df[df.Collection == collection])
+        if size < minSize:
+            df = df[df.Collection != collection]
+
+    X = df.drop(dropList, axis=1).values
+    y = df['Collection'].values
+    names = df['Graph'].values
+
+    iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
+                               )
+    cv_pred = cross_val_predict(model, X, y, cv=iterator)
+    cv_results_dict = {'Name' : names, 'Actual' : y, 'Predicted' : cv_pred}
+
+    column_order = ['Name', 'Actual', 'Predicted']
+    results = pd.DataFrame(cv_results_dict, columns = column_order, copy=True)
+
+    if prnt == True:
+        print('Using collections of size >', minSize)
+        print('Excluding categories: ', dropList)
+        print(classification_report(y, cv_pred))
+        print(confusion_matrix(y, cv_pred))
+
+    return results[ results.Actual != results.Predicted ]
+
+
+
+#print(get_mislabeled_graphs(DecisionTreeClassifier(), df))
+
+
+
+
+allNameDict = {'Name' : df.Graph.values, 'Count' : np.zeros( len(df.Graph.values) )}
+order = ['Name', 'Count']
+all_names = pd.DataFrame(allNameDict, columns=order, copy=True)
+
+model =  DecisionTreeClassifier()
+repeat = 2
+for i in range( repeat ):
+    mislabeled = get_mislabeled_graphs(model, df, prnt=False)
+    for graph in mislabeled.Name.values:
+        print(all_names[ all_names.Name == graph ].iloc[0][1])
+        all_names[ all_names.Name == graph ].iloc[0][1] += 1
+
+print(all_names)

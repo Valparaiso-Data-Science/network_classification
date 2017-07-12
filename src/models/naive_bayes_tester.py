@@ -10,17 +10,18 @@ from git.src.models.model_class import modelFitTest
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
-maxTri_assort_minDeg_scores = [] # sets up list for all cv score averages
-iterations = 20
+scores = [] # sets up list for all cv score averages
+scoresDiff = [] # sets up list for all differences of cv score averages
+iterations = 100
 toDrop = ['Graph', 'Collection',
           # 'Nodes',
           # 'Edges',
           # 'Density',
-          # 'Maximum degree',
+           'Maximum degree',
            'Minimum degree',
           # 'Average degree',
            'Assortativity',
-          # 'Total triangles',
+           'Total triangles',
           # 'Average triangles',
            'Maximum triangles',
           # 'Avg. clustering coef.',
@@ -28,10 +29,10 @@ toDrop = ['Graph', 'Collection',
           # 'Maximum k-core',
           # 'Max. clique (lb)'
             ]
-#for i in range(iterations):
-#    score = modelFitTest(GaussianNB, df, dropList=toDrop, cv=5, feat_comp=True)
-#    maxTri_assort_minDeg_scores.append(score)
-#
-#print(maxTri_assort_minDeg_scores)
+for i in range(iterations):
+    score = modelFitTest(GaussianNB(), df, dropList=toDrop, cv=5, feat_comp=True, prnt=False)
+    scoresDiff.append(score[0])
+    scores.append(score[1])
 
-print(modelFitTest(GaussianNB, df, feat_comp=True))
+print('average score: ', np.mean(scores))
+print('average score difference: ', np.mean(scoresDiff))
