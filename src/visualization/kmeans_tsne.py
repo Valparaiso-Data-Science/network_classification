@@ -195,36 +195,36 @@ hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 # Creating the figure for the scatter plot
 p=figure(title = 'Scaled Data ', plot_width=1000)
 
+all_new_labels = df_new['Label'].unique().tolist()
 
 # Create scatter points and color the plot by collection
 j = 0 # To use in loop
 for i, graph in enumerate(all_new_categories):
     source = ColumnDataSource(df_new[df_new['Category Name'] == graph])
-    p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-
-#    if graph != 'Centroid':
-#        if (df_new['Label'][j] == 0).any():
+    if graph != 'Centroid':
+        p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        if (df_new['Category Name'][j] == graph).all():
 #            p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Label'][j] == 1).any():
+#        elif (df_new['Category Name'][j] == graph).all():
 #            p.triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Label'][j] == 2).any():
+#        elif (df_new['Category Name'][j] == graph).all():
 #            p.diamond(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Label'][j] == 3).any():
+#        elif (df_new['Category Name'][j] == graph).all():
 #            p.asterisk(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Label'][j] == 4).any():
+#        elif (df_new['Category Name'][j] == graph).all():
 #            p.cross(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Label'][j] == 5).any():
-#            p.x(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Label'][j] == 6).any():
+#        elif (df_new['Category Name'][j] == graph).all():
+#            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+#        elif (df_new['Category Name'][j] == graph).all():
 #            p.inverted_triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
 #        else:
 #            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
 #        j += 1
-#    else:
+    else:
         # Plot the centroids
-#        p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
+        p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
 
-p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
+#p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
 
 # Add tools and interactive legend
 p.add_tools(hover)

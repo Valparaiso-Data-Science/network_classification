@@ -28,36 +28,6 @@ df_array = df_new.values
 # Get names of the columns
 column = df_new.keys()
 
-# Create new data frame with the centroids data from the kmeans in raw data
-#new_cent = pd.DataFrame(centroids, columns = column)
-#new_cent['Collection'] = 'Centroid'
-#new_cent['Graph'] = [0,1,2,3,4,5,6,7]
-
-# Rearranging the order of the columns
-#new_cent = new_cent[['Graph', 'Collection', 'Nodes', 'Edges', 'Density', 'Maximum degree',
-#       'Minimum degree', 'Average degree', 'Assortativity', 'Total triangles',
-#       'Average triangles', 'Maximum triangles', 'Avg. clustering coef.',
-#       'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)']]
-
-# Concatenate raw data frame with centroids data frame
-#raw_with_cent = pd.concat([raw, new_cent])
-
-# Create a copy of this data frame
-#raw_with_cent_copy = pd.DataFrame.copy(raw_with_cent)
-
-# Delete categorical columns
-#del raw_with_cent_copy['Graph']
-#del raw_with_cent_copy['Collection']
-
-# Delete Nodes and Edges (Will this make a change?)
-#del raw_with_cent_copy['Nodes']
-#del raw_with_cent_copy['Edges']
-
-# Get all the category names and graph names
-#category_new = raw_with_cent['Collection']
-#names_new = raw_with_cent['Graph']
-#all_new_categories = category_new.unique().tolist()
-
 
 # Get category and graph names for new dataframe
 category = df['Collection']
@@ -67,7 +37,7 @@ names = df['Graph']
 all_categories = category.unique().tolist()
 
 # Run tsne on the new data frame
-tsne = TSNE(random_state=42)
+tsne = TSNE()
 scaler = MinMaxScaler()
 pipeline = make_pipeline(scaler, tsne)
 
@@ -111,7 +81,7 @@ all_labels = df_data['Label'].unique().tolist()
 
 # Create hover tool
 hover = HoverTool()
-hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
+hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}"), ("Cluster", "@Label")]
 
 # Creating the figure for the scatter plot
 p = figure(title = 't-SNE ', plot_width=1000)
