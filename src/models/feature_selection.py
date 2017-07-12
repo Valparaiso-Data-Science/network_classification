@@ -135,7 +135,7 @@ print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), revers
 # RFECV feature selection
 #**************************************
 # Can change the model and cv
-rfecv = RFECV(estimator = model_6, step = 1, cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
+rfecv = RFECV(estimator = model_6, step = 1, cv = StratifiedKFold(n_splits=5, shuffle = True, random_state=42),
               scoring = 'accuracy')
 rfecv.fit(X, Y)
 print("Optimal number of features : %d" % rfecv.n_features_)
