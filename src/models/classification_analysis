@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
+from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict, StratifiedKFold
 from sklearn.svm import SVC, LinearSVC
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
@@ -46,7 +46,14 @@ def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'
 
         results_dict = {'Name' : names_test, 'Actual' : y_test, 'Predicted' : y_pred}
         column_order = ['Name', 'Actual', 'Predicted']
-        results = pd.DataFrame(results_dict, columns = column_order, copy=True)
+        #results = pd.DataFrame(results_dict, columns = column_order, copy=True)
+
+        iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
+                                   )
+        cv_pred = cross_val_predict(model, X, y, cv=iterator)
+        cv_results_dict = {'Name' : names, 'Actual' : y, 'Predicted' : cv_pred}
+        results = pd.DataFrame(cv_results_dict, columns = column_order, copy=True)
+        print(confusion_matrix(y, cv_pred))
         return results[ results.Actual != results.Predicted ]
 
 
