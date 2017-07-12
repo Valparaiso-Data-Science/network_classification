@@ -47,6 +47,7 @@ def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=
             Xold = df.drop(['Graph', 'Collection'], axis = 1).values
             oldCVscores = cross_val_score(model, Xold, y, cv = iterator)
             print('New cv average - Old cv average = ', np.mean(cvscores) - np.mean(oldCVscores))
+            print( 'New cv average: ', np.mean(cvscores))
 
 
     #Same code, but without prints
@@ -89,4 +90,4 @@ def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=
             Xold = df.drop(['Graph', 'Collection'], axis=1).values
             oldCVscores = cross_val_score(model, Xold, y, cv=iterator)
             # print('New cv average - Old cv average = ', np.mean(cvscores) - np.mean(oldCVscores))
-            return np.mean(cvscores) - np.mean(oldCVscores)
+            return [ np.mean(cvscores) - np.mean(oldCVscores), np.mean(cvscores) ]
