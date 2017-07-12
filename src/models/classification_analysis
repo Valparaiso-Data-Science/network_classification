@@ -13,96 +13,33 @@ df = pd.read_csv(infile, index_col=0)
 
 def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'], split=.25, cv=4, prnt=True):
 
+
+    collections = np.unique(df.Collection.values)
+    for collection in collections:
+        size = len(df[df.Collection == collection])
+        if size < minSize:
+            df = df[df.Collection != collection]
+
+    X = df.drop(dropList, axis=1).values
+    y = df['Collection'].values
+    names = df['Graph'].values
+
+    iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
+                               )
+    cv_pred = cross_val_predict(model, X, y, cv=iterator)
+    cv_results_dict = {'Name' : names, 'Actual' : y, 'Predicted' : cv_pred}
+
+    column_order = ['Name', 'Actual', 'Predicted']
+    results = pd.DataFrame(cv_results_dict, columns = column_order, copy=True)
+
     if prnt == True:
-        collections = np.unique(df.Collection.values)
-        for collection in collections:
-            size = len(df[df.Collection == collection])
-            if size < minSize:
-                df = df[df.Collection != collection]
         print('Using collections of size >', minSize)
-
-        X = df.drop(dropList, axis=1).values
-        y = df['Collection'].values
-        names = df['Graph'].values
         print('Excluding categories: ', dropList)
+        print(classification_report(y, cv_pred))
+        print(confusion_matrix(y, cv_pred))
 
-        #iterator = StratifiedKFold(n_splits = cv, shuffle = True,# random_state = 42
-        #                            )
-        #cvscores = cross_val_score(model, X, y, cv = iterator)
-        #print(cv, '-fold stratified cross validation')
-#
-#
-        #print('cv scores: ', cvscores)
-        #print('cv average: ', np.mean(cvscores))
+    return results[ results.Actual != results.Predicted ]
 
-        X_train, X_test, y_train, y_test, names_train, names_test = train_test_split(X, y, names, test_size=split, stratify=y)
-        model.fit( X_train, y_train )
-        y_pred = model.predict( X_test )
-        #print('Test size: ', split)
-        #print(classification_report(y_test, y_pred))
-        #print('Confusion matrix')
-        #print(confusion_matrix(y_test, y_pred))
-        #print('score of prediction: ', model.score(X_test, y_test))
-
-        results_dict = {'Name' : names_test, 'Actual' : y_test, 'Predicted' : y_pred}
-        column_order = ['Name', 'Actual', 'Predicted']
-        #results = pd.DataFrame(results_dict, columns = column_order, copy=True)
-
-        iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
-                                   )
-        cv_pred = cross_val_predict(model, X, y, cv=iterator)
-        cv_results_dict = {'Name' : names, 'Actual' : y, 'Predicted' : cv_pred}
-        results = pd.DataFrame(cv_results_dict, columns = column_order, copy=True)
-
-        if prnt == True:
-            print(classification_report(y, cv_pred))
-            print(confusion_matrix(y, cv_pred))
-
-        return results[ results.Actual != results.Predicted ]
-
-
-
-    #Same code, but without prints
-
-    #else:
-    #    collections = np.unique(df.Collection.values)
-    #    for collection in collections:
-    #        size = len(df[df.Collection == collection])
-    #        if size < minSize:
-    #            df = df[df.Collection != collection]
-    #    #print('Using collections of size >', minSize)
-#
-    #    X = df.drop(dropList, axis=1).values
-    #    y = df['Collection'].values
-    #    #print('Excluding categories: ', dropList)
-#
-    #    iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
-    #                               )
-    #    cvscores = cross_val_score(model, X, y, cv=iterator)
-    #    #print(cv, '-fold stratified cross validation')
-#
-    #    if feat_comp == False:
-    #        #print('cv scores: ', cvscores)
-    #        #print('cv average: ', np.mean(cvscores))
-#
-    #        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split, stratify=y)
-    #        model.fit(X_train, y_train)
-    #        y_pred = model.predict(X_test)
-#
-    #        print('Test size: ', split)
-    #        print(classification_report(y_test, y_pred))
-    #        print('Confusion matrix')
-    #        print(confusion_matrix(y_test, y_pred))
-    #        print('score of prediction: ', model.score(X_test, y_test))
-#
-    #        return cvscores, np.mean(cvscores), classification_report(y_test, y_pred), confusion_matrix(y_test, y_pred), model.score(X_test, y_test)
-    #    else:
-#
-    #        # feature comparison -- compares the current cv average from input to the cv average from using all features
-    #        Xold = df.drop(['Graph', 'Collection'], axis=1).values
-    #        oldCVscores = cross_val_score(model, Xold, y, cv=iterator)
-    #        # print('New cv average - Old cv average = ', np.mean(cvscores) - np.mean(oldCVscores))
-    #        return [ np.mean(cvscores) - np.mean(oldCVscores), np.mean(cvscores) ]
 
 
 print(get_mislabeled_graphs(DecisionTreeClassifier(), df))
