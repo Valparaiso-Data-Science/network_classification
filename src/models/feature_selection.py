@@ -9,7 +9,7 @@ from sklearn.model_selection import StratifiedKFold
 import numpy as np
 
 # Read file
-df = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col='Unnamed: 0')
+df = pd.read_csv('~/Downloads/network_classification/src/data/data_greater_than_20.csv', index_col='Unnamed: 0')
 
 # Delete categorical column
 del df['Graph']
@@ -135,24 +135,32 @@ print(sorted(zip(map(lambda x: round(x, 4), model_8.scores_), col_names), revers
 # RFECV feature selection
 #**************************************
 # Can change the model and cv
-rfecv = RFECV(estimator = model_6, step = 1, cv = StratifiedKFold(n_splits=5, shuffle = True, random_state=42),
-              scoring = 'accuracy')
-rfecv.fit(X, Y)
-print("Optimal number of features : %d" % rfecv.n_features_)
-#print("Selected Features: " + str(rfecv.support_))
-print("Feature Ranking: " + str(rfecv.ranking_))
 
-# Get grid scores
-g_scores = rfecv.grid_scores_
-indices = np.argsort(g_scores)[::-1]
-print('Printing RFECV results:')
-for f in range(X.shape[1]):
-    print("%d. Number of features: %d, Grid_Score: %f" % (f + 1, indices[f]+1, g_scores[indices[f]]))
 
-# Plot number of features VS. cross-validation scores
-plt.figure()
-plt.title("RFECV - Random Forest", {'size':'16'})
-plt.xlabel("Number of features selected", {'size':'11'})
-plt.ylabel("Cross validation score (nb of correct classifications)", {'size':'11'})
-plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
-plt.show()
+def rfecv(model, name):
+    rfecv = RFECV(estimator=model, step=1, cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
+                  scoring='accuracy')
+    rfecv.fit(X, Y)
+    print("Optimal number of features : %d" % rfecv.n_features_)
+    # print("Selected Features: " + str(rfecv.support_))
+    print("Feature Ranking: " + str(rfecv.ranking_))
+
+    # Get grid scores
+    g_scores = rfecv.grid_scores_
+    indices = np.argsort(g_scores)[::-1]
+    print('Printing RFECV results:')
+    for f in range(X.shape[1]):
+        print("%d. Number of features: %d, Grid_Score: %f" % (f + 1, indices[f] + 1, g_scores[indices[f]]))
+
+    # Plot number of features VS. cross-validation scores
+    plt.figure()
+    plt.title(name, {'size': '16'})
+    plt.xlabel("Number of features selected", {'size': '11'})
+    plt.ylabel("Cross validation score (nb of correct classifications)", {'size': '11'})
+    plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
+    plt.show()
+
+
+rfecv(model_3, "RFECV - Linear SVC")
+rfecv(model_5, "RFECV - Decision Tree")
+rfecv(model_6, "RFECV - Random Forest")
