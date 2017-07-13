@@ -47,16 +47,16 @@ def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'
 
 
 
-allNameDict = {'Name' : df.Graph.values, 'Count' : np.zeros( len(df.Graph.values) )}
-order = ['Name', 'Count']
-all_names = pd.DataFrame(allNameDict, columns=order, copy=True)
+allNameDict = {'Count' : np.zeros( len(df.Graph.values) )}
+
+all_names = pd.DataFrame(allNameDict, index=df.Graph.values, copy=True)
 
 model =  DecisionTreeClassifier()
-repeat = 2
+repeat = 100
 for i in range( repeat ):
     mislabeled = get_mislabeled_graphs(model, df, prnt=False)
     for graph in mislabeled.Name.values:
-        print(all_names[ all_names.Name == graph ].iloc[0][1])
-        all_names[ all_names.Name == graph ].iloc[0][1] += 1
+        #print(all_names.loc[graph ][0])
+        all_names.loc[graph, 'Count'] += 1
+        #all_names[ all_names.Name == graph ].iloc[0][1] += 1
 
-print(all_names)
