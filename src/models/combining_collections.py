@@ -23,4 +23,6 @@ from git.src.models.model_class import modelFitTest
 
 modelFitTest(RandomForestClassifier(), dfNew, cv=5)
 
-from git.src.models.classification_analysis import *
+from git.src.models.classification_analysis import get_mislabel_analysis, get_mislabeled_graphs
+
+print(get_mislabeled_graphs(DecisionTreeClassifier(), df))
