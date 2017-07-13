@@ -19,12 +19,12 @@ remove = ['Graph', 'Collection',
           # 'Edges',
           # 'Density',
           # 'Maximum degree',
-           'Minimum degree',
+          # 'Minimum degree',
           # 'Average degree',
-           'Assortativity',
+          # 'Assortativity',
           # 'Total triangles',
           # 'Average triangles',
-           'Maximum triangles',
+          # 'Maximum triangles',
           # 'Avg. clustering coef.',
           # 'Frac. closed triangles',
           # 'Maximum k-core',
@@ -33,7 +33,7 @@ remove = ['Graph', 'Collection',
 
 
 print('Decision Tree')
-modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.2, dropList=remove, feat_comp=True
+modelFitTest(DecisionTreeClassifier(), df, cv=5, dropList=remove, feat_comp=False
               )
 ##print('Decision Tree')
 ##modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
@@ -48,7 +48,7 @@ modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.2, dropList=remove, feat
 #modelFitTest(SVC(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Linear SVC')
-modelFitTest(LinearSVC(), df, cv=5, split=.2, dropList=remove, feat_comp=True
+modelFitTest(LinearSVC(), df, cv=5, dropList=remove, feat_comp=False
               )
 #print('Linear SVC')
 #modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
@@ -56,7 +56,7 @@ modelFitTest(LinearSVC(), df, cv=5, split=.2, dropList=remove, feat_comp=True
 #modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('Gaussian Naive Bayes')
-modelFitTest(GaussianNB(), df, cv=5, split=.2, dropList=remove, feat_comp=True
+modelFitTest(GaussianNB(), df, cv=5, dropList=remove, feat_comp=False
               )
 #print('Gaussian Naive Bayes')
 #modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
@@ -71,7 +71,7 @@ modelFitTest(GaussianNB(), df, cv=5, split=.2, dropList=remove, feat_comp=True
 #modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 print('RandomForestClassifier')
-modelFitTest(RandomForestClassifier(), df, cv=5, split=.2, dropList=remove, feat_comp=True
+modelFitTest(RandomForestClassifier(), df, cv=5, dropList=remove, feat_comp=False
  )
 #print('RandomForestClassifier')
 #modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
