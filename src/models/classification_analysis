@@ -43,11 +43,8 @@ def get_mislabel_analysis(model, df, minSize=20, dropList=['Graph', 'Collection'
 
 
 
-#print(get_mislabeled_graphs(DecisionTreeClassifier(), df))
-
-
-
-def get_mislabeled_graphs(model, df, repeat=100, percent_return=0.5):
+# returns a dataframe consisting of the graphs that were mislabeled 'percent_return' - percent of the time after 'repeat' tests of the model
+def get_mislabeled_graphs(model, df, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'], cv=5):
     allNameDict = {'CountTot' : np.zeros( len(df.Graph.values) ),
                    'CountWeb' : np.zeros( len(df.Graph.values) ),
                    'CountFb': np.zeros( len(df.Graph.values) ),
@@ -59,7 +56,7 @@ def get_mislabeled_graphs(model, df, repeat=100, percent_return=0.5):
     all_names = pd.DataFrame(allNameDict, columns=order, index=df.Graph.values, copy=True)
 
     for i in range( repeat ):
-        analysis = get_mislabel_analysis(model, df, prnt=False)
+        analysis = get_mislabel_analysis(model, df, minSize, dropList, cv, prnt=False)
         for graph in analysis.Name.values:
             all_names.loc[graph, 'CountTot'] += 1
 
@@ -80,7 +77,7 @@ def get_mislabeled_graphs(model, df, repeat=100, percent_return=0.5):
     percentOver = all_names[ all_names['CountTot'] >= percent_return * repeat ]
     return percentOver
 
-#DtreeAnalysis = get_mislabel_analysis(DecisionTreeClassifier(), df, prnt=False)
-Dtree50 = get_mislabeled_graphs(DecisionTreeClassifier(), df )
-print( Dtree50.head(), #DtreeAnalysis
+
+Dtree50 = get_mislabeled_graphs(RandomForestClassifier(), df )
+print( Dtree50, #DtreeAnalysis
  )
