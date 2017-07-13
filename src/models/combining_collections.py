@@ -14,4 +14,4 @@ df = pd.read_csv(infile, index_col=0)
 techGraphs = df[ df.Collection == 'Technological Networks' ]
 
 for i in techGraphs.index:
-    i
+    print('fill')
