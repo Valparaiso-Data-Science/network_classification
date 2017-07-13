@@ -12,4 +12,6 @@ infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxs
 df = pd.read_csv(infile, index_col=0)
 
 techGraphs = df[ df.Collection == 'Technological Networks' ]
-print(techGraphs.info(), techGraphs.head())
+
+for i in techGraphs.index:
+    i
