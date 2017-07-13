@@ -1,15 +1,14 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold, cross_val_predict
 from sklearn.metrics import classification_report, confusion_matrix
 
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
-def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=.25, cv=4, feat_comp=False, prnt=True):
+def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], cv=4, feat_comp=False, prnt=True):
 
-# To include prints of the outputs
 
     collections = np.unique(df.Collection.values)
     for collection in collections:
@@ -34,18 +33,21 @@ def modelFitTest(model, df, minSize=20, dropList=['Graph', 'Collection'], split=
 
     if feat_comp == False:
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split, stratify=y)
-        model.fit( X_train, y_train )
-        y_pred = model.predict( X_test )
+        #X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=split, stratify=y)
+        #model.fit( X_train, y_train )
+        #y_pred = model.predict( X_test )
 
+        cv_pred = cross_val_predict(model, X, y, cv = iterator)
+
+        # To include prints of the outputs
         if prnt == True:
             print('cv scores: ', cvscores)
             print('cv average: ', np.mean(cvscores))
-            print('Test size: ', split)
-            print(classification_report(y_test, y_pred))
+            #print('Test size: ', split)
+            print(classification_report(y, cv_pred))
             print('Confusion matrix')
-            print(confusion_matrix(y_test, y_pred))
-            print('score of prediction: ', model.score(X_test, y_test))
+            print(confusion_matrix(y, cv_pred))
+            #print('score of prediction: ', model.score(X_test, y_test))
 
 
     else:
