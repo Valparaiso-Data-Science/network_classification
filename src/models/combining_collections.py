@@ -12,6 +12,15 @@ infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxs
 df = pd.read_csv(infile, index_col=0)
 
 techGraphs = df[ df.Collection == 'Technological Networks' ]
+webGraphs = df[ df.Collection == 'Web Graphs' ]
+web_tech = pd.concat([webGraphs, techGraphs])
+dfNew = df.copy()
+for i in web_tech.index:
+    dfNew.loc[i, 'Collection'] = 'Web-Tech'
 
-for i in techGraphs.index:
-    i
+
+from git.src.models.model_class import modelFitTest
+
+modelFitTest(RandomForestClassifier(), dfNew, cv=5)
+
+from git.src.models.classification_analysis import *
