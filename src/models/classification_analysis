@@ -11,7 +11,8 @@ from sklearn.ensemble import RandomForestClassifier
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
-def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'], cv=5, prnt=True):
+# Returns a dataframe showing all mislabeled graphs, their actual collection, and which collection they were classified as
+def get_mislabel_analysis(model, df, minSize=20, dropList=['Graph', 'Collection'], cv=5, prnt=True):
 
 
     collections = np.unique(df.Collection.values)
@@ -42,21 +43,41 @@ def get_mislabeled_graphs(model, df, minSize=20, dropList=['Graph', 'Collection'
 
 
 
-#print(get_mislabeled_graphs(DecisionTreeClassifier(), df))
+# returns a dataframe consisting of the graphs that were mislabeled 'percent_return' - percent of the time after 'repeat' tests of the model
+def get_mislabeled_graphs(model, df, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'], cv=5):
+    allNameDict = {'CountTot' : np.zeros( len(df.Graph.values) ),
+                   'CountWeb' : np.zeros( len(df.Graph.values) ),
+                   'CountFb': np.zeros( len(df.Graph.values) ),
+                   'CountSoc': np.zeros( len(df.Graph.values) ),
+                   'CountRt': np.zeros( len(df.Graph.values) ),
+                   'CountChem': np.zeros( len(df.Graph.values) ),
+                   'CountBn': np.zeros( len(df.Graph.values) ),}
+    order = ['CountTot', 'CountBn', 'CountChem', 'CountFb', 'CountRt', 'CountSoc', 'CountWeb']
+    all_names = pd.DataFrame(allNameDict, columns=order, index=df.Graph.values, copy=True)
+
+    for i in range( repeat ):
+        analysis = get_mislabel_analysis(model, df, minSize, dropList, cv, prnt=False)
+        for graph in analysis.Name.values:
+            all_names.loc[graph, 'CountTot'] += 1
+
+            if analysis[analysis.Name == graph].iloc[0, 2] == 'Brain Networks':
+                all_names.loc[graph, 'CountBn'] += 1
+            elif analysis[ analysis.Name == graph ].iloc[0,2] == 'Cheminformatics':
+                all_names.loc[ graph, 'CountChem' ] += 1
+            elif analysis[ analysis.Name == graph ].iloc[0,2] == 'Facebook Networks':
+                all_names.loc[ graph, 'CountFb' ] += 1
+            elif analysis[ analysis.Name == graph ].iloc[0,2] == 'Retweet Networks':
+                all_names.loc[ graph, 'CountRt' ] += 1
+            elif analysis[ analysis.Name == graph ].iloc[0,2] == 'Social Networks':
+                all_names.loc[ graph, 'CountSoc' ] += 1
+            elif analysis[ analysis.Name == graph ].iloc[0,2] == 'Web Graphs':
+                all_names.loc[ graph, 'CountWeb' ] += 1
 
 
+    percentOver = all_names[ all_names['CountTot'] >= percent_return * repeat ]
+    return percentOver
 
 
-allNameDict = {'Name' : df.Graph.values, 'Count' : np.zeros( len(df.Graph.values) )}
-order = ['Name', 'Count']
-all_names = pd.DataFrame(allNameDict, columns=order, copy=True)
-
-model =  DecisionTreeClassifier()
-repeat = 2
-for i in range( repeat ):
-    mislabeled = get_mislabeled_graphs(model, df, prnt=False)
-    for graph in mislabeled.Name.values:
-        print(all_names[ all_names.Name == graph ].iloc[0][1])
-        all_names[ all_names.Name == graph ].iloc[0][1] += 1
-
-print(all_names)
+Dtree50 = get_mislabeled_graphs(RandomForestClassifier(), df )
+print( Dtree50, #DtreeAnalysis
+ )
