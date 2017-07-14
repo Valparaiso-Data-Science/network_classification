@@ -32,7 +32,10 @@ remove = ['Graph', 'Collection',
           # 'Max. clique (lb)'
             ]
 
+tester = ModelTester(df)
+#print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
 
+print(tester.get_mislabel_analysis(RandomForestClassifier()))
 #print('Decision Tree')
 #modelFitTest(DecisionTreeClassifier(), df, cv=5, dropList=remove, feat_comp=False )
 ##print('Decision Tree')
@@ -76,5 +79,3 @@ remove = ['Graph', 'Collection',
 #modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 
-tester = ModelTester(df)
-print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
