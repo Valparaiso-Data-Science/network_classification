@@ -35,7 +35,13 @@ remove = ['Graph', 'Collection',
 tester = ModelTester(df)
 #print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
 
-print(tester.get_mislabel_analysis(RandomForestClassifier()))
+
+combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+print(np.unique(combined.Collection.values))
+#print(combined[combined.Collection == 'Web Graphs'])
+
+
+
 #print('Decision Tree')
 #modelFitTest(DecisionTreeClassifier(), df, cv=5, dropList=remove, feat_comp=False )
 ##print('Decision Tree')

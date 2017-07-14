@@ -143,12 +143,14 @@ class ModelTester():
         percentOver = all_names[all_names['CountTot'] >= percent_return * repeat]
         return percentOver
 
-    def combine_collections(self, collectionList):
-        techGraphs = df[df.Collection == 'Technological Networks']
-        webGraphs = df[df.Collection == 'Web Graphs']
-        web_tech = pd.concat([webGraphs, techGraphs])
-        dfNew = df.copy()
-        for i in web_tech.index:
-            dfNew.loc[i, 'Collection'] = 'Web-Tech'
+# returns new df with collections in collectionList combined into one new collection: newName
+    def combine_collections(self, collectionList, newName):
+        dfNew = self.df.copy()
+        collectionDFs = []
+        for label in collectionList:
+            dfSpec = dfNew[ dfNew.Collection == label ]
+            collectionDFs.append( dfSpec )
+            for i in dfSpec.index:
+                dfNew.loc[i, 'Collection'] = newName
 
         return dfNew
