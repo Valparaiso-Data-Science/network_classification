@@ -141,8 +141,8 @@ class ModelTester():
         if prnt == True:
             print('Using collections of size >', minSize)
             print('Excluding features: ', dropList)
-            print(classification_report(y, cv_pred))
-            print(confusion_matrix(y, cv_pred))
+
+
 
 
         return results[results.Actual != results.Predicted]
@@ -214,10 +214,16 @@ class ModelTester():
             for i in dfSpec.index:
                 dfNew.loc[i, 'Collection'] = newName
 
+#for the misc df
+            if 'Collection Hypothesis' in dfNew.columns:
+                dfSpec = dfNew[ dfNew['Collection Hypothesis'] == label ]
+                for i in dfSpec.index:
+                    dfNew.loc[i, 'Collection Hypothesis'] = newName
+
         return dfNew
 
 # Trains a model on full set of data, and then predicts on new data 'testDF'
-    def train_predict(self, model, testDF, dropList=['Graph', 'Collection']):
+    def train_predict(self, model, testDF, dropList=['Graph', 'Collection'], minSize=20):
         dfNew = self.df.copy()
         graphs = list(dfNew['Graph'])
         categories = list(dfNew['Collection'])
@@ -235,6 +241,13 @@ class ModelTester():
         cols = list(scaleDF.columns)
         cols = cols[-2:] + cols[:-2]
         scaleDF = scaleDF[cols]
+
+        # This removes the collections that are too small
+        collections = np.unique(scaleDF.Collection.values)
+        for collection in collections:
+            size = len(scaleDF[scaleDF.Collection == collection])
+            if size < minSize:
+                scaleDF = scaleDF[scaleDF.Collection != collection]
 
         X =scaleDF.drop(dropList, axis=1).values
         y = scaleDF['Collection'].values

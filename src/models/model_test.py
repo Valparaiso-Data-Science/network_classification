@@ -38,12 +38,42 @@ tester = ModelTester(df)
 
 combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTester = ModelTester(combined)
-#print(combTester.get_mislabeled_graphs(RandomForestClassifier()))
-combTester.modelFitTest(RandomForestClassifier())
-tester.modelFitTest(RandomForestClassifier())
+combined = combTester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
+combTester = ModelTester(combined)
+#combined = combTester.combine_collections([#'Collaboration Networks',
+#                                           'Interaction Networks',
+#                                           'Recommendation Networks'
+#                                           ], 'Collab_Inter_Rec')
+#combTester = ModelTester(combined)
+combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
+combTester = ModelTester(combined)
 
-miscFile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv'
-pd.read_csv(infile, index_col=1)
+combMislabel = combTester.get_mislabel_analysis(RandomForestClassifier(), minSize=16)
+print(combMislabel
+      [ combMislabel.Actual == 'Sci-Eco']
+     )
+combTester.modelFitTest(RandomForestClassifier(), minSize=16)
+tester.modelFitTest(RandomForestClassifier(), minSize=0)
+
+miscFile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/miscellaneous_networks.csv'
+misc = pd.read_csv(miscFile, index_col=0)
+miscObject = ModelTester(misc)
+
+renamedMisc = miscObject.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+miscObject = ModelTester(renamedMisc)
+renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
+miscObject = ModelTester(renamedMisc)
+renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
+
+
+
+miscTest = combTester.train_predict(RandomForestClassifier(), renamedMisc, minSize=0)
+print(miscTest)
+print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
+
+
+
+
 
 
 #print('Decision Tree')
