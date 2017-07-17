@@ -155,10 +155,17 @@ class ModelTester():
 
         return dfNew
 
-    def train_test(self, model, Xtest, dropList=['Graph', 'Collection']):
+# Trains a model on full set of data, and then predicts on new data 'testDF'
+    def train_predict(self, model, testDF, dropList=['Graph', 'Collection']):
         X = self.df.drop(dropList, axis=1).values
         y = self.df['Collection'].values
         names = self.df['Graph'].values
 
+        testNames = testDF.Graph.values
+        testFeatures = testDF.drop(dropList, axis=1).values
         model.fit(X, y)
-        pred = model.predict(Xtest)
+        pred = model.predict(testFeatures)
+
+        resultsDict = {'Graph' : testNames, 'Predicted' : pred}
+        results = pd.DataFrame(resultsDict)
+        return results
