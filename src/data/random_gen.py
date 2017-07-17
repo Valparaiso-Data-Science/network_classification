@@ -5,7 +5,7 @@ er = Graph()
 b = Graph()
 
 p_list = [0.01, 0.05, 0.1]
-m_list = [1, 10, 50]
+m_list = [10, 40, 60]
 
 nGraphs = range(1, 26)
 #generate all the erdos_renyi and the barabasi graphs- 3 loops each generating 25 graphs
@@ -44,7 +44,7 @@ for n2 in nGraphs:
 print('relax! done with n2!!')
 #loop 3: n=100000
 for n3 in nGraphs:
-    n_3 = 50000 + np.random.randint(-10000, 10000)
+    n_3 = 100000 + np.random.randint(-20000, 20000)
     p = np.random.choice(p_list)
     p_str = str(int(p * 100))
     er = er.Erdos_Renyi(n_3, p=p)
