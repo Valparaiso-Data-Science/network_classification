@@ -43,16 +43,16 @@ class ModelTester():
         scaleDF = scaleDF[cols]
 
 
-        dfNew = self.df.copy()
-        collections = np.unique(dfNew.Collection.values)
+
+        collections = np.unique(scaleDF.Collection.values)
         for collection in collections:
-            size = len(dfNew[dfNew.Collection == collection])
+            size = len(scaleDF[scaleDF.Collection == collection])
             if size < minSize:
-                dfNew = dfNew[dfNew.Collection != collection]
+                scaleDF = scaleDF[scaleDF.Collection != collection]
 
 
-        X = dfNew.drop(dropList, axis=1).values
-        y = dfNew['Collection'].values
+        X = scaleDF.drop(dropList, axis=1).values
+        y = scaleDF['Collection'].values
 
 
         iterator = StratifiedKFold(n_splits = cv, shuffle = True,# random_state = 42
@@ -87,7 +87,7 @@ class ModelTester():
 
         else:
             #feature comparison -- compares the current cv average from input to the cv average from using all features
-            Xold = dfNew.drop(['Graph', 'Collection'], axis = 1).values
+            Xold = scaleDF.drop(['Graph', 'Collection'], axis = 1).values
             oldCVscores = cross_val_score(model, Xold, y, cv = iterator)
 
             if prnt == True:
@@ -101,15 +101,34 @@ class ModelTester():
     def get_mislabel_analysis(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, prnt=True):
 
         dfNew = self.df.copy()
-        collections = np.unique(dfNew.Collection.values)
-        for collection in collections:
-            size = len(dfNew[dfNew.Collection == collection])
-            if size < minSize:
-                dfNew = dfNew[dfNew.Collection != collection]
 
-        X = dfNew.drop(dropList, axis=1).values
-        y = dfNew['Collection'].values
-        names = dfNew['Graph'].values
+        # scales the data
+        graphs = list(dfNew['Graph'])
+        categories = list(dfNew['Collection'])
+        del dfNew['Graph']
+        del dfNew['Collection']
+
+        array = dfNew.values
+        scale = MinMaxScaler()
+        scaledArray = scale.fit_transform(array)
+        # create the new df
+        scaleDF = pd.DataFrame(scaledArray)
+        scaleDF.columns = dfNew.columns
+        scaleDF['Graph'] = graphs
+        scaleDF['Collection'] = categories
+        cols = list(scaleDF.columns)
+        cols = cols[-2:] + cols[:-2]
+        scaleDF = scaleDF[cols]
+
+        collections = np.unique(scaleDF.Collection.values)
+        for collection in collections:
+            size = len(scaleDF[scaleDF.Collection == collection])
+            if size < minSize:
+                scaleDF = scaleDF[scaleDF.Collection != collection]
+
+        X = scaleDF.drop(dropList, axis=1).values
+        y = scaleDF['Collection'].values
+        names = scaleDF['Graph'].values
 
         iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
                                    )
@@ -133,23 +152,43 @@ class ModelTester():
     def get_mislabeled_graphs(self, model, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'],
                               cv=5):
 
-# This removes the collections that are too small
+
         dfNew = self.df.copy()
-        collections = np.unique(dfNew.Collection.values)
+
+#scales the data
+        graphs = list(dfNew['Graph'])
+        categories = list(dfNew['Collection'])
+        del dfNew['Graph']
+        del dfNew['Collection']
+
+        array = dfNew.values
+        scale = MinMaxScaler()
+        scaledArray = scale.fit_transform(array)
+#create the new df
+        scaleDF = pd.DataFrame(scaledArray)
+        scaleDF.columns = dfNew.columns
+        scaleDF['Graph'] = graphs
+        scaleDF['Collection'] = categories
+        cols = list(scaleDF.columns)
+        cols = cols[-2:] + cols[:-2]
+        scaleDF = scaleDF[cols]
+
+# This removes the collections that are too small
+        collections = np.unique(scaleDF.Collection.values)
         for collection in collections:
-            size = len(dfNew[dfNew.Collection == collection])
+            size = len(scaleDF[scaleDF.Collection == collection])
             if size < minSize:
-                dfNew = dfNew[dfNew.Collection != collection]
+                scaleDF = scaleDF[scaleDF.Collection != collection]
 
 # Creates a dictionary that will be used to create a new dataframe
-        collectionNames = np.unique(dfNew.Collection.values)
-        allNameDict = {'TotalCount': np.zeros(len(dfNew.Graph.values))}
+        collectionNames = np.unique(scaleDF.Collection.values)
+        allNameDict = {'TotalCount': np.zeros(len(scaleDF.Graph.values))}
         for i in range( len(collectionNames) ):
-            allNameDict[collectionNames[i]] = np.zeros(len(dfNew.Graph.values))
+            allNameDict[collectionNames[i]] = np.zeros(len(scaleDF.Graph.values))
 
 # Creates DF with organzied column order
         order = ['TotalCount'] + list(collectionNames)
-        all_names = pd.DataFrame(allNameDict, columns=order, index=dfNew.Graph.values, copy=True)
+        all_names = pd.DataFrame(allNameDict, columns=order, index=scaleDF.Graph.values, copy=True)
       # This trains and test the model 'repeat' number of times, keeping track of how each graph was mislabeled each time
         for i in range(repeat):
             analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, prnt=False)
@@ -179,9 +218,27 @@ class ModelTester():
 
 # Trains a model on full set of data, and then predicts on new data 'testDF'
     def train_predict(self, model, testDF, dropList=['Graph', 'Collection']):
-        X = self.df.drop(dropList, axis=1).values
-        y = self.df['Collection'].values
-        names = self.df['Graph'].values
+        dfNew = self.df.copy()
+        graphs = list(dfNew['Graph'])
+        categories = list(dfNew['Collection'])
+        del dfNew['Graph']
+        del dfNew['Collection']
+
+        array = dfNew.values
+        scale = MinMaxScaler()
+        scaledArray = scale.fit_transform(array)
+        # create the new df
+        scaleDF = pd.DataFrame(scaledArray)
+        scaleDF.columns = dfNew.columns
+        scaleDF['Graph'] = graphs
+        scaleDF['Collection'] = categories
+        cols = list(scaleDF.columns)
+        cols = cols[-2:] + cols[:-2]
+        scaleDF = scaleDF[cols]
+
+        X =scaleDF.drop(dropList, axis=1).values
+        y = scaleDF['Collection'].values
+        names = scaleDF['Graph'].values
 
         testNames = testDF.Graph.values
         testFeatures = testDF.drop(dropList, axis=1).values
