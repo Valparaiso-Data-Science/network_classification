@@ -111,7 +111,7 @@ class ModelTester():
     def get_mislabeled_graphs(self, model, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'],
                               cv=5):
 
-# This removes
+# This removes the collections that are too small
         dfNew = self.df.copy()
         collections = np.unique(dfNew.Collection.values)
         for collection in collections:
@@ -119,46 +119,27 @@ class ModelTester():
             if size < minSize:
                 dfNew = dfNew[dfNew.Collection != collection]
 
+# Creates a dictionary that will be used to create a new dataframe
         collectionNames = np.unique(dfNew.Collection.values)
         allNameDict = {'TotalCount': np.zeros(len(dfNew.Graph.values))}
         for i in range( len(collectionNames) ):
             allNameDict[collectionNames[i]] = np.zeros(len(dfNew.Graph.values))
 
-        #allNameDict = {'CountTot': np.zeros(len(dfNew.Graph.values)),
-        #               'CountWeb': np.zeros(len(dfNew.Graph.values)),
-        #               'CountFb': np.zeros(len(dfNew.Graph.values)),
-        #               'CountSoc': np.zeros(len(dfNew.Graph.values)),
-        #               'CountRt': np.zeros(len(dfNew.Graph.values)),
-        #               'CountChem': np.zeros(len(dfNew.Graph.values)),
-        #               'CountBn': np.zeros(len(dfNew.Graph.values)), }
+# Creates DF with organzied column order
         order = ['TotalCount'] + list(collectionNames)
         all_names = pd.DataFrame(allNameDict, columns=order, index=dfNew.Graph.values, copy=True)
-        print(all_names.head())
+      # This trains and test the model 'repeat' number of times, keeping track of how each graph was mislabeled each time
         for i in range(repeat):
             analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, prnt=False)
 
+# Keeps the count
             for graph in analysis.Name.values:
                 all_names.loc[graph, 'TotalCount'] += 1
 
                 mislabel = analysis[analysis.Name == graph].iloc[0, 2]
                 all_names.loc[graph, mislabel] += 1
 
-            #for graph in analysis.Name.values:
-            #    all_names.loc[graph, 'TotalCount'] += 1
-#
-            #    if analysis[analysis.Name == graph].iloc[0, 2] == 'Brain Networks':
-            #        all_names.loc[graph, 'CountBn'] += 1
-            #    elif analysis[analysis.Name == graph].iloc[0, 2] == 'Cheminformatics':
-            #        all_names.loc[graph, 'CountChem'] += 1
-            #    elif analysis[analysis.Name == graph].iloc[0, 2] == 'Facebook Networks':
-            #        all_names.loc[graph, 'CountFb'] += 1
-            #    elif analysis[analysis.Name == graph].iloc[0, 2] == 'Retweet Networks':
-            #        all_names.loc[graph, 'CountRt'] += 1
-            #    elif analysis[analysis.Name == graph].iloc[0, 2] == 'Social Networks':
-            #        all_names.loc[graph, 'CountSoc'] += 1
-            #    elif analysis[analysis.Name == graph].iloc[0, 2] == 'Web Graphs':
-            #        all_names.loc[graph, 'CountWeb'] += 1
-
+# This returns a Df with only the graphs that were labeled 'percent_return' -percent of the time
         percentOver = all_names[all_names['TotalCount'] >= percent_return * repeat]
         return percentOver
 
