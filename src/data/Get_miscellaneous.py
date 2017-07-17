@@ -12,5 +12,11 @@ df.columns = (['Graph', 'Collection', 'Nodes', 'Edges', 'Density', 'Maximum degr
 # Get only the miscellaneous data
 misc_data = df[df['Collection'] == 'Miscellaneous Networks']
 
+# Get rid of Chromatic Number
+del misc_data['Chromatic Number']
+
+# Drop NaN values of the frame
+misc_data = misc_data.dropna()
+
 # Move data to a csv file
 misc_data.to_csv('~/Downloads/network_classification/src/data/miscellaneous_networks.csv')
