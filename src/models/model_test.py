@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 #from git.src.models.model_class import modelFitTest
 from git.src.models.model_class import ModelTester
 
-infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
+infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
 #collections to remove from model
@@ -23,7 +23,7 @@ remove = ['Graph', 'Collection',
           # 'Minimum degree',
           # 'Average degree',
           # 'Assortativity',
-           'Total triangles',
+          #  'Total triangles',
           # 'Average triangles',
           # 'Maximum triangles',
           # 'Avg. clustering coef.',
@@ -42,6 +42,8 @@ combTester = ModelTester(combined)
 combTester.modelFitTest(RandomForestClassifier())
 tester.modelFitTest(RandomForestClassifier())
 
+miscFile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv'
+pd.read_csv(infile, index_col=1)
 
 
 #print('Decision Tree')

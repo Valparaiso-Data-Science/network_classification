@@ -240,11 +240,17 @@ class ModelTester():
         y = scaleDF['Collection'].values
         names = scaleDF['Graph'].values
 
-        testNames = testDF.Graph.values
-        testFeatures = testDF.drop(dropList, axis=1).values
-        model.fit(X, y)
-        pred = model.predict(testFeatures)
 
-        resultsDict = {'Graph' : testNames, 'Predicted' : pred}
+        testNames = testDF.Graph.values
+        hypothesis = testDF['Collection Hypothesis'].values
+        if 'Collection Hypothesis' in testDF.columns:
+            testFeatures = testDF.drop(['Collection Hypothesis'] + dropList, axis=1)
+        else:
+            testFeatures = testDF.drop(dropList, axis=1)
+        model.fit(X, y)
+        scaledTestFeatures = scale.transform(testFeatures)
+        pred = model.predict(scaledTestFeatures)
+
+        resultsDict = {'Graph' : testNames, 'Hypothesis' : hypothesis, 'Predicted' : pred}
         results = pd.DataFrame(resultsDict)
         return results
