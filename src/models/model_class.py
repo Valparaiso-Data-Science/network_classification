@@ -154,3 +154,11 @@ class ModelTester():
                 dfNew.loc[i, 'Collection'] = newName
 
         return dfNew
+
+    def train_test(self, model, Xtest, dropList=['Graph', 'Collection']):
+        X = self.df.drop(dropList, axis=1).values
+        y = self.df['Collection'].values
+        names = self.df['Graph'].values
+
+        model.fit(X, y)
+        pred = model.predict(Xtest)
