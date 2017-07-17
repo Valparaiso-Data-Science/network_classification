@@ -10,18 +10,17 @@ from sklearn.pipeline import make_pipeline
 import scipy
 
 misc = pd.read_csv('~/Downloads/network_classification/src/data/miscellaneous_networks.csv', index_col=0)
-misc = misc.dropna()
 del misc['Chromatic Number']
+misc = misc.dropna()
 scaled = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 df = pd.concat([scaled, misc])
 
 df_new = pd.DataFrame.copy(df)
 
-del df_new['Collection']
 del df_new['Graph']
-
-
+del df_new['Collection']
+del df_new['Collection Hypothesis']
 
 df_array = df_new.values
 
