@@ -1,3 +1,6 @@
+# This program creates plots using data ran on tsne and
+# plots it with bokeh using kmeans to get the clusters
+
 import pandas as pd
 import numpy as np
 from sklearn.cluster import KMeans
@@ -6,6 +9,7 @@ from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
 import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
+import scipy
 
 
 # Read file
@@ -33,28 +37,28 @@ raw_array = raw_new.values
 #**************************
 # Getting inertia graph
 #**************************
-ks = range(1, 20)
-inertias = []
+def inertia_plot(data_array):
+    ks = range(1, 20)
+    inertias = []
 
-for k in ks:
-    # Create a KMeans instance with k clusters: model
-    model = KMeans(n_clusters=k)
+    for k in ks:
+        # Create a KMeans instance with k clusters: model
+        model = KMeans(n_clusters=k)
 
-    # Fit model to samples
-    # Change to the data we need to check
-    model.fit(raw_array)
+        # Fit model to samples
+        # Change to the data we need to check
+        model.fit(data_array)
 
-    # Append the inertia to the list of inertias
-    inertias.append(model.inertia_)
+        # Append the inertia to the list of inertias
+        inertias.append(model.inertia_)
 
-# Plot ks vs inertias
-plt.plot(ks, inertias, '-o')
-plt.xlabel('number of clusters, k')
-plt.ylabel('inertia')
-plt.xticks(ks)
+    # Plot ks vs inertias
+    plt.plot(ks, inertias, '-o')
+    plt.xlabel('number of clusters, k')
+    plt.ylabel('inertia')
+    plt.xticks(ks)
+    plt.show()
 
-# Uncomment to show inertia graph
-#plt.show()
 
 
 #**************************
@@ -169,7 +173,7 @@ all_new_categories = category_new.unique().tolist()
 
 
 # Run tsne on the new data frame
-tsne = TSNE(random_state=42)
+tsne = TSNE(metric=scipy.spatial.distance.canberra)
 tsne_features = tsne.fit_transform(raw_with_cent_copy.values)
 xs_new = tsne_features[:, 0]
 ys_new = tsne_features[:, 1]
