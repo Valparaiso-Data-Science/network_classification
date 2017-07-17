@@ -38,7 +38,7 @@ tester = ModelTester(df)
 
 combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTester = ModelTester(combined)
-print(combTester.get_mislabeled_graphs(RandomForestClassifier()))
+#print(combTester.get_mislabeled_graphs(RandomForestClassifier()))
 combTester.modelFitTest(RandomForestClassifier())
 tester.modelFitTest(RandomForestClassifier())
 

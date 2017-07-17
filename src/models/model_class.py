@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold, cross_val_predict
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.preprocessing import MinMaxScaler
 
 
-infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
-df = pd.read_csv(infile, index_col=0)
+#infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
+#df = pd.read_csv(infile, index_col=0)
 
 
 class ModelTester():
@@ -20,6 +21,27 @@ class ModelTester():
 
 # Returns classification report and confusion matrix from cv over entire dataframe. If feat_comp == True, returns the difference in cv score from df with all features included
     def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, prnt=True):
+
+        dfNew = self.df.copy()
+
+        #scales the data
+        graphs = list(dfNew['Graph'])
+        categories = list(dfNew['Collection'])
+        del dfNew['Graph']
+        del dfNew['Collection']
+
+        array = dfNew.values
+        scale = MinMaxScaler()
+        scaledArray = scale.fit_transform(array)
+#create the new df
+        scaleDF = pd.DataFrame(scaledArray)
+        scaleDF.columns = dfNew.columns
+        scaleDF['Graph'] = graphs
+        scaleDF['Collection'] = categories
+        cols = list(scaleDF.columns)
+        cols = cols[-2:] + cols[:-2]
+        scaleDF = scaleDF[cols]
+
 
         dfNew = self.df.copy()
         collections = np.unique(dfNew.Collection.values)
