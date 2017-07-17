@@ -19,8 +19,8 @@
 908,ego-facebook,Miscellaneous Networks,Facebook Networks,2888,5962.0,0.0014,769.0,0.0,2.06,-0.62,273.0,0.09,52.0,0.027000000000000003,0.0,3.0,2.0
 909,ego-gplus,Miscellaneous Networks,Social Networks,23628,78388.0,0.0003,2761.0,0.0,3.32,-0.32,54663.0,2.31,4559.0,0.174,0.004,12.0,5.0
 910,ego-twitter,Miscellaneous Networks,Social Networks,23370,65662.0,0.0002,238.0,0.0,2.81,-0.02,26412.0,1.13,390.0,0.069,0.021,10.0,6.0
-911,foodweb-baydry,Miscellaneous Networks,Biological Networks,128,4212.0,0.5182,110.0,0.0,32.91,-0.01,25531.0,199.46,1726.5,0.326,0.311,24.0,9.0
-912,foodweb-baywet,Miscellaneous Networks,Biological Networks,128,4150.0,0.5106,110.0,0.0,32.42,-0.01,24663.0,192.68,1695.0,0.326,0.308,23.0,9.0
+911,foodweb-baydry,Miscellaneous Networks,Ecology Networks,128,4212.0,0.5182,110.0,0.0,32.91,-0.01,25531.0,199.46,1726.5,0.326,0.311,24.0,9.0
+912,foodweb-baywet,Miscellaneous Networks,Ecology Networks,128,4150.0,0.5106,110.0,0.0,32.42,-0.01,24663.0,192.68,1695.0,0.326,0.308,23.0,9.0
 914,fs-adjnoun-adj-copperfield,Miscellaneous Networks,Lexical Networks,112,424.5,0.0683,49.0,1.0,7.66,0.0,852.0,7.61,137.0,0.17300000000000001,0.157,6.0,5.0
 915,inf-contiguous-usa,Miscellaneous Networks,Infrastructure Networks,49,214.0,0.182,8.0,0.0,4.37,-0.01,167.0,3.41,8.0,0.478,0.4,3.0,1.0
 916,maayan-Stelzl,Miscellaneous Networks,Biological Networks,1702,6310.0,0.0044,95.0,0.0,3.71,-0.01,288.0,0.17,23.0,0.006,0.006,7.0,2.0
