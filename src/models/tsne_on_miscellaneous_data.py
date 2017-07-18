@@ -1,3 +1,6 @@
+# This code runs tsne on the data including miscellaneous networks.
+# It then calculates the clusters using k-means and plots them.
+
 
 import pandas as pd
 from sklearn.manifold import TSNE
