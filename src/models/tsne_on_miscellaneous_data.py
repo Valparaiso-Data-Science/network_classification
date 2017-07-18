@@ -7,20 +7,20 @@ from bokeh.palettes import d3
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.pipeline import make_pipeline
+import scipy
 
 misc = pd.read_csv('~/Downloads/network_classification/src/data/miscellaneous_networks.csv', index_col=0)
-misc = misc.dropna()
 del misc['Chromatic Number']
+misc = misc.dropna()
 scaled = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 df = pd.concat([scaled, misc])
 
 df_new = pd.DataFrame.copy(df)
 
-del df_new['Collection']
 del df_new['Graph']
-
-
+del df_new['Collection']
+del df_new['Collection Hypothesis']
 
 df_array = df_new.values
 
@@ -37,7 +37,7 @@ names = df['Graph']
 all_categories = category.unique().tolist()
 
 # Run tsne on the new data frame
-tsne = TSNE()
+tsne = TSNE(metric=scipy.spatial.distance.canberra)
 scaler = MinMaxScaler()
 pipeline = make_pipeline(scaler, tsne)
 
