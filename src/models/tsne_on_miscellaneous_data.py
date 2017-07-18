@@ -9,10 +9,10 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.pipeline import make_pipeline
 import scipy
 
+# Read files
 misc = pd.read_csv('~/Downloads/network_classification/src/data/miscellaneous_networks.csv', index_col=0)
-del misc['Chromatic Number']
-misc = misc.dropna()
-scaled = pd.read_csv('~/Downloads/network_classification/src/data/data_minmaxscale.csv', index_col=0)
+del misc['Collection Hypothesis']
+scaled = pd.read_csv('~/Downloads/network_classification/src/data/clean_data_with_new_chem.csv', index_col=0)
 
 df = pd.concat([scaled, misc])
 
@@ -20,7 +20,7 @@ df_new = pd.DataFrame.copy(df)
 
 del df_new['Graph']
 del df_new['Collection']
-del df_new['Collection Hypothesis']
+
 
 df_array = df_new.values
 
@@ -84,7 +84,7 @@ hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}"), ("Cluster", "@Label")]
 
 # Creating the figure for the scatter plot
-p = figure(title = 't-SNE ', plot_width=1000)
+p = figure(title = 't-SNE on All Data', plot_width=1000)
 
 # Create scatter points and color the plot by collection
 for i, graph in enumerate(all_categories):
