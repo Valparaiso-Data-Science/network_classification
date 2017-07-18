@@ -2,7 +2,7 @@
 891,adjnoun-adjacency,Miscellaneous Networks,Lexical Networks,112,850.0,0.1367,49.0,0.0,7.59,-0.06,852.0,7.61,137.0,0.17300000000000001,0.157,6.0,3.0
 892,aff-amazon-copurchases,Miscellaneous Networks,Recommendation Networks,403394,3387388.0,4.16e-05,2761.0,1.0,16.0,-0.013843200000000002,27158004.0,67.0,4454.0,0.43889799999999995,0.25601199999999996,21.0,11.0
 893,aff-dbpedia-users2country,Miscellaneous Networks,Affiliation Networks,590112,637133.0,3.66e-06,111131.0,1.0,2.0,1.25264,6318.0,0.0,1591.0,0.00172551,5.62e-07,16.0,3.0
-894,aff-flickr-user-groups,Miscellaneous Networks,Unknown Networks,395979,8545193.0,0.000108996,34994.0,1.0,43.0,-0.09179730000000001,111097849.0,280.0,1523778.0,0.030278500000000003,0.010384899999999999,188.0,14.0
+894,aff-flickr-user-groups,Miscellaneous Networks,Social Networks,395979,8545193.0,0.000108996,34994.0,1.0,43.0,-0.09179730000000001,111097849.0,280.0,1523778.0,0.030278500000000003,0.010384899999999999,188.0,14.0
 895,aff-github-user2project,Miscellaneous Networks,Collaboration Networks,120865,440165.0,6.0299999999999995e-05,3691.0,1.0,7.0,-0.033068900000000005,989453.0,8.0,22329.0,0.00611082,0.015768200000000003,49.0,8.0
 896,arenas-jazz,Miscellaneous Networks,Collaboration Networks,198,5484.0,0.2812,100.0,0.0,27.7,0.01,53697.0,271.2,1421.0,0.617,0.52,29.0,28.0
 897,arenas-meta,Miscellaneous Networks,Biological Networks,453,4050.0,0.0396,237.0,0.0,8.94,-0.07,9846.0,21.74,869.0,0.643,0.124,10.0,7.0
@@ -13,14 +13,14 @@
 902,ca-cit-HepTh,Miscellaneous Networks,Collaboration Networks,22908,2673133.0,0.0101881,11967.0,1.0,233.0,0.024499599999999996,933582693.0,40753.0,5013183.0,0.809359,0.313687,562.0,101.0
 903,cit-HepTh2007,Miscellaneous Networks,Collaboration Networks,27769,352768.0,0.000914986,2468.0,1.0,25.0,-0.0301994,4455399.0,160.0,33585.0,0.312896,0.119924,38.0,23.0
 904,contiguous-usa,Miscellaneous Networks,Infrastructure Networks,49,214.0,0.182,8.0,0.0,4.37,-0.01,167.0,3.41,8.0,0.478,0.4,3.0,1.0
-905,cora-agm-fcl-aid,Miscellaneous Networks,Unknown Networks,10237,57233.0,0.0011,698.0,0.0,12.3,0.0,7308.0,0.71,730.0,0.003,0.004,60.0,8.0
+905,cora-agm-fcl-aid,Miscellaneous Networks,Citation Networks,10237,57233.0,0.0011,698.0,0.0,12.3,0.0,7308.0,0.71,730.0,0.003,0.004,60.0,8.0
 906,cora-subelj,Miscellaneous Networks,Collaboration Networks,23166,91499.5,0.0003,379.0,1.0,7.9,0.0,263804.0,11.39,1090.0,0.27899999999999997,0.125,15.0,14.0
 907,dolphins,Miscellaneous Networks,Social Networks,62,318.0,0.1682,12.0,0.0,5.13,0.0,285.0,4.6,17.0,0.259,0.31,4.0,3.0
 908,ego-facebook,Miscellaneous Networks,Facebook Networks,2888,5962.0,0.0014,769.0,0.0,2.06,-0.62,273.0,0.09,52.0,0.027000000000000003,0.0,3.0,2.0
 909,ego-gplus,Miscellaneous Networks,Social Networks,23628,78388.0,0.0003,2761.0,0.0,3.32,-0.32,54663.0,2.31,4559.0,0.174,0.004,12.0,5.0
 910,ego-twitter,Miscellaneous Networks,Social Networks,23370,65662.0,0.0002,238.0,0.0,2.81,-0.02,26412.0,1.13,390.0,0.069,0.021,10.0,6.0
-911,foodweb-baydry,Miscellaneous Networks,Biological Networks,128,4212.0,0.5182,110.0,0.0,32.91,-0.01,25531.0,199.46,1726.5,0.326,0.311,24.0,9.0
-912,foodweb-baywet,Miscellaneous Networks,Biological Networks,128,4150.0,0.5106,110.0,0.0,32.42,-0.01,24663.0,192.68,1695.0,0.326,0.308,23.0,9.0
+911,foodweb-baydry,Miscellaneous Networks,Ecology Networks,128,4212.0,0.5182,110.0,0.0,32.91,-0.01,25531.0,199.46,1726.5,0.326,0.311,24.0,9.0
+912,foodweb-baywet,Miscellaneous Networks,Ecology Networks,128,4150.0,0.5106,110.0,0.0,32.42,-0.01,24663.0,192.68,1695.0,0.326,0.308,23.0,9.0
 914,fs-adjnoun-adj-copperfield,Miscellaneous Networks,Lexical Networks,112,424.5,0.0683,49.0,1.0,7.66,0.0,852.0,7.61,137.0,0.17300000000000001,0.157,6.0,5.0
 915,inf-contiguous-usa,Miscellaneous Networks,Infrastructure Networks,49,214.0,0.182,8.0,0.0,4.37,-0.01,167.0,3.41,8.0,0.478,0.4,3.0,1.0
 916,maayan-Stelzl,Miscellaneous Networks,Biological Networks,1702,6310.0,0.0044,95.0,0.0,3.71,-0.01,288.0,0.17,23.0,0.006,0.006,7.0,2.0
@@ -33,7 +33,7 @@
 923,misc-IMDB-bi,Miscellaneous Networks,Collaboration Networks,896308,3782456.0,9.42e-06,1590.0,0.0,8.0,-0.052988,13074.0,0.0,78.0,5.79e-05,8.08e-05,24.0,3.0
 924,misc-Reuters911,Miscellaneous Networks,Lexical Networks,13332,148038.0,0.00166589,2265.0,0.0,22.0,-0.10897899999999999,3510870.0,263.0,69804.0,0.36798400000000003,0.10693299999999999,74.0,28.0
 925,misc-football,Miscellaneous Networks,Social Networks,115,613.0,0.0935164,12.0,7.0,10.0,0.162442,2430.0,21.0,32.0,0.40321599999999996,0.40724,9.0,9.0
-926,misc-jung-code-dep,Miscellaneous Networks,Unknown Networks,6120,138706.0,0.00740787,26133.0,1.0,45.0,-0.22979499999999997,11857821.0,1937.0,1000741.0,2.05455,0.021327799999999997,274.0,16.0
+926,misc-jung-code-dep,Miscellaneous Networks,Technological Networks,6120,138706.0,0.00740787,26133.0,1.0,45.0,-0.22979499999999997,11857821.0,1937.0,1000741.0,2.05455,0.021327799999999997,274.0,16.0
 927,misc-lesmis,Miscellaneous Networks,Social Networks,77,254.0,0.0868079,36.0,1.0,6.0,-0.165225,1401.0,18.0,82.0,0.573137,0.498932,10.0,10.0
 928,moreno-highschool,Miscellaneous Networks,Social Networks,70,548.0,0.2269,19.0,0.0,7.83,-0.01,913.0,13.04,48.0,0.45299999999999996,0.40299999999999997,6.0,4.0
 929,moreno-lesmis,Miscellaneous Networks,Social Networks,77,508.0,0.1736,36.0,0.0,6.6,-0.02,1359.0,17.65,79.0,0.557,0.488,9.0,8.0
