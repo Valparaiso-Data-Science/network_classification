@@ -8,10 +8,14 @@ import threading
 import queue
 import time
 import igraph as ig #i don't know if there is a commonly used short name for it so I made this up
+from scoop import futures
 
 num_worker_threads = 20  # Adjust to desired number of threads  (number of cores minus 1)
 #C:\Users\kschmit1\Documents\GitHub\network_classification\src\features
-out_path = '/Users/kschmit1/Documents/GitHub/network_classification/src/features/synthetic_features.csv'  # designate your own output path
+
+#out_path = '/Users/kschmit1/Documents/GitHub/network_classification/src/features/synthetic_features_paralleldata.csv'  # designate your own output path
+out_path=r"C:\Users\kschmit1\Google Drive\Research and Grants\Research\Networks\summer 2017"
+
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 #the path above is from James' laptop
 network_path = 'E://VERUM/synthetic_graphs' #This is Adriana's flash drive
@@ -140,8 +144,8 @@ def doCalculation(g):
 
 # Returns true or false after checking to see if a queued graph has been completed
 def isComplete(graph):
-    for keys in mydict[graph]:
-        if keys is '':
+    for item in mydict[graph]:
+        if item is '':
             return False
     return True
 
@@ -198,40 +202,49 @@ def dictTotal(inDict):
         totalNum += inDict[key]
     return totalNum
 
-
-queueCal(incompleteGraphs)  # generates list of graph and attributes needed to run
-
-
 # Multithreading part of code
-def worker():
-    while True:
-        item = q.get()
-        if item is None:
-            break
-        doCalculation(item)
-        if isComplete(item[0]) is True:
-            lock.acquire()
-            try:
-                newWriter(item[0])
-            finally:
-                lock.release()
-        q.task_done()
+#def worker():
+#    while True:
+#        item = q.get()
+#        if item is None:
+#            break
+#        doCalculation(item)
+#        if isComplete(item[0]) is True:
+#            lock.acquire()
+#            try:
+#                newWriter(item[0])
+#            finally:
+#                lock.release()
+#        q.task_done()
 
 
-q = queue.Queue(0)
-threads = []
-for m in range(num_worker_threads):
-    t = threading.Thread(target=worker)
-    t.start()
-    threads.append(t)
-    time.sleep(.1)
+if __name__ == '__main__':
+  
+    queueCal(incompleteGraphs)  # generates list of graph and attributes needed to run
+    tmp = list(futures.map(doCalculation, queueAtt))
+    
+    for grph in mydict.keys():
+        if isComplete(grph) is True:
+            completeGraphs.append(grph)
+            newWriter(grph)
+            
 
-for item in queueAtt:
-    q.put(item)
+            
 
-q.join()
-
-for i in range(num_worker_threads):
-    q.put(None)
-for t in threads:
-    t.join()
+#    q = queue.Queue(0)
+#    threads = []
+#    for m in range(num_worker_threads):
+#        t = threading.Thread(target=worker)
+#        t.start()
+#        threads.append(t)
+#        time.sleep(.1)
+#    
+#    for item in queueAtt:
+#        q.put(item)
+#    
+#    q.join()
+#    
+#    for i in range(num_worker_threads):
+#        q.put(None)
+#    for t in threads:
+#        t.join()
