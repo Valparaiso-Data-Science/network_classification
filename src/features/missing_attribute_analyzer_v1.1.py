@@ -7,14 +7,16 @@ import networkx as nx
 import threading
 import queue
 import time
+import igraph as ig #i don't know if there is a commonly used short name for it so I made this up
 
 num_worker_threads = 3  # Adjust to desired number of threads  (number of cores minus 1)
-out_path = 'C:/Users/Owner/Documents/VERUM/Network stuff/testresults2.csv'  # designate your own output path
+out_path = '/Users/emmaingram/PycharmProjects/network_classification/src/features/testresults.csv'  # designate your own output path
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 #the path above is from James' laptop
-network_path = 'F:/VERUM/Network_Repository_files' #This is James' external hard drive
+network_path = '/Volumes/ADRIANA/VERUM/synthetic_graphs' #This is Adriana's flash drive (Emma is using it)
 
-infile = open('C:/Users/Owner/Documents/VERUM/Network stuff/data_without_dimacs_bhoslib_or_temp.csv')  # designate the location of the CSV file to read
+infile = open('/Users/emmaingram/Downloads/synthetic_data.csv')
+              #/Volumes/ADRIANA/VERUM/synthetic_graphs/synthetic_data.csv')  # designate the location of the CSV file to read
 reader = csv.reader(infile)
 mydict = dict((rows[0], rows[1:]) for rows in reader)
 infile.close()
@@ -81,7 +83,9 @@ def doCalculation(g):
     for root, dirs, files in os.walk(network_path):
         for names in files:
             if names.split(".")[0] == g[0]:
-                graph = nx.read_adjlist(root + "/" + g[0] + ".txt")
+                graph = nx.read_edgelist(root + "/" + g[0] + ".csv") #decided to use read edgelist for the synthetic graphs
+                #i_graph = ig.Graph()
+                #i_graph.Read_Edgelist(root + "/" + g[0] + ".csv") #also using .csv to read synthetic graph files
                 print("Calculating " + header[g[1]] + " for " + g[0])
                 if g[1] is 0:
                     mydict[g[0]][g[1]] = "none"
@@ -113,22 +117,21 @@ def doCalculation(g):
                     mydict[g[0]][g[1]] = dictMax(newDict)
                 elif g[1] is 11:
                     mydict[g[0]][g[1]] = nx.average_clustering(graph)
-                elif g[1] is 12:  # Frac Closed Triangles (dont know formula)
-                    mydict[g[0]][g[1]] = 'na'
+                elif g[1] is 12:  # Frac Closed Triangles = Global CC
+                    mydict[g[0]][g[1]] = nx.transitivity(graph)
                 elif g[1] is 13:  #creates a new graph that is the max k-core, and then takes the min degree of that core, aka k
                     new_graph = graph.copy()
                     new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops - this might alter the max k-core
                     k_core = nx.k_core(new_graph)
                     newDict = dict(nx.degree(k_core))
                     mydict[g[0]][g[1]] = dictMin(newDict) + 1 # there are different ways of representing k-core number, NetRep. adds 1
-                elif g[
-                    1] is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
-                    mydict[g[0]][g[1]] = 'na'
-                elif g[1] is 15:  # Cant find Chromatic number in nx, will have to calculate upper bound?
-                    mydict[g[0]][g[1]] = 'na'
-                elif g[1] is 15:
-                    #find number of connected components
-                    mydict[g[0]][g[1]] = nx.number_connected_components(graph)
+                elif g[1] is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
+                    mydict[g[0]][g[1]] = nx.graph_clique_number(graph) #ryan and nesreen said that the clique number is the same thing as max clique
+                #elif g[1] is 15:  # Cant find Chromatic number in nx, will have to calculate upper bound?
+                #    mydict[g[0]][g[1]] = 'na'
+                #elif g[1] is 15:
+                #    #find number of connected components
+                #    mydict[g[0]][g[1]] = nx.number_connected_components(graph)
                 else:
                     mydict[g[0]][g[1]] = 'missing'
 
