@@ -10,13 +10,13 @@ import time
 import igraph as ig #i don't know if there is a commonly used short name for it so I made this up
 
 num_worker_threads = 3  # Adjust to desired number of threads  (number of cores minus 1)
-out_path = '/Users/emmaingram/PycharmProjects/network_classification/src/features/testresults_ig.csv'  # designate your own output path
+out_path = '/Users/emmaingram/PycharmProjects/network_classification/src/features/synthetic_features.csv'  # designate your own output path
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 #the path above is from James' laptop
-network_path = '/Volumes/ADRIANA/VERUM/synthetic_graphs' #This is Adriana's flash drive (Emma is using it)
+network_path = '/Volumes/ADRIANA/VERUM/synthetic_graphs' #This is Adriana's flash drive
 
-infile = open('/Users/emmaingram/Downloads/synthetic_data.csv')
-              #/Volumes/ADRIANA/VERUM/synthetic_graphs/synthetic_data.csv')  # designate the location of the CSV file to read
+infile = open('/Users/emmaingram/PycharmProjects/network_classification/src/data/synthetic_data.csv')
+
 reader = csv.reader(infile)
 mydict = dict((rows[0], rows[1:]) for rows in reader)
 infile.close()
