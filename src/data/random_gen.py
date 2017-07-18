@@ -4,7 +4,7 @@ import numpy as np
 er = Graph()
 b = Graph()
 
-p_list_1 = [0.05, 0.1, 0.]
+p_list_1 = [0.05, 0.1, 0.2]
 p_list_2 = [0.0005, 0.005, 0.001]
 p_list_3 = [0.000005, 0.00005, 0.0005]
 m_list_1 = [10, 40, 60]
