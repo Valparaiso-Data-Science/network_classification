@@ -7,15 +7,18 @@ import networkx as nx
 import threading
 import queue
 import time
-import igraph as ig #i don't know if there is a commonly used short name for it so I made this up
+#import igraph as ig #i don't know if there is a commonly used short name for it so I made this up
+
+start = time.time()
 
 num_worker_threads = 3  # Adjust to desired number of threads  (number of cores minus 1)
-out_path = '/Users/emmaingram/PycharmProjects/network_classification/src/features/synthetic_features.csv'  # designate your own output path
+out_path = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/features/synthetic_features_e1.csv'  # designate your own output path
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 #the path above is from James' laptop
-network_path = '/Volumes/ADRIANA/VERUM/synthetic_graphs' #This is Adriana's flash drive
+#network_path = '/Volumes/ADRIANA/VERUM/synthetic_graphs' #This is Adriana's flash drive
+network_path = 'D:/VERUM/Network_Repository_files/Synthetic_Networks' #This is Karl's external harddrive on James' laptop
 
-infile = open('/Users/emmaingram/PycharmProjects/network_classification/src/data/synthetic_data.csv')
+infile = open('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_b3e1.csv')
 
 reader = csv.reader(infile)
 mydict = dict((rows[0], rows[1:]) for rows in reader)
@@ -84,8 +87,8 @@ def doCalculation(g):
         for names in files:
             if names.split(".")[0] == g[0]:
                 graph = nx.read_edgelist(root + "/" + g[0] + ".csv") #decided to use read edgelist for the synthetic graphs
-                i_graph = ig.Graph()
-                i_graph = i_graph.Read_Edgelist(root + "/" + g[0] + ".csv") #also using .csv to read synthetic graph files
+                #i_graph = ig.Graph()
+                #i_graph = i_graph.Read_Edgelist(root + "/" + g[0] + ".csv") #also using .csv to read synthetic graph files
                 print("Calculating " + header[g[1]] + " for " + g[0])
                 if g[1] is 0:
                     mydict[g[0]][g[1]] = "none"
@@ -126,8 +129,8 @@ def doCalculation(g):
                     newDict = dict(nx.degree(k_core))
                     mydict[g[0]][g[1]] = dictMin(newDict) + 1 # there are different ways of representing k-core number, NetRep. adds 1
                 elif g[1] is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
-                    #mydict[g[0]][g[1]] = nx.graph_clique_number(graph) #ryan and nesreen said that the clique number is the same thing as max clique
-                    mydict[g[0]][g[1]] =i_graph.clique_number()  #ignores directionality of edges (fine for synthetic graphs)
+                    mydict[g[0]][g[1]] = nx.graph_clique_number(graph) #ryan and nesreen said that the clique number is the same thing as max clique
+                    #mydict[g[0]][g[1]] =i_graph.clique_number()  #ignores directionality of edges (fine for synthetic graphs)
                 #elif g[1] is 15:  # Cant find Chromatic number in nx, will have to calculate upper bound?
                 #    mydict[g[0]][g[1]] = 'na'
                 #elif g[1] is 15:
@@ -234,3 +237,6 @@ for i in range(num_worker_threads):
     q.put(None)
 for t in threads:
     t.join()
+
+end = time.time()
+print(end-start)
