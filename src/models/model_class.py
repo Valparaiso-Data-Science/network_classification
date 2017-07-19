@@ -19,6 +19,42 @@ class ModelTester():
     def __str__(self):
         return str(self.df)
 
+    def train_test(self, model, testSize=.2, minSize=20, dropList=['Graph', 'Collection']):
+        dfNew = self.df.copy()
+
+        # scales the data
+        graphs = list(dfNew['Graph'])
+        categories = list(dfNew['Collection'])
+        del dfNew['Graph']
+        del dfNew['Collection']
+
+        array = dfNew.values
+        scale = MinMaxScaler()
+        scaledArray = scale.fit_transform(array)
+        # create the new df
+        scaleDF = pd.DataFrame(scaledArray)
+        scaleDF.columns = dfNew.columns
+        scaleDF['Graph'] = graphs
+        scaleDF['Collection'] = categories
+        cols = list(scaleDF.columns)
+        cols = cols[-2:] + cols[:-2]
+        scaleDF = scaleDF[cols]
+
+        collections = np.unique(scaleDF.Collection.values)
+        for collection in collections:
+            size = len(scaleDF[scaleDF.Collection == collection])
+            if size < minSize:
+                scaleDF = scaleDF[scaleDF.Collection != collection]
+
+        X = scaleDF.drop(dropList, axis=1).values
+        y = scaleDF['Collection'].values\
+
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=testSize)
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        score = model.score(X_test, y_test)
+        return score
+
 # Returns classification report and confusion matrix from cv over entire dataframe. If feat_comp == True, returns the difference in cv score from df with all features included
     def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, prnt=True):
 
