@@ -47,7 +47,7 @@ class ModelTester():
                 scaleDF = scaleDF[scaleDF.Collection != collection]
 
         X = scaleDF.drop(dropList, axis=1).values
-        y = scaleDF['Collection'].values\
+        y = scaleDF['Collection'].values
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=testSize)
         model.fit(X_train, y_train)

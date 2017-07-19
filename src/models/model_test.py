@@ -36,7 +36,7 @@ remove = ['Graph', 'Collection',
           # 'Max. clique (lb)'
             ]
 
-forestModel = RandomForestClassifier(n_estimators=50)
+forestModel = RandomForestClassifier(n_estimators=30)
 
 tester = ModelTester(df)
 #print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
@@ -54,13 +54,13 @@ combTester = ModelTester(combined)
 combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
 combTester = ModelTester(combined)
 
-combMislabel = combTester.get_mislabel_analysis(RandomForestClassifier(), minSize=20)
+combMislabel = combTester.get_mislabel_analysis(forestModel, minSize=20)
 print('combMislabel: ')
 print(combMislabel
      # [ combMislabel.Actual == 'Interaction Networks']
      )
-combTester.modelFitTest(RandomForestClassifier(), minSize=16)
-tester.modelFitTest(RandomForestClassifier(), minSize=16)
+combTester.modelFitTest(forestModel, minSize=16)
+tester.modelFitTest(forestModel, minSize=16)
 
 
 # Start to experiment with misc graphs
@@ -76,10 +76,10 @@ renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Co
 
 
 
-miscTest = combTester.train_predict(RandomForestClassifier(), renamedMisc, minSize=16)
+miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
 #print(miscTest)
 print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
-miscAnalysis = combTester.get_mislabeled_graphs(RandomForestClassifier(), externalData=renamedMisc, minSize=16)
+miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 print(miscAnalysis)
 
 
@@ -87,8 +87,8 @@ infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_w
 df = pd.read_csv(infile, index_col=0)
 tester = ModelTester(df)
 print('GENERAL MISLABEL')
-#print(tester.get_mislabeled_graphs(RandomForestClassifier()))
-analysis = tester.get_mislabel_analysis(RandomForestClassifier())
+#print(tester.get_mislabeled_graphs(forestModel))
+analysis = tester.get_mislabel_analysis(forestModel)
 print( analysis
        #[analysis.Actual == analysis.Predicted]
      )
@@ -98,8 +98,8 @@ df_er = pd.read_csv(infile_er, index_col=0)
 
 dfSyn = pd.concat([df, df_er])
 testerSyn = ModelTester(dfSyn)
-testerSyn.modelFitTest(RandomForestClassifier())
-print(testerSyn.get_mislabeled_graphs(RandomForestClassifier()))
+testerSyn.modelFitTest(forestModel)
+print(testerSyn.get_mislabeled_graphs(forestModel))
 
 
 
@@ -141,11 +141,11 @@ print(testerSyn.get_mislabeled_graphs(RandomForestClassifier()))
 #print('Logistic Regression')
 #modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
-#print('RandomForestClassifier')
-#modelFitTest(RandomForestClassifier(), df, cv=5, dropList=remove, feat_comp=False )
-#print('RandomForestClassifier')
-#modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-#print('RandomForestClassifier')
-#modelFitTest(RandomForestClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
+#print('forestModel')
+#modelFitTest(forestModel, df, cv=5, dropList=remove, feat_comp=False )
+#print('forestModel')
+#modelFitTest(forestModel, df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
+#print('forestModel')
+#modelFitTest(forestModel, df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 
