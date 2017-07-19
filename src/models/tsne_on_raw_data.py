@@ -1,6 +1,6 @@
-# This program runs k-means on unscaled data and
-# retrieves centroids and runs tsne on this new
-# data and creates plots using tsne
+# This program runs k-means on scaled data and
+# retrieves centroids. It then runs tsne on this new
+# data and creates a plot of the clusters
 
 
 import pandas as pd
