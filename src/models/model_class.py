@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold, cross_val_predict
+from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold, cross_val_predict, LeaveOneOut
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.preprocessing import MinMaxScaler
 
@@ -56,7 +56,7 @@ class ModelTester():
         return score
 
 # Returns classification report and confusion matrix from cv over entire dataframe. If feat_comp == True, returns the difference in cv score from df with all features included
-    def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, prnt=True):
+    def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, LOO=False, prnt=True):
 
         dfNew = self.df.copy()
 
@@ -91,8 +91,10 @@ class ModelTester():
         y = scaleDF['Collection'].values
 
 
-        iterator = StratifiedKFold(n_splits = cv, shuffle = True,# random_state = 42
-                                        )
+        iterator = StratifiedKFold(n_splits = cv, shuffle = True)
+        if LOO == True:
+            iterator = LeaveOneOut().split(X)
+
         cvscores = cross_val_score(model, X, y, cv = iterator)
 
 

@@ -23,11 +23,11 @@ remove = ['Graph', 'Collection',
           # 'Nodes',
           # 'Edges',
           # 'Density',
-          # 'Maximum degree',
-          # 'Minimum degree',
+           'Maximum degree',
+           'Minimum degree',
           # 'Average degree',
-          # 'Assortativity',
-          #  'Total triangles',
+           'Assortativity',
+            'Total triangles',
           # 'Average triangles',
           # 'Maximum triangles',
           # 'Avg. clustering coef.',
@@ -37,6 +37,7 @@ remove = ['Graph', 'Collection',
             ]
 
 forestModel = RandomForestClassifier(n_estimators=30)
+GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
 #print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
@@ -79,8 +80,8 @@ renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Co
 miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
 #print(miscTest)
 print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
-miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
-print(miscAnalysis)
+#miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
+#print(miscAnalysis)
 
 
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
@@ -98,8 +99,12 @@ df_er = pd.read_csv(infile_er, index_col=0)
 
 dfSyn = pd.concat([df, df_er])
 testerSyn = ModelTester(dfSyn)
-testerSyn.modelFitTest(forestModel)
-print(testerSyn.get_mislabeled_graphs(forestModel))
+tester.modelFitTest(forestModel)
+tester.modelFitTest(GNBmodel, dropList=remove)
+testerSyn.modelFitTest(forestModel, LOO=True, minSize=5)
+testerSyn.modelFitTest(GNBmodel, dropList=remove)
+#print(tester.get_mislabeled_graphs(GNBmodel, dropList=remove))
+#print(tester.get_mislabeled_graphs(forestModel))
 
 
 
