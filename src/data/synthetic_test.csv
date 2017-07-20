@@ -1,0 +1,6 @@
+Graph,Collection,Nodes,Edges,Density,Maximum degree,Minimum degree,Average degree,Assortativity,Total triangles,Average triangles,Maximum triangles,Avg. clustering coef.,Frac. closed triangles,Maximum k-core,Max. clique (lb)
+er_1_21_10,Synthetic,,,,,,,,,,,,,,
+er_1_22_10,Synthetic,,,,,,,,,,,,,,
+er_1_23_10,Synthetic,,,,,,,,,,,,,,
+er_1_24_5,Synthetic,,,,,,,,,,,,,,
+er_1_25_20,Synthetic,,,,,,,,,,,,,,
