@@ -40,6 +40,7 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
+tester.modelFitTest(forestModel)
 
 combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTester = ModelTester(combined)

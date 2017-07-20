@@ -54,7 +54,8 @@ class ModelTester():
         score = model.score(X_test, y_test)
         return score
 
-# Returns classification report and confusion matrix from cv over entire dataframe. If feat_comp == True, returns the difference in cv score from df with all features included
+# Returns the mean of the cv scores. If prnt==True, prints classification report and confusion matrix from cv over entire dataframe. If LOO==True, it does Leave One Out cv instead
+# If feat_comp == True, returns the difference in cv score from df with all features included
     def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, LOO=False, prnt=True):
 
         dfNew = self.df.copy()
@@ -98,6 +99,7 @@ class ModelTester():
 
 
         if prnt == True:
+            print('Model: ', str(model))
             print('Using collections of size >', minSize)
             print('Excluding categories: ', dropList)
             if LOO == False:
@@ -124,7 +126,7 @@ class ModelTester():
                 print(confusion_matrix(y, cv_pred))
                 #print('score of prediction: ', model.score(X_test, y_test))
 
-            return cvscores, np.mean(cvscores)
+            return np.mean(cvscores)
 
         else:
             #feature comparison -- compares the current cv average from input to the cv average from using all features
