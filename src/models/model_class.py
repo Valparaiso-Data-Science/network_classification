@@ -147,9 +147,13 @@ class ModelTester():
 
         return results[results.Actual != results.Predicted]
 
+
+
+
     # returns a new dataframe consisting of the graphs that were mislabeled 'percent_return' - percent of the time after 'repeat' tests of the model
     # includes in new dataframe how many times each graph was mislabeled, and in which category
-    def get_mislabeled_graphs(self, model, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'],
+    # externalData is used to run this code testing other data, not doing cv (like with misc graphs)
+    def get_mislabeled_graphs(self, model, externalData=False, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'],
                               cv=5):
 
 
@@ -180,25 +184,61 @@ class ModelTester():
             if size < minSize:
                 scaleDF = scaleDF[scaleDF.Collection != collection]
 
-# Creates a dictionary that will be used to create a new dataframe
+# Creates a dictionary that will be used to create a new dataframe. It is different if working with externalData
         collectionNames = np.unique(scaleDF.Collection.values)
-        allNameDict = {'TotalCount': np.zeros(len(scaleDF.Graph.values))}
-        for i in range( len(collectionNames) ):
-            allNameDict[collectionNames[i]] = np.zeros(len(scaleDF.Graph.values))
+        if type(externalData) == bool:
+            allNameDict = {'TotalCount': np.zeros(len(scaleDF.Graph.values))}
+            for i in range( len(collectionNames) ):
+                allNameDict[collectionNames[i]] = np.zeros(len(scaleDF.Graph.values))
+            order = ['TotalCount'] + list(collectionNames)
+# for working with externalData
+        # this one is specifically for misc graphs
+        elif 'Collection Hypothesis' in externalData.columns:
+            allNameDict = {'Hypothesis' : externalData['Collection Hypothesis'].values, 'TotalCount': np.zeros(len(externalData.Graph.values))}
+            for i in range(len(collectionNames)):
+                allNameDict[collectionNames[i]] = np.zeros(len(externalData.Graph.values))
+            order = ['Hypothesis', 'TotalCount'] + list(collectionNames)
+        else:
+            allNameDict = {'TotalCount': np.zeros(len(externalData.Graph.values))}
+            for i in range(len(collectionNames)):
+                allNameDict[collectionNames[i]] = np.zeros(len(externalData.Graph.values))
+            order = ['TotalCount'] + list(collectionNames)
 
-# Creates DF with organzied column order
-        order = ['TotalCount'] + list(collectionNames)
-        all_names = pd.DataFrame(allNameDict, columns=order, index=scaleDF.Graph.values, copy=True)
-      # This trains and test the model 'repeat' number of times, keeping track of how each graph was mislabeled each time
-        for i in range(repeat):
-            analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, prnt=False)
 
-# Keeps the count
-            for graph in analysis.Name.values:
-                all_names.loc[graph, 'TotalCount'] += 1
+# Creates DF with organzied column order, and index depending on if we are running the method on self.df data or external data (misc graphs)
+        if type(externalData) == bool:
+            all_names = pd.DataFrame(allNameDict, columns=order, index=scaleDF.Graph.values, copy=True)
 
-                mislabel = analysis[analysis.Name == graph].iloc[0, 2]
-                all_names.loc[graph, mislabel] += 1
+   # For external data
+        else:
+            all_names = pd.DataFrame(allNameDict, columns=order, index=externalData.Graph.values, copy=True)
+
+     #This has the method run on self.df data, with cv
+        if type(externalData) == bool:
+          # This trains and test the model 'repeat' number of times, keeping track of how each graph was mislabeled each time
+            for i in range(repeat):
+                analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, prnt=False)
+
+    # Keeps the count
+                for graph in analysis.Name.values:
+                    all_names.loc[graph, 'TotalCount'] += 1
+
+                    mislabel = analysis[analysis.Name == graph].iloc[0, 2]
+                    all_names.loc[graph, mislabel] += 1
+
+    # This is for externalData == a dataframe, so the method runs testing some external data (aka misc graphs)
+        else:
+            # This trains the model and tests on the externalData 'repeat' number of times, keeping track of how each graph was mislabeled each time
+            for i in range(repeat):
+                analysis = self.train_predict(model, externalData, dropList, minSize)
+                mislabeled = analysis[ analysis.Hypothesis != analysis.Predicted ]
+
+                # Keeps the count
+                for graph in mislabeled.Name.values:
+                    all_names.loc[graph, 'TotalCount'] += 1
+
+                    mislabel = mislabeled[mislabeled.Name == graph].iloc[0, 2]
+                    all_names.loc[graph, mislabel] += 1
 
 # This returns a Df with only the graphs that were labeled 'percent_return' -percent of the time
         percentOver = all_names[all_names['TotalCount'] >= percent_return * repeat]
@@ -249,21 +289,23 @@ class ModelTester():
             if size < minSize:
                 scaleDF = scaleDF[scaleDF.Collection != collection]
 
+# Creates the training data
         X =scaleDF.drop(dropList, axis=1).values
         y = scaleDF['Collection'].values
-        names = scaleDF['Graph'].values
 
-
+# Sets up the testing data
         testNames = testDF.Graph.values
         hypothesis = testDF['Collection Hypothesis'].values
         if 'Collection Hypothesis' in testDF.columns:
             testFeatures = testDF.drop(['Collection Hypothesis'] + dropList, axis=1)
         else:
             testFeatures = testDF.drop(dropList, axis=1)
+
         model.fit(X, y)
         scaledTestFeatures = scale.transform(testFeatures)
         pred = model.predict(scaledTestFeatures)
 
-        resultsDict = {'Graph' : testNames, 'Hypothesis' : hypothesis, 'Predicted' : pred}
-        results = pd.DataFrame(resultsDict)
+        resultsDict = {'Name' : testNames, 'Hypothesis' : hypothesis, 'Predicted' : pred}
+        colOrder = ['Name', 'Hypothesis', 'Predicted']
+        results = pd.DataFrame(resultsDict, columns=colOrder)
         return results

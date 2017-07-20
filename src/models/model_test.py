@@ -14,6 +14,10 @@ from git.src.models.model_class import ModelTester
 infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
+#remove Interaction Networks
+df = df[ df.Collection != 'Interaction Networks' ]
+df = df[ df.Collection != 'Collaboration Networks' ]
+
 #collections to remove from model
 remove = ['Graph', 'Collection',
           # 'Nodes',
@@ -32,6 +36,8 @@ remove = ['Graph', 'Collection',
           # 'Max. clique (lb)'
             ]
 
+forestModel = RandomForestClassifier(n_estimators=50)
+
 tester = ModelTester(df)
 #print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
 
@@ -48,13 +54,16 @@ combTester = ModelTester(combined)
 combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
 combTester = ModelTester(combined)
 
-combMislabel = combTester.get_mislabel_analysis(RandomForestClassifier(), minSize=16)
+combMislabel = combTester.get_mislabel_analysis(RandomForestClassifier(), minSize=20)
+print('combMislabel: ')
 print(combMislabel
-      [ combMislabel.Actual == 'Sci-Eco']
+     # [ combMislabel.Actual == 'Interaction Networks']
      )
 combTester.modelFitTest(RandomForestClassifier(), minSize=16)
-tester.modelFitTest(RandomForestClassifier(), minSize=0)
+tester.modelFitTest(RandomForestClassifier(), minSize=16)
 
+
+# Start to experiment with misc graphs
 miscFile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/miscellaneous_networks.csv'
 misc = pd.read_csv(miscFile, index_col=0)
 miscObject = ModelTester(misc)
@@ -67,9 +76,30 @@ renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Co
 
 
 
-miscTest = combTester.train_predict(RandomForestClassifier(), renamedMisc, minSize=0)
-print(miscTest)
+miscTest = combTester.train_predict(RandomForestClassifier(), renamedMisc, minSize=16)
+#print(miscTest)
 print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
+miscAnalysis = combTester.get_mislabeled_graphs(RandomForestClassifier(), externalData=renamedMisc, minSize=16)
+print(miscAnalysis)
+
+
+infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
+df = pd.read_csv(infile, index_col=0)
+tester = ModelTester(df)
+print('GENERAL MISLABEL')
+#print(tester.get_mislabeled_graphs(RandomForestClassifier()))
+analysis = tester.get_mislabel_analysis(RandomForestClassifier())
+print( analysis
+       #[analysis.Actual == analysis.Predicted]
+     )
+
+infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
+df_er = pd.read_csv(infile_er, index_col=0)
+
+dfSyn = pd.concat([df, df_er])
+testerSyn = ModelTester(dfSyn)
+testerSyn.modelFitTest(RandomForestClassifier())
+print(testerSyn.get_mislabeled_graphs(RandomForestClassifier()))
 
 
 
