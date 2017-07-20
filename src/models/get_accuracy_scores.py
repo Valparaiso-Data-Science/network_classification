@@ -14,8 +14,21 @@ df = pd.read_csv(infile, index_col=0)
 
 
 tester = ModelTester(df)
-model = RandomForestClassifier(n_estimators=30)
-print(tester.train_test(model))
+forestModel = RandomForestClassifier(30)
+
+tester.modelFitTest(forestModel)
+tester.modelFitTest(forestModel, LOO=True)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -100,7 +100,10 @@ class ModelTester():
         if prnt == True:
             print('Using collections of size >', minSize)
             print('Excluding categories: ', dropList)
-            print(cv, '-fold stratified cross validation')
+            if LOO == False:
+                print(cv, '-fold stratified cross validation')
+            else:
+                print('Leave One Out cross validation')
 
         if feat_comp == False:
 
@@ -112,7 +115,8 @@ class ModelTester():
 
             # To include prints of the outputs
             if prnt == True:
-                print('cv scores: ', cvscores)
+                if LOO == False:
+                    print('cv scores: ', cvscores)
                 print('cv average: ', np.mean(cvscores))
                 #print('Test size: ', split)
                 print(classification_report(y, cv_pred))
