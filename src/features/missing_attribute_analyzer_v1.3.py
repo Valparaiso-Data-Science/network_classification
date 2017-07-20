@@ -19,11 +19,15 @@ queueAtt = []  # A list that contains a list of graphs and number corresponding 
 incompleteGraphs = dict()  # used to store incomplete graph names and attribute numbers
 completeGraphs = []  # used to store complete graphs
 
+
+#out_path = '/Users/kschmit1/Documents/GitHub/network_classification/src/features/synthetic_features_paralleldata.csv'  # designate your own output path
+out_path=r"C:\Users\kschmit1\Google Drive\Research and Grants\Research\Networks\summer 2017\synthetic_features_b1b2.csv"
+
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 #the path above is from James' laptop
 network_path = 'E://VERUM/synthetic_graphs' #This is Adriana's flash drive
 
-infile = open('/Users/kschmit1/Documents/GitHub/network_classification/src/data/synthetic_test.csv')
+infile = open('/Users/kschmit1/Documents/GitHub/network_classification/src/data/synthetic_b1b2.csv')
 
 reader = csv.reader(infile)
 mydict = dict((rows[0], rows[1:]) for rows in reader)
@@ -35,35 +39,21 @@ completeRow = True
 
 #print('incomplete graphs: ', incompleteGraphs)
 
-# searches a list (incompleteGraphs) for a string(graph name) and the numbers that follow(attributes to calculate)
+# searches a list (incompleteGraphs) for a string(graph name) and the numbers 
+# that follow(attributes to calculate). If it finds any, merges it into a queue
 def queueCal(g):
 #    graph_name = None
 #    calculation = None
 #    nowComplete = False
     for i in g.keys():
+        # Skip the dictionary entry with the headers.
+        # Merge graph name on front of list so queueAtt can be passed as
+        # data structure for parallized code to be run on. 
         if i not in ['Graph']:
             tmplst=list([i])
             tmplst.extend(g[i])
             queueAtt.append(tmplst)
-        
-#        if isinstance(i, str):
-#            graph_name = i
-#        elif isinstance(i, int):
-#            calculation = i
-#            # print "I am going to run calculation " + header[i] + " on " + str(graph_name)
-#            queueAtt.append([graph_name, i])
-#            global completeGraphs
-#            nowComplete = True
-#            for j in mydict[graph_name]:
-#                if j is "":
-#                    nowComplete = False
-#        if nowComplete is True:
-#            completeGraphs.append(graph_name)
-#            for k in mydict[graph_name]:
-#                completeGraphs.append(k)
-#            writer.writerow(completeGraphs)
-#            completeGraphs = []
-#            nowComplete = False
+
 
 
 # Takes a list from queueAtt and runs the correct calculation on the correct graph
@@ -76,6 +66,10 @@ def doCalculation(g):
                 graph = nx.read_edgelist(root + "/" + g[0] + ".csv") #decided to use read edgelist for the synthetic graphs
                 i_graph = ig.Graph()
                 i_graph = i_graph.Read_Edgelist(root + "/" + g[0] + ".csv") #also using .csv to read synthetic graph files
+                
+                #Modified to loop over an entire list of attributes to compute
+                #By doing this once, we save the need to reload the graph each
+                # time, hopefully also gaining some speed-up with local caches
                 while len(g) > 1:
                     calcindx=g.pop()
                     
@@ -211,11 +205,7 @@ def dictTotal(inDict):
 #        q.task_done()
 
 
-if __name__ == '__main__':
-
-    #out_path = '/Users/kschmit1/Documents/GitHub/network_classification/src/features/synthetic_features_paralleldata.csv'  # designate your own output path
-    out_path=r"C:\Users\kschmit1\Google Drive\Research and Grants\Research\Networks\summer 2017\synthetic_features_test.csv"
-    
+if __name__ == '__main__':   
 
     
     with open(out_path, 'w', newline= '') as outfile:
@@ -224,7 +214,9 @@ if __name__ == '__main__':
 
 
 
-    # searches each key for missing data, if not missing data, it writes the complete row to the csv file.  If missing data, it add graph name and attributes missing to incomplete graphs
+    # searches each key for missing data, if not missing data, it writes the 
+    # complete row to the csv file.  If missing data, it add graph name and 
+    # attributes missing to the list of things to be computed.
     for keys in mydict:
         array = mydict[keys]  # may not be needed
         completeRow = True  # used to reset completeRow condition true for each iteration
@@ -233,7 +225,7 @@ if __name__ == '__main__':
             if array[i] is '':
                 # print "The graph " + keys+ " is missing an the attribute " + header[i]
                 completeRow = False
-                incompleteGraphs[keys].append(i)
+                incompleteGraphs[keys].append(i) #Appends index for feature
                 #incompleteGraphs.append(i)
         if (completeRow is True) and (keys not in 'Graph'):
             print(keys)
@@ -253,6 +245,10 @@ if __name__ == '__main__':
     
     #print(queueAtt)
     
+    #Uses the futures.map from "SCOOP" package to parallelize over multicores
+    # the computation of the various attributes. Each core currently gets the 
+    # full list of attribute to compute for a given graph. This reduces loading
+    # of graphs into memory for different cores/caches... I hope. 
     tmp = list(futures.map(doCalculation, queueAtt))
     
     #print(mydict)
