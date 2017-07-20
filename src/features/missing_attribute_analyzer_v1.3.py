@@ -21,13 +21,13 @@ completeGraphs = []  # used to store complete graphs
 
 
 #out_path = '/Users/kschmit1/Documents/GitHub/network_classification/src/features/synthetic_features_paralleldata.csv'  # designate your own output path
-out_path=r"C:\Users\kschmit1\Google Drive\Research and Grants\Research\Networks\summer 2017\synthetic_features_b1b2.csv"
+out_path=r"C:\Users\kschmit1\Google Drive\Research and Grants\Research\Networks\summer 2017\synthetic_features_b3.csv"
 
 #network_path = 'C:/Users/Owner/Downloads/network_repository_graphs' #designate the location of the network path to walk (or can I add a way to do it from the current location by default?)
 #the path above is from James' laptop
 network_path = 'E://VERUM/synthetic_graphs' #This is Adriana's flash drive
 
-infile = open('/Users/kschmit1/Documents/GitHub/network_classification/src/data/synthetic_b1b2.csv')
+infile = open('/Users/kschmit1/Documents/GitHub/network_classification/src/data/synthetic_b3.csv')
 
 reader = csv.reader(infile)
 mydict = dict((rows[0], rows[1:]) for rows in reader)
