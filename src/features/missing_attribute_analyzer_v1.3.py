@@ -44,61 +44,67 @@ def queueCal(g):
 
 # Takes a list from queueAtt and runs the correct calculation on the correct graph
 def doCalculation(g):
+    list_to_return = list([mydict[g[0]]])
     for root, dirs, files in os.walk(network_path):
         for names in files:
             if names.split(".")[0] == g[0]:
                 graph = nx.read_edgelist(root + "/" + g[0] + ".csv") #decided to use read edgelist for the synthetic graphs
                 i_graph = ig.Graph()
                 i_graph = i_graph.Read_Edgelist(root + "/" + g[0] + ".csv") #also using .csv to read synthetic graph files
-                print("Calculating " + header[g[1]] + " for " + g[0])
-                if g[1] is 0:
-                    mydict[g[0]][g[1]] = "none"
-                if g[1] is 1:
-                    mydict[g[0]][g[1]] = nx.number_of_nodes(graph)
-                elif g[1] is 2:
-                    mydict[g[0]][g[1]] = nx.number_of_edges(graph)
-                elif g[1] is 3:
-                    mydict[g[0]][g[1]] = nx.density(graph)
-                elif g[1] is 4:
-                    newDict = dict(nx.degree(graph))
-                    mydict[g[0]][g[1]] = dictMax(newDict)
-                elif g[1] is 5:
-                    newDict = dict(nx.degree(graph))
-                    mydict[g[0]][g[1]] = dictMin(newDict)
-                elif g[1] is 6:
-                    newDict = dict(nx.degree(graph))
-                    mydict[g[0]][g[1]] = dictAverage(newDict) #this returns a decimal, while the network repository calculation rounds down
-                elif g[1] is 7:
-                    mydict[g[0]][g[1]] = nx.degree_assortativity_coefficient(graph)
-                elif g[1] is 8:
-                    newDict = dict(nx.triangles(graph))
-                    mydict[g[0]][g[1]] = dictTotal(newDict)
-                elif g[1] is 9:
-                    newDict = dict(nx.triangles(graph))
-                    mydict[g[0]][g[1]] = dictAverage(newDict) #this returns a decimal, while the network repository calculation rounds down
-                elif g[1] is 10:
-                    newDict = dict(nx.triangles(graph))
-                    mydict[g[0]][g[1]] = dictMax(newDict)
-                elif g[1] is 11:
-                    mydict[g[0]][g[1]] = nx.average_clustering(graph)
-                elif g[1] is 12:  # Frac Closed Triangles = Global CC
-                    mydict[g[0]][g[1]] = nx.transitivity(graph)
-                elif g[1] is 13:  #creates a new graph that is the max k-core, and then takes the min degree of that core, aka k
-                    new_graph = graph.copy()
-                    new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops - this might alter the max k-core
-                    k_core = nx.k_core(new_graph)
-                    newDict = dict(nx.degree(k_core))
-                    mydict[g[0]][g[1]] = dictMin(newDict) + 1 # there are different ways of representing k-core number, NetRep. adds 1
-                elif g[1] is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
-                    #mydict[g[0]][g[1]] = nx.graph_clique_number(graph) #ryan and nesreen said that the clique number is the same thing as max clique
-                    mydict[g[0]][g[1]] =i_graph.clique_number()  #ignores directionality of edges (fine for synthetic graphs)
-                #elif g[1] is 15:  # Cant find Chromatic number in nx, will have to calculate upper bound?
-                #    mydict[g[0]][g[1]] = 'na'
-                #elif g[1] is 15:
-                #    #find number of connected components
-                #    mydict[g[0]][g[1]] = nx.number_connected_components(graph)
-                else:
-                    mydict[g[0]][g[1]] = 'missing'
+                while len(g) > 1:
+                    calcindx=g.pop()
+                    
+                    print("Calculating " + header[calcindx] + " for " + g[0])
+                    if calcindx is 0:
+                        list_to_return[calcindx] = "none"
+                    if calcindx is 1:
+                        list_to_return[calcindx] = nx.number_of_nodes(graph)
+                    elif calcindx is 2:
+                        list_to_return[calcindx] = nx.number_of_edges(graph)
+                    elif calcindx is 3:
+                        list_to_return[calcindx] = nx.density(graph)
+                    elif calcindx is 4:
+                        newDict = dict(nx.degree(graph))
+                        list_to_return[calcindx] = dictMax(newDict)
+                    elif calcindx is 5:
+                        newDict = dict(nx.degree(graph))
+                        list_to_return[calcindx] = dictMin(newDict)
+                    elif calcindx is 6:
+                        newDict = dict(nx.degree(graph))
+                        list_to_return[calcindx] = dictAverage(newDict) #this returns a decimal, while the network repository calculation rounds down
+                    elif calcindx is 7:
+                        list_to_return[calcindx] = nx.degree_assortativity_coefficient(graph)
+                    elif calcindx is 8:
+                        newDict = dict(nx.triangles(graph))
+                        list_to_return[calcindx] = dictTotal(newDict)
+                    elif calcindx is 9:
+                        newDict = dict(nx.triangles(graph))
+                        list_to_return[calcindx] = dictAverage(newDict) #this returns a decimal, while the network repository calculation rounds down
+                    elif calcindx is 10:
+                        newDict = dict(nx.triangles(graph))
+                        list_to_return[calcindx] = dictMax(newDict)
+                    elif calcindx is 11:
+                        list_to_return[calcindx] = nx.average_clustering(graph)
+                    elif calcindx is 12:  # Frac Closed Triangles = Global CC
+                        list_to_return[calcindx] = nx.transitivity(graph)
+                    elif calcindx is 13:  #creates a new graph that is the max k-core, and then takes the min degree of that core, aka k
+                        new_graph = graph.copy()
+                        new_graph.remove_edges_from(new_graph.selfloop_edges()) # nx.k_core can't operate on a graph with self-loops - this might alter the max k-core
+                        k_core = nx.k_core(new_graph)
+                        newDict = dict(nx.degree(k_core))
+                        list_to_return[calcindx] = dictMin(newDict) + 1 # there are different ways of representing k-core number, NetRep. adds 1
+                    elif calcindx is 14:  # max clique (max_clique doesnt exsist? and graph_clique_number returned different than in CSV file)
+                        #list_to_return[calcindx] = nx.graph_clique_number(graph) #ryan and nesreen said that the clique number is the same thing as max clique
+                        list_to_return[calcindx] =i_graph.clique_number()  #ignores directionality of edges (fine for synthetic graphs)
+                    #elif calcindx is 15:  # Cant find Chromatic number in nx, will have to calculate upper bound?
+                    #    list_to_return[calcindx] = 'na'
+                    #elif calcindx is 15:
+                    #    #find number of connected components
+                    #    list_to_return[calcindx] = nx.number_connected_components(graph)
+                    else:
+                        list_to_return[calcindx] = 'missing'
+                        
+    return list_to_return
 
 
 # Returns true or false after checking to see if a queued graph has been completed
