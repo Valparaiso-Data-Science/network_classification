@@ -51,7 +51,6 @@ class ModelTester():
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=testSize)
         model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
         score = model.score(X_test, y_test)
         return score
 
@@ -121,7 +120,7 @@ class ModelTester():
                 print(confusion_matrix(y, cv_pred))
                 #print('score of prediction: ', model.score(X_test, y_test))
 
-            return cvscores, np.mean(cvscores), classification_report(y, cv_pred), confusion_matrix(y, cv_pred)
+            return cvscores, np.mean(cvscores)
 
         else:
             #feature comparison -- compares the current cv average from input to the cv average from using all features
