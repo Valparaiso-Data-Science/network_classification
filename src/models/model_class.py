@@ -93,7 +93,7 @@ class ModelTester():
 
         iterator = StratifiedKFold(n_splits = cv, shuffle = True)
         if LOO == True:
-            iterator = LeaveOneOut().split(X)
+            iterator = LeaveOneOut()
 
         cvscores = cross_val_score(model, X, y, cv = iterator)
 

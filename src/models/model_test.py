@@ -40,26 +40,15 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
-#print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
-
 
 combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTester = ModelTester(combined)
 combined = combTester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
 combTester = ModelTester(combined)
-#combined = combTester.combine_collections([#'Collaboration Networks',
-#                                           'Interaction Networks',
-#                                           'Recommendation Networks'
-#                                           ], 'Collab_Inter_Rec')
-#combTester = ModelTester(combined)
 combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
 combTester = ModelTester(combined)
 
-combMislabel = combTester.get_mislabel_analysis(forestModel, minSize=20)
-print('combMislabel: ')
-print(combMislabel
-     # [ combMislabel.Actual == 'Interaction Networks']
-     )
+
 combTester.modelFitTest(forestModel, minSize=16)
 tester.modelFitTest(forestModel, minSize=16)
 
@@ -84,15 +73,6 @@ print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
 #print(miscAnalysis)
 
 
-infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
-df = pd.read_csv(infile, index_col=0)
-tester = ModelTester(df)
-print('GENERAL MISLABEL')
-#print(tester.get_mislabeled_graphs(forestModel))
-analysis = tester.get_mislabel_analysis(forestModel)
-print( analysis
-       #[analysis.Actual == analysis.Predicted]
-     )
 
 infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
 df_er = pd.read_csv(infile_er, index_col=0)
