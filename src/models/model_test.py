@@ -49,7 +49,7 @@ combTester = ModelTester(combined)
 combined = combTester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTester = ModelTester(combined)
 
-#combTester.modelFitTest(forestModel, minSize=16, LOO=True)
+combTester.modelFitTest(forestModel, minSize=16, LOO=True)
 
 #combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
 #combTester = ModelTester(combined)
@@ -86,7 +86,7 @@ renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Netw
 
 
 miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
-print(miscTest)
+#print(miscTest)
 #print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
 #miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 #print(miscAnalysis)

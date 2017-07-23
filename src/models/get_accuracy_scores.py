@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC, LinearSVC
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, LeaveOneOut
 from sklearn.preprocessing import MinMaxScaler
-
+import sys
 import time
 
 from git.src.models.model_class import ModelTester
@@ -35,6 +35,39 @@ tester = ModelTester(df)
 forestModel = RandomForestClassifier(30)
 NBModel = GaussianNB()
 
+
+combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
+combTesterBnBio = ModelTester(combined)
+
+combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+combTesterWbTch = ModelTester(combined)
+
+combined = combTesterBnBio.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+combTesterBoth = ModelTester(combined)
+
+
+
+scoresArr = np.zeros(3)
+for i in range(100):
+    webTech = combTesterWbTch.modelFitTest(forestModel, prnt=False, LOO=True)
+    brainBio = combTesterBnBio.modelFitTest(forestModel, prnt=False, LOO=True)
+    both = combTesterBoth.modelFitTest(forestModel, prnt=False, LOO=True)
+
+    currentScores = [ webTech,
+                      brainBio,
+                      both
+                      ]
+    arr = np.array(currentScores)
+    scoresArr += arr
+    print( 'Iteration ', i )
+
+
+scoresAv = scoresArr / 100
+print('WebTech: ', scoresAv[0])
+print('BrainBio: ', scoresAv[1])
+print('Both: ', scoresAv[2])
+
+sys.exit('Im done')
 start = time.time()
 
 scoresArr = np.zeros(12)
@@ -52,15 +85,15 @@ for i in range(100):
     Log = tester.modelFitTest(LogisticRegression(), prnt=False)
     #LogLOO = tester.modelFitTest(LogisticRegression(), LOO=True, prnt=False)
 
-    allScores = [RF,# RFLOO,
+    currentScores = [RF,# RFLOO,
                  NB,# NBLOO,
                  DT,# DTLOO,
                  Lin,# LinLOO,
                  svc,# svcLOO,
                  Log,# LogLOO
                  ]
-    Arr = np.array(allScores)
-    scoresArr += Arr
+    arr = np.array(currentScores)
+    scoresArr += arr
 scoresAv = scoresArr / 100
 
 print(scoresAv)
