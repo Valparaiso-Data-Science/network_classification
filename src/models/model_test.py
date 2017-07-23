@@ -40,18 +40,33 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
-tester.modelFitTest(forestModel)
-
-combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
-combTester = ModelTester(combined)
-combined = combTester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
-combTester = ModelTester(combined)
-combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
-combTester = ModelTester(combined)
+#tester.modelFitTest(forestModel, minSize=0)
 
 
-combTester.modelFitTest(forestModel, minSize=16)
-tester.modelFitTest(forestModel, minSize=16)
+combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
+combTester = ModelTester(combined)
+
+combined = combTester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+combTester = ModelTester(combined)
+
+#combTester.modelFitTest(forestModel, minSize=16, LOO=True)
+
+#combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
+#combTester = ModelTester(combined)
+
+#combTester.modelFitTest(forestModel, minSize=16, LOO=True)
+#tester.modelFitTest(forestModel, minSize=16, LOO=True)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Start to experiment with misc graphs
@@ -62,14 +77,17 @@ miscObject = ModelTester(misc)
 renamedMisc = miscObject.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 miscObject = ModelTester(renamedMisc)
 renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
-miscObject = ModelTester(renamedMisc)
-renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
+#miscObject = ModelTester(renamedMisc)
+#renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
+
+#miscComb = combTester.train_predict(forestModel, renamedMisc)
+
 
 
 
 miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
-#print(miscTest)
-print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
+print(miscTest)
+#print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
 #miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 #print(miscAnalysis)
 

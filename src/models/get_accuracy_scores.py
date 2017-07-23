@@ -40,22 +40,29 @@ start = time.time()
 scoresArr = np.zeros(12)
 for i in range(100):
     RF = tester.modelFitTest(forestModel, prnt=False)
-    RFLOO = tester.modelFitTest(forestModel, LOO=True, prnt=False)
+    #RFLOO = tester.modelFitTest(forestModel, LOO=True, prnt=False)
     NB = tester.modelFitTest(NBModel, dropList=remove, prnt=False)
-    NBLOO = tester.modelFitTest(NBModel, LOO=True, dropList=remove, prnt=False)
+    #NBLOO = tester.modelFitTest(NBModel, LOO=True, dropList=remove, prnt=False)
     DT = tester.modelFitTest(DecisionTreeClassifier(), prnt=False)
-    DTLOO = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False)
+    #DTLOO = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False)
     Lin = tester.modelFitTest(LinearSVC(), prnt=False)
-    LinLOO = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False)
+    #LinLOO = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False)
     svc = tester.modelFitTest(SVC(), prnt=False)
-    svcLOO = tester.modelFitTest(SVC(), LOO=True, prnt=False)
+    #svcLOO = tester.modelFitTest(SVC(), LOO=True, prnt=False)
     Log = tester.modelFitTest(LogisticRegression(), prnt=False)
-    LogLOO = tester.modelFitTest(LogisticRegression(), LOO=True, prnt=False)
+    #LogLOO = tester.modelFitTest(LogisticRegression(), LOO=True, prnt=False)
 
-    allScores = [RF, RFLOO, NB, NBLOO, DT, DTLOO, Lin, LinLOO, svc, svcLOO, Log, LogLOO]
+    allScores = [RF,# RFLOO,
+                 NB,# NBLOO,
+                 DT,# DTLOO,
+                 Lin,# LinLOO,
+                 svc,# svcLOO,
+                 Log,# LogLOO
+                 ]
     Arr = np.array(allScores)
     scoresArr += Arr
 scoresAv = scoresArr / 100
+
 print(scoresAv)
 
 end = time.time()
