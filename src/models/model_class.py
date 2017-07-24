@@ -51,11 +51,11 @@ class ModelTester():
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=testSize)
         model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
         score = model.score(X_test, y_test)
         return score
 
-# Returns classification report and confusion matrix from cv over entire dataframe. If feat_comp == True, returns the difference in cv score from df with all features included
+# Returns the mean of the cv scores. If prnt==True, prints classification report and confusion matrix from cv over entire dataframe. If LOO==True, it does Leave One Out cv instead
+# If feat_comp == True, returns the difference in cv score from df with all features included
     def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, LOO=False, prnt=True):
 
         dfNew = self.df.copy()
@@ -93,15 +93,19 @@ class ModelTester():
 
         iterator = StratifiedKFold(n_splits = cv, shuffle = True)
         if LOO == True:
-            iterator = LeaveOneOut().split(X)
+            iterator = LeaveOneOut()
 
         cvscores = cross_val_score(model, X, y, cv = iterator)
 
 
         if prnt == True:
+            print('Model: ', str(model))
             print('Using collections of size >', minSize)
             print('Excluding categories: ', dropList)
-            print(cv, '-fold stratified cross validation')
+            if LOO == False:
+                print(cv, '-fold stratified cross validation')
+            else:
+                print('Leave One Out cross validation')
 
         if feat_comp == False:
 
@@ -113,7 +117,8 @@ class ModelTester():
 
             # To include prints of the outputs
             if prnt == True:
-                print('cv scores: ', cvscores)
+                if LOO == False:
+                    print('cv scores: ', cvscores)
                 print('cv average: ', np.mean(cvscores))
                 #print('Test size: ', split)
                 print(classification_report(y, cv_pred))
@@ -121,7 +126,7 @@ class ModelTester():
                 print(confusion_matrix(y, cv_pred))
                 #print('score of prediction: ', model.score(X_test, y_test))
 
-            return cvscores, np.mean(cvscores), classification_report(y, cv_pred), confusion_matrix(y, cv_pred)
+            return np.mean(cvscores)
 
         else:
             #feature comparison -- compares the current cv average from input to the cv average from using all features

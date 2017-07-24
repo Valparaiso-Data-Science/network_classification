@@ -1,3 +1,5 @@
+''' This script was mostly used to test out the model class, and get mislabel analyses. There is not much organization, and things were constantly being added and changed'''
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold
@@ -40,59 +42,66 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
-#print(tester.get_mislabel_analysis(RandomForestClassifier(), dropList=remove))
+#tester.modelFitTest(forestModel, LOO=True)
 
 
-combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
 combTester = ModelTester(combined)
-combined = combTester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
+
+combined = combTester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTester = ModelTester(combined)
-#combined = combTester.combine_collections([#'Collaboration Networks',
-#                                           'Interaction Networks',
-#                                           'Recommendation Networks'
-#                                           ], 'Collab_Inter_Rec')
+
+#combTester.modelFitTest(forestModel, minSize=16, LOO=True)
+
+#combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
 #combTester = ModelTester(combined)
-combined = combTester.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
-combTester = ModelTester(combined)
 
-combMislabel = combTester.get_mislabel_analysis(forestModel, minSize=20)
-print('combMislabel: ')
-print(combMislabel
-     # [ combMislabel.Actual == 'Interaction Networks']
-     )
-combTester.modelFitTest(forestModel, minSize=16)
-tester.modelFitTest(forestModel, minSize=16)
+#combTester.modelFitTest(forestModel, minSize=16, LOO=True)
+#tester.modelFitTest(forestModel, minSize=16, LOO=True)
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Start to experiment with misc graphs
-miscFile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/miscellaneous_networks.csv'
+miscFile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/reduced_miscellaneous_networks.csv'
 misc = pd.read_csv(miscFile, index_col=0)
 miscObject = ModelTester(misc)
 
 renamedMisc = miscObject.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 miscObject = ModelTester(renamedMisc)
 renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
-miscObject = ModelTester(renamedMisc)
-renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
+#miscObject = ModelTester(renamedMisc)
+#renamedMisc = miscObject.combine_collections(['Ecology Networks', 'Scientific Computing'], 'Sci-Eco')
 
+#miscComb = combTester.train_predict(forestModel, renamedMisc)
 
+miscScore = []
+for i in range(100):
+    miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
+    correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
+    score = correct / 50
+    miscScore.append(score)
+
+print(miscScore)
+print('average score: ', np.mean(miscScore))
 
 miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
-#print(miscTest)
+print(miscTest)
+print(miscTest.info())
 print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
 #miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 #print(miscAnalysis)
 
 
-infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
-df = pd.read_csv(infile, index_col=0)
-tester = ModelTester(df)
-print('GENERAL MISLABEL')
-#print(tester.get_mislabeled_graphs(forestModel))
-analysis = tester.get_mislabel_analysis(forestModel)
-print( analysis
-       #[analysis.Actual == analysis.Predicted]
-     )
 
 infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
 df_er = pd.read_csv(infile_er, index_col=0)
@@ -107,50 +116,5 @@ testerSyn.modelFitTest(GNBmodel, dropList=remove)
 #print(tester.get_mislabeled_graphs(forestModel))
 
 
-
-
-
-
-#print('Decision Tree')
-#modelFitTest(DecisionTreeClassifier(), df, cv=5, dropList=remove, feat_comp=False )
-##print('Decision Tree')
-##modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-##print('Decision Tree')
-##modelFitTest(DecisionTreeClassifier(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
-
-#print('SVC')
-#modelFitTest(SVC(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-#print('SVC')
-#modelFitTest(SVC(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-#print('SVC')
-#modelFitTest(SVC(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
-
-#print('Linear SVC')
-#modelFitTest(LinearSVC(), df, cv=5, dropList=remove, feat_comp=False )
-#print('Linear SVC')
-#modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-#print('Linear SVC')
-#modelFitTest(LinearSVC(), df,cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
-
-#print('Gaussian Naive Bayes')
-#modelFitTest(GaussianNB(), df, cv=5, dropList=remove, feat_comp=False )
-#print('Gaussian Naive Bayes')
-#modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-#print('Gaussian Naive Bayes')
-#modelFitTest(GaussianNB(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
-
-#print('Logistic Regression')
-#modelFitTest(LogisticRegression(), df, cv=5, split=.3, dropList=remove, feat_comp=False)
-#print('Logistic Regression')
-#modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-#print('Logistic Regression')
-#modelFitTest(LogisticRegression(), df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
-
-#print('forestModel')
-#modelFitTest(forestModel, df, cv=5, dropList=remove, feat_comp=False )
-#print('forestModel')
-#modelFitTest(forestModel, df, cv=5, split=.3, minSize=10, dropList=remove, feat_comp=False)
-#print('forestModel')
-#modelFitTest(forestModel, df, cv=5, split=.3, minSize=20, dropList=remove, feat_comp=False)
 
 
