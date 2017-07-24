@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from bokeh.plotting import figure, output_file, show
+from bokeh.layouts import row, column, gridplot
+from bokeh.palettes import d3
+from bokeh.models import ColumnDataSource
+from bokeh.models.widgets import DataTable, TableColumn
 
 net = pd.read_csv('~/PycharmProjects/network_classification/src/data/clean_data_with_new_chem.csv', index_col=0)
 
@@ -36,7 +41,6 @@ features = ['Nodes',
            'Max. clique (lb)'
             ]
 data_mean = pd.DataFrame(index=collections, columns=features)
-
 mean = []
 for feature in features:
     for collection in collections:
@@ -63,3 +67,18 @@ for feature in features:
     minimum = []
     maximum = []
 print(data_min_max)
+
+#data_min_max.to_csv('~/PycharmProjects/network_classification/src/data/table_of_ranges.csv')
+p = figure()
+source = ColumnDataSource(data_min_max)
+columns = [TableColumn(field='index', title='Collection'),
+           TableColumn(field='Nodes', title='Nodes'),
+           TableColumn(field='Edges', title='Edges'),
+           TableColumn(field='Density', title='Density', width=800),
+           TableColumn(field='Maximum degree', title='Maximum Degree', width=800),
+           TableColumn(field='Minimum degree', title='Minimum Degree', width=800),
+           TableColumn(field='Average degree', title='Average Degree', width=800)]
+data_table = DataTable(source = source, columns=columns, row_headers=False, reorderable=True)
+
+output_file('cluster_data_table.html')
+show(data_table)
