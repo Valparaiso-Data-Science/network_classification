@@ -13,7 +13,7 @@ import scipy
 
 
 # Read file
-tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
+tsne_data = pd.read_csv('~/PycharmProjects/network_classification/src/data/new_tsne_data.csv', index_col=0)
 
 
 # Make a copy of the data
@@ -67,6 +67,13 @@ kmeans = KMeans(n_clusters = 8)
 kmeans.fit_transform(tsne_array)
 labels = kmeans.predict(tsne_array)
 centroids = kmeans.cluster_centers_
+
+#****************
+#write out labels for use in boxplots/table
+#****************
+
+#tsne_data['Label'] = labels
+#tsne_data.to_csv('~/PycharmProjects/network_classification/src/data/tsne_label_data.csv')
 
 # Assign the columns of centroids: centroids_x, centroids_y
 centroids_x = centroids[:,0]
