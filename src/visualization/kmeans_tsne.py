@@ -13,7 +13,7 @@ import scipy
 
 
 # Read file
-tsne_data = pd.read_csv('~/PycharmProjects/network_classification/src/data/new_tsne_data.csv', index_col=0)
+tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
 
 
 # Make a copy of the data
@@ -105,8 +105,8 @@ hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 
 # Creating the figure for the scatter plot
-p=figure(title = 't-SNE ', plot_width=1000)
-
+p=figure(title = 't-Distributed Stochastic Neighbor Embedding', plot_width=1000)
+p.title.text_font_size = '25pt'
 # Create scatter points and color the plot by collection
 for i, graph in enumerate(all_categories):
     source = ColumnDataSource(df[df['Category Name'] == graph])
