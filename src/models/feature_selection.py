@@ -92,32 +92,55 @@ print(sorted(zip(map(lambda x: round(x, 4), model_2.scores_), col_names), revers
 #**************************************
 # RFECV feature selection
 #**************************************
+list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+df_features = pd.DataFrame(index=pd.Series(range(14)))
+iterations = 100
+total_num_features = 14
 
 def rfecv(model, name):
-    rfecv = RFECV(estimator=model, step=1, cv=StratifiedKFold(n_splits=5, shuffle=True, random_state=42),
-                  scoring='accuracy')
-    rfecv.fit(X, Y)
-    print("Optimal number of features : %d" % rfecv.n_features_)
-    # print("Selected Features: " + str(rfecv.support_))
-    print("Feature Ranking: " + str(rfecv.ranking_))
+    for j in range(iterations):
+        rfecv = RFECV(estimator=model, step=1, cv=StratifiedKFold(n_splits=5, shuffle=True),
+                      scoring='accuracy')
+        rfecv.fit(X, Y)
+        # Uncomment this to see the ranking of the features in rfecv
+        #print("Optimal number of features : %d" % rfecv.n_features_)
+        #print("Selected Features: " + str(rfecv.support_))
+        #print("Feature Ranking: " + str(rfecv.ranking_))
 
-    # Get grid scores
-    g_scores = rfecv.grid_scores_
-    indices = np.argsort(g_scores)[::-1]
-    print('Printing RFECV results:')
-    for f in range(X.shape[1]):
-        print("%d. Number of features: %d, Grid_Score: %f" % (f + 1, indices[f] + 1, g_scores[indices[f]]))
+        # Get grid scores
+        g_scores = rfecv.grid_scores_
+        indices = np.argsort(g_scores)[::-1]
+        print('Printing RFECV results:')
 
-    # Plot number of features VS. cross-validation scores
+        for f in range(X.shape[1]):
+            # print("%d. Number of features: %d, Grid_Score: %f" % (f + 1, indices[f] + 1, g_scores[indices[f]]))
+            for i in range(total_num_features):
+                if indices[f]  == i :
+                    list[i] = list[i] + g_scores[indices[f]]
+        #print('List: ' + str(list))
+
+    df_features['scores'] = list
+    print(df_features.columns)
+
+
+    for m in range(total_num_features):
+        list[m] = list[m]/iterations
+
+    print('New List: ' + str(list))
+
+        # Plot number of features VS. cross-validation scores
     plt.figure()
     plt.title(name, {'size': '16'})
     plt.xlabel("Number of features selected", {'size': '11'})
     plt.ylabel("Cross validation score (nb of correct classifications)", {'size': '11'})
-    plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
+    plt.plot(range(1, len(list) + 1), list)
     plt.show()
 
 
+
+
+
 # Calling RFECV function for all three models
-rfecv(model_3, "RFECV - Linear SVC")
-rfecv(model_5, "RFECV - Decision Tree")
-rfecv(model_6, "RFECV - Random Forest")
+rfecv(LinearSVC(), "RFECV - Linear SVC")
+rfecv(tree.DecisionTreeClassifier(), "RFECV - Decision Tree")
+rfecv(RandomForestClassifier(), "RFECV - Random Forest")
