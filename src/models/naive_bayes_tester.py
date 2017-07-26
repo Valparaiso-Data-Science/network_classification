@@ -32,18 +32,18 @@ toDrop = ['Graph', 'Collection',
 tester = ModelTester(df)
 features = ['Nodes', 'Edges', 'Density', 'Maximum degree', 'Minimum degree', 'Average degree', 'Assortativity', 'Total triangles', 'Average triangles', 'Maximum triangles', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'
             ]
-def rfe(df, model, iterations=100, initialFeatures=['Nodes']):
+def rfe(model, iterations=100, initialFeatures=['Nodes']):
     sFeatures = set(features)
     sInitial = set(initialFeatures)
     diff = sFeatures.difference(sInitial)
     #make this 100x mean
-    bestScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list( diff ))
+    bestScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list( diff ), prnt=False)
 
+    bestFeature = None
     for feature in list( diff ):
-        newDiff = diff.difference(feature)
+        newDiff = diff.difference({feature})
         #make 100x mean
-        newScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff))
-        bestFeature = None
+        newScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff), prnt=False)
         if newScore > bestScore:
             bestScore = newScore
             bestFeature = feature
@@ -51,16 +51,18 @@ def rfe(df, model, iterations=100, initialFeatures=['Nodes']):
         print('best score: ', bestScore)
         print('features used: ', sFeatures.difference(diff))
         return bestScore
-    nextDiff = diff.difference(bestFeature)
 
     print('added ', bestFeature)
+    bestScore = rfe(model, initialFeatures=initialFeatures + [bestFeature])
+    return bestScore
+
+result = rfe(GaussianNB(), initialFeatures=['Density', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'])
+print(result)
 
 
-
-
-for i in range(100):
-    score = tester.modelFitTest(GaussianNB(), dropList=toDrop, cv=5, prnt=False)
-    scores.append(score)
-
-print('average score: ', np.mean(scores))
-#print('average score difference: ', np.mean(scoresDiff))
+#for i in range(100):
+#    score = tester.modelFitTest(GaussianNB(), dropList=toDrop, cv=5, prnt=False)
+#    scores.append(score)
+#
+#print('average score: ', np.mean(scores))
+##print('average score difference: ', np.mean(scoresDiff))
