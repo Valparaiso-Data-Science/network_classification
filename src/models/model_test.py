@@ -42,7 +42,7 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
-tester.modelFitTest(forestModel)
+print(tester.modelFitTest(forestModel, f1Score=True, prnt=False))
 
 
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')

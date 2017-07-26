@@ -36,6 +36,61 @@ forestModel = RandomForestClassifier(30)
 NBModel = GaussianNB()
 
 
+#*************************************************************
+# For getting f1 score among collections for different models
+#*************************************************************
+start = time.time()
+
+scoresRF = np.zeros(6)
+scoresGNB = np.zeros(6)
+scoresDT = np.zeros(6)
+for i in range(100):
+    print('iteration ', i)
+
+    currentRF = tester.modelFitTest(forestModel, f1Score=True, LOO=True, prnt=False)
+    currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
+    currentDT = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, f1Score=True, prnt=False)
+
+    scoresRF += np.array(currentRF)
+    scoresGNB += np.array(currentGNB)
+    scoresDT += np.array(currentDT)
+
+
+averageRF = scoresRF/100
+averageGNB = scoresGNB/100
+averageDT = scoresDT/100
+
+print('Random Forest')
+print('Brain: ', averageRF[0])
+print('Chem: ', averageRF[1])
+print('Facebook: ', averageRF[2])
+print('Retweet: ', averageRF[3])
+print('Social: ', averageRF[4])
+print('Web: ', averageRF[5])
+
+print('Gaussian Naive Bayes')
+print('Brain: ', averageGNB[0])
+print('Chem: ', averageGNB[1])
+print('Facebook: ', averageGNB[2])
+print('Retweet: ', averageGNB[3])
+print('Social: ', averageGNB[4])
+print('Web: ', averageGNB[5])
+
+print('Decision Tree')
+print('Brain: ', averageGNB[0])
+print('Chem: ', averageGNB[1])
+print('Facebook: ', averageGNB[2])
+print('Retweet: ', averageGNB[3])
+print('Social: ', averageGNB[4])
+print('Web: ', averageGNB[5])
+
+end = time.time()
+print('time: ', end-start)
+sys.exit("I'm done")
+#***********************************************
+# For getting accuracy of combined collections
+#***********************************************
+
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
 combTesterBnBio = ModelTester(combined)
 
@@ -44,8 +99,6 @@ combTesterWbTch = ModelTester(combined)
 
 combined = combTesterBnBio.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
 combTesterBoth = ModelTester(combined)
-
-
 
 scoresArr = np.zeros(3)
 for i in range(100):
@@ -68,7 +121,12 @@ print('BrainBio: ', scoresAv[1])
 print('Both: ', scoresAv[2])
 
 sys.exit('Im done')
-start = time.time()
+#start = time.time()
+
+
+#**************************************************************
+# For getting accuracy of 6 models
+#**************************************************************
 
 scoresArr = np.zeros(12)
 for i in range(100):
