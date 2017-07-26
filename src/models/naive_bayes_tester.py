@@ -14,20 +14,20 @@ scores = [] # sets up list for all cv score averages
 scoresDiff = [] # sets up list for all differences of cv score averages
 
 toDrop = ['Graph', 'Collection',
-          # 'Nodes',
-          # 'Edges',
-          # 'Density',
+           'Nodes',
+           'Edges',
+           'Density',
            'Maximum degree',
            'Minimum degree',
-          # 'Average degree',
+           'Average degree',
            'Assortativity',
            'Total triangles',
-          # 'Average triangles',
+           'Average triangles',
            'Maximum triangles',
-          # 'Avg. clustering coef.',
-          # 'Frac. closed triangles',
-          # 'Maximum k-core',
-          # 'Max. clique (lb)'
+           'Avg. clustering coef.',
+           'Frac. closed triangles',
+           'Maximum k-core',
+           'Max. clique (lb)'
             ]
 tester = ModelTester(df)
 features = ['Nodes', 'Edges', 'Density', 'Maximum degree', 'Minimum degree', 'Average degree', 'Assortativity', 'Total triangles', 'Average triangles', 'Maximum triangles', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'
@@ -37,13 +37,21 @@ def rfe(model, iterations=100, initialFeatures=['Nodes']):
     sInitial = set(initialFeatures)
     diff = sFeatures.difference(sInitial)
     #make this 100x mean
-    bestScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list( diff ), prnt=False)
+    scores = []
+    for i in range(iterations):
+        score = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list( diff ), prnt=False)
+        scores.append(score)
+    bestScore = np.mean(score)
 
     bestFeature = None
     for feature in list( diff ):
         newDiff = diff.difference({feature})
         #make 100x mean
-        newScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff), prnt=False)
+        scores =[]
+        for i in range(iterations):
+            score = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff), prnt=False)
+            scores.append(score)
+        newScore = np.mean(scores)
         if newScore > bestScore:
             bestScore = newScore
             bestFeature = feature
@@ -55,6 +63,8 @@ def rfe(model, iterations=100, initialFeatures=['Nodes']):
     print('added ', bestFeature)
     bestScore = rfe(model, initialFeatures=initialFeatures + [bestFeature])
     return bestScore
+
+rfe(GaussianNB(), initialFeatures=[])
 
 result = rfe(GaussianNB(), initialFeatures=['Density', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'])
 print(result)

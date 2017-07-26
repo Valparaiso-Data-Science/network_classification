@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold, cross_val_predict, LeaveOneOut
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -120,7 +120,7 @@ class ModelTester():
                 if LOO == False:
                     print('cv scores: ', cvscores)
                 print('cv average: ', np.mean(cvscores))
-                #print('Test size: ', split)
+                print('F1 score: ', f1_score(y, cv_pred) )
                 print(classification_report(y, cv_pred))
                 print('Confusion matrix')
                 print(confusion_matrix(y, cv_pred))
