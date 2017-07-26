@@ -12,7 +12,7 @@ df = pd.read_csv(infile, index_col=0)
 
 scores = [] # sets up list for all cv score averages
 scoresDiff = [] # sets up list for all differences of cv score averages
-iterations = 100
+
 toDrop = ['Graph', 'Collection',
           # 'Nodes',
           # 'Edges',
@@ -30,8 +30,22 @@ toDrop = ['Graph', 'Collection',
           # 'Max. clique (lb)'
             ]
 tester = ModelTester(df)
+features = ['Nodes', 'Edges', 'Density', 'Maximum degree', 'Minimum degree', 'Average degree', 'Assortativity', 'Total triangles', 'Average triangles', 'Maximum triangles', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'
+            ]
+def rfe(df, model, iterations=100, initialFeatures=['Nodes']):
+    sFeatures = set(features)
+    sInitial = set(initialFeatures)
+    diff = sFeatures.difference(sInitial)
+    #make this 100x mean
+    bestScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list( diff ))
 
-for i in range(iterations):
+    for feature in list( diff ):
+        newDiff = diff.difference()
+        newScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff))
+
+
+
+for i in range(100):
     score = tester.modelFitTest(GaussianNB(), dropList=toDrop, cv=5, prnt=False)
     scores.append(score)
 
