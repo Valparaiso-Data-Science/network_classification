@@ -47,12 +47,12 @@ scoresDT = np.zeros(6)
 for i in range(100):
     print('iteration ', i)
 
-    currentRF = tester.modelFitTest(forestModel, f1Score=True, LOO=True, prnt=False)
-    currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
+   # currentRF = tester.modelFitTest(forestModel, f1Score=True, LOO=True, prnt=False)
+   # currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
     currentDT = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, f1Score=True, prnt=False)
 
-    scoresRF += np.array(currentRF)
-    scoresGNB += np.array(currentGNB)
+   # scoresRF += np.array(currentRF)
+   # scoresGNB += np.array(currentGNB)
     scoresDT += np.array(currentDT)
 
 
@@ -60,29 +60,29 @@ averageRF = scoresRF/100
 averageGNB = scoresGNB/100
 averageDT = scoresDT/100
 
-print('Random Forest')
-print('Brain: ', averageRF[0])
-print('Chem: ', averageRF[1])
-print('Facebook: ', averageRF[2])
-print('Retweet: ', averageRF[3])
-print('Social: ', averageRF[4])
-print('Web: ', averageRF[5])
-
-print('Gaussian Naive Bayes')
-print('Brain: ', averageGNB[0])
-print('Chem: ', averageGNB[1])
-print('Facebook: ', averageGNB[2])
-print('Retweet: ', averageGNB[3])
-print('Social: ', averageGNB[4])
-print('Web: ', averageGNB[5])
+#print('Random Forest')
+#print('Brain: ', averageRF[0])
+#print('Chem: ', averageRF[1])
+#print('Facebook: ', averageRF[2])
+#print('Retweet: ', averageRF[3])
+#print('Social: ', averageRF[4])
+#print('Web: ', averageRF[5])
+#
+#print('Gaussian Naive Bayes')
+#print('Brain: ', averageGNB[0])
+#print('Chem: ', averageGNB[1])
+#print('Facebook: ', averageGNB[2])
+#print('Retweet: ', averageGNB[3])
+#print('Social: ', averageGNB[4])
+#print('Web: ', averageGNB[5])
 
 print('Decision Tree')
-print('Brain: ', averageGNB[0])
-print('Chem: ', averageGNB[1])
-print('Facebook: ', averageGNB[2])
-print('Retweet: ', averageGNB[3])
-print('Social: ', averageGNB[4])
-print('Web: ', averageGNB[5])
+print('Brain: ', averageDT[0])
+print('Chem: ', averageDT[1])
+print('Facebook: ', averageDT[2])
+print('Retweet: ', averageDT[3])
+print('Social: ', averageDT[4])
+print('Web: ', averageDT[5])
 
 end = time.time()
 print('time: ', end-start)
