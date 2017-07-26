@@ -56,7 +56,9 @@ class ModelTester():
 
 # Returns the mean of the cv scores. If prnt==True, prints classification report and confusion matrix from cv over entire dataframe. If LOO==True, it does Leave One Out cv instead
 # If feat_comp == True, returns the difference in cv score from df with all features included
-    def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, LOO=False, prnt=True):
+# If LOO == True, the method does Leave One Out cross validation instead of stratified k-fold cv
+# If f1Score == True, the method returns a list of the f1 scores for each collection, organized alphabetically
+    def modelFitTest(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, feat_comp=False, LOO=False, f1Score=False, prnt=True):
 
         dfNew = self.df.copy()
 
@@ -120,11 +122,18 @@ class ModelTester():
                 if LOO == False:
                     print('cv scores: ', cvscores)
                 print('cv average: ', np.mean(cvscores))
-                print('F1 score: ', f1_score(y, cv_pred) )
+                #print('F1 score None: ', f1_score(y, cv_pred, average=None) )
+                #print('F1 score Micro: ', f1_score(y, cv_pred, average='micro') )
+                #print('F1 score Macro: ', f1_score(y, cv_pred, average='macro') )
+                #print('F1 score Weighted: ', f1_score(y, cv_pred, average='weighted') )
                 print(classification_report(y, cv_pred))
                 print('Confusion matrix')
                 print(confusion_matrix(y, cv_pred))
                 #print('score of prediction: ', model.score(X_test, y_test))
+
+                # This input specifies that the user only wants the f1 scores of the collections as output
+            if f1Score == True:
+                return f1_score(y, cv_pred, average=None)
 
             return np.mean(cvscores)
 
