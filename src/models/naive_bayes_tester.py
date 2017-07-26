@@ -40,8 +40,21 @@ def rfe(df, model, iterations=100, initialFeatures=['Nodes']):
     bestScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list( diff ))
 
     for feature in list( diff ):
-        newDiff = diff.difference()
+        newDiff = diff.difference(feature)
+        #make 100x mean
         newScore = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff))
+        bestFeature = None
+        if newScore > bestScore:
+            bestScore = newScore
+            bestFeature = feature
+    if bestFeature == None:
+        print('best score: ', bestScore)
+        print('features used: ', sFeatures.difference(diff))
+        return bestScore
+    nextDiff = diff.difference(bestFeature)
+
+    print('added ', bestFeature)
+
 
 
 
