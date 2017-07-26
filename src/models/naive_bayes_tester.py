@@ -5,9 +5,9 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.naive_bayes import GaussianNB
 
 
-from git.src.models.model_class import modelFitTest
+from git.src.models.model_class import ModelTester
 
-infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
+infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/clean_data_with_new_chem.csv' # -- change for machine
 df = pd.read_csv(infile, index_col=0)
 
 scores = [] # sets up list for all cv score averages
@@ -29,10 +29,11 @@ toDrop = ['Graph', 'Collection',
           # 'Maximum k-core',
           # 'Max. clique (lb)'
             ]
+tester = ModelTester(df)
+
 for i in range(iterations):
-    score = modelFitTest(GaussianNB(), df, dropList=toDrop, cv=5, feat_comp=True, prnt=False)
-    scoresDiff.append(score[0])
-    scores.append(score[1])
+    score = tester.modelFitTest(GaussianNB(), dropList=toDrop, cv=5, prnt=False)
+    scores.append(score)
 
 print('average score: ', np.mean(scores))
-print('average score difference: ', np.mean(scoresDiff))
+#print('average score difference: ', np.mean(scoresDiff))
