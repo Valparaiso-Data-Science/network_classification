@@ -23,15 +23,15 @@ df = df[ df.Collection != 'Collaboration Networks' ]
 #collections to remove from model
 remove = ['Graph', 'Collection',
           # 'Nodes',
-          # 'Edges',
+           'Edges',
           # 'Density',
            'Maximum degree',
            'Minimum degree',
           # 'Average degree',
-           'Assortativity',
+          # 'Assortativity',
             'Total triangles',
-          # 'Average triangles',
-          # 'Maximum triangles',
+           'Average triangles',
+           'Maximum triangles',
           # 'Avg. clustering coef.',
           # 'Frac. closed triangles',
           # 'Maximum k-core',
@@ -42,7 +42,7 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
-print(tester.modelFitTest(forestModel, f1Score=True, prnt=False))
+#print(tester.modelFitTest(forestModel, f1Score=True, prnt=False))
 
 
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
@@ -85,19 +85,19 @@ renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Netw
 #miscComb = combTester.train_predict(forestModel, renamedMisc)
 
 miscScore = []
-for i in range(100):
-    miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
-    correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
-    score = correct / 50
-    miscScore.append(score)
+#for i in range(100):
+#    miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
+#    correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
+#    score = correct / 50
+#    miscScore.append(score)
 
-print(miscScore)
-print('average score: ', np.mean(miscScore))
+#print(miscScore)
+#print('average score: ', np.mean(miscScore))
 
-miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
-print(miscTest)
-print(miscTest.info())
-print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
+#miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
+#print(miscTest)
+#print(miscTest.info())
+#print(miscTest[ miscTest.Hypothesis == miscTest.Predicted])
 #miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 #print(miscAnalysis)
 
@@ -110,7 +110,7 @@ dfSyn = pd.concat([df, df_er])
 testerSyn = ModelTester(dfSyn)
 tester.modelFitTest(forestModel)
 tester.modelFitTest(GNBmodel, dropList=remove)
-testerSyn.modelFitTest(forestModel, LOO=True, minSize=5)
+testerSyn.modelFitTest(forestModel, LOO=False)
 testerSyn.modelFitTest(GNBmodel, dropList=remove)
 #print(tester.get_mislabeled_graphs(GNBmodel, dropList=remove))
 #print(tester.get_mislabeled_graphs(forestModel))
