@@ -130,9 +130,9 @@ def rfecv(model, name):
 
         # Plot number of features VS. cross-validation scores
     plt.figure()
-    plt.title(name, {'size': '16'})
-    plt.xlabel("Number of features selected", {'size': '11'})
-    plt.ylabel("Cross validation score (nb of correct classifications)", {'size': '11'})
+    plt.title(name, {'size': '22'})
+    plt.xlabel("Number of features selected", {'size': '18'})
+    plt.ylabel("Cross validation score \n(nb of correct classifications)", {'size': '18'})
     plt.plot(range(1, len(list) + 1), list)
     plt.show()
 
@@ -141,6 +141,6 @@ def rfecv(model, name):
 
 
 # Calling RFECV function for all three models
-rfecv(LinearSVC(), "RFECV - Linear SVC")
+#rfecv(LinearSVC(), "RFECV - Linear SVC")
 rfecv(tree.DecisionTreeClassifier(), "RFECV - Decision Tree")
-rfecv(RandomForestClassifier(), "RFECV - Random Forest")
+#rfecv(RandomForestClassifier(), "RFECV - Random Forest")

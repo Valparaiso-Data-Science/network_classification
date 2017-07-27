@@ -119,6 +119,8 @@ p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid
 p.add_tools(hover)
 p.legend.location = "top_left"
 p.legend.click_policy="hide"
+p.legend.label_text_font_size = "16pt"
+p.legend.background_fill_alpha = 0
 
 # Save file and show plot
 output_file('kmeans_centroids_plot.html')
