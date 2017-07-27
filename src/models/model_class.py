@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold, cross_val_predict, LeaveOneOut
 from sklearn.metrics import classification_report, confusion_matrix, f1_score
 from sklearn.preprocessing import MinMaxScaler
+import sys
 
 
 #infile = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/data_minmaxscale.csv' # -- change for machine
@@ -319,8 +320,9 @@ class ModelTester():
         dfNew = self.df.copy()
         graphs = list(dfNew['Graph'])
         categories = list(dfNew['Collection'])
-        del dfNew['Graph']
-        del dfNew['Collection']
+        dfNew = dfNew.drop(dropList, axis=1)
+        #del dfNew['Graph']
+        #del dfNew['Collection']
 
         array = dfNew.values
         scale = MinMaxScaler()
@@ -333,16 +335,17 @@ class ModelTester():
         cols = list(scaleDF.columns)
         cols = cols[-2:] + cols[:-2]
         scaleDF = scaleDF[cols]
-
+       # print(scaleDF.head())
         # This removes the collections that are too small
         collections = np.unique(scaleDF.Collection.values)
         for collection in collections:
             size = len(scaleDF[scaleDF.Collection == collection])
             if size < minSize:
                 scaleDF = scaleDF[scaleDF.Collection != collection]
+       # print(scaleDF.info())
 
 # Creates the training data
-        X =scaleDF.drop(dropList, axis=1).values
+        X =scaleDF.drop(['Graph', 'Collection'], axis=1).values
         y = scaleDF['Collection'].values
 
 # Sets up the testing data

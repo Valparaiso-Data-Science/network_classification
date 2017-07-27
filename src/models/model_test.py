@@ -9,6 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
+import sys
 
 #from git.src.models.model_class import modelFitTest
 from git.src.models.model_class import ModelTester
@@ -85,14 +86,15 @@ renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Netw
 #miscComb = combTester.train_predict(forestModel, renamedMisc)
 
 miscScore = []
-#for i in range(100):
-#    miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
-#    correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
-#    score = correct / 50
-#    miscScore.append(score)
+for i in range(100):
+    miscTest = combTester.train_predict(GNBmodel, renamedMisc, dropList=remove)
+    correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
+    score = correct / 50
+    miscScore.append(score)
 
-#print(miscScore)
-#print('average score: ', np.mean(miscScore))
+print(miscTest[miscTest.Hypothesis == miscTest.Predicted])
+print(miscScore)
+print('average score: ', np.mean(miscScore))
 
 #miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
 #print(miscTest)
@@ -101,7 +103,7 @@ miscScore = []
 #miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 #print(miscAnalysis)
 
-
+sys.exit("I'm done'")
 
 infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
 df_er = pd.read_csv(infile_er, index_col=0)

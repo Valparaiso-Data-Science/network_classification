@@ -17,15 +17,15 @@ df = pd.read_csv(infile, index_col=0)
 
 remove = ['Graph', 'Collection',
           # 'Nodes',
-          # 'Edges',
+           'Edges',
           # 'Density',
            'Maximum degree',
            'Minimum degree',
           # 'Average degree',
-           'Assortativity',
+          # 'Assortativity',
             'Total triangles',
-          # 'Average triangles',
-          # 'Maximum triangles',
+           'Average triangles',
+           'Maximum triangles',
           # 'Avg. clustering coef.',
           # 'Frac. closed triangles',
           # 'Maximum k-core',
@@ -34,6 +34,46 @@ remove = ['Graph', 'Collection',
 tester = ModelTester(df)
 forestModel = RandomForestClassifier(30)
 NBModel = GaussianNB()
+
+
+
+
+
+#***********************************************
+# For getting accuracy of combined collections
+#***********************************************
+
+combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
+combTesterBnBio = ModelTester(combined)
+
+combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+combTesterWbTch = ModelTester(combined)
+
+combined = combTesterBnBio.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
+combTesterBoth = ModelTester(combined)
+
+scoresArr = np.zeros(3)
+for i in range(100):
+    webTech = combTesterWbTch.modelFitTest(NBModel, dropList=remove, prnt=False, LOO=True)
+    brainBio = combTesterBnBio.modelFitTest(NBModel, dropList=remove, prnt=False, LOO=True)
+    both = combTesterBoth.modelFitTest(NBModel, dropList=remove, prnt=False, LOO=True)
+
+    currentScores = [ webTech,
+                      brainBio,
+                      both
+                      ]
+    arr = np.array(currentScores)
+    scoresArr += arr
+    print( 'Iteration ', i )
+
+
+scoresAv = scoresArr / 100
+print('WebTech: ', scoresAv[0])
+print('BrainBio: ', scoresAv[1])
+print('Both: ', scoresAv[2])
+
+sys.exit('Im done')
+
 
 
 #*************************************************************
@@ -86,41 +126,8 @@ print('Web: ', averageDT[5])
 
 end = time.time()
 print('time: ', end-start)
-sys.exit("I'm done")
-#***********************************************
-# For getting accuracy of combined collections
-#***********************************************
-
-combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
-combTesterBnBio = ModelTester(combined)
-
-combined = tester.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
-combTesterWbTch = ModelTester(combined)
-
-combined = combTesterBnBio.combine_collections(['Web Graphs', 'Technological Networks'], 'Web-Tech')
-combTesterBoth = ModelTester(combined)
-
-scoresArr = np.zeros(3)
-for i in range(100):
-    webTech = combTesterWbTch.modelFitTest(forestModel, prnt=False, LOO=True)
-    brainBio = combTesterBnBio.modelFitTest(forestModel, prnt=False, LOO=True)
-    both = combTesterBoth.modelFitTest(forestModel, prnt=False, LOO=True)
-
-    currentScores = [ webTech,
-                      brainBio,
-                      both
-                      ]
-    arr = np.array(currentScores)
-    scoresArr += arr
-    print( 'Iteration ', i )
 
 
-scoresAv = scoresArr / 100
-print('WebTech: ', scoresAv[0])
-print('BrainBio: ', scoresAv[1])
-print('Both: ', scoresAv[2])
-
-sys.exit('Im done')
 #start = time.time()
 
 
