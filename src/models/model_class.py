@@ -195,7 +195,8 @@ class ModelTester():
         # This adds a column to the df with predicted probabilities
         if proba == True:
             cv_pred_proba = cross_val_predict(model, X, y, cv=iterator, method='predict_proba')
-            cv_results_dict = {'Name': names, 'Actual': y, 'Predicted': cv_pred, 'Probabilities': cv_pred_proba}
+            maxProba = np.max(cv_pred_proba, axis=1)
+            cv_results_dict = {'Name': names, 'Actual': y, 'Predicted': cv_pred, 'Probabilities': maxProba}
 
         column_order = ['Name', 'Actual', 'Predicted']
         if proba == True:
