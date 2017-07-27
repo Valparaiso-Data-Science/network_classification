@@ -151,7 +151,8 @@ class ModelTester():
 
 
 # Returns a dataframe with the names of mislabeled graphs (from one full cv run of the model), the actual collections of these graphs, and the predicted collections
-    def get_mislabel_analysis(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, prnt=True):
+        #proba is for analysing the predicted probability  of Gaussian NB
+    def get_mislabel_analysis(self, model, minSize=20, dropList=['Graph', 'Collection'], cv=5, LOO=False, proba=False, prnt=True):
 
         dfNew = self.df.copy()
 
@@ -183,12 +184,23 @@ class ModelTester():
         y = scaleDF['Collection'].values
         names = scaleDF['Graph'].values
 
-        iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
-                                   )
+        if LOO == False:
+            iterator = StratifiedKFold(n_splits=cv, shuffle=True,  # random_state = 42
+                               )
+        else:
+            iterator = LeaveOneOut()
         cv_pred = cross_val_predict(model, X, y, cv=iterator)
+
         cv_results_dict = {'Name': names, 'Actual': y, 'Predicted': cv_pred}
+        # This adds a column to the df with predicted probabilities
+        if proba == True:
+            cv_pred_proba = cross_val_predict(model, X, y, cv=iterator, method='predict_proba')
+            cv_results_dict = {'Name': names, 'Actual': y, 'Predicted': cv_pred, 'Probabilities': cv_pred_proba}
 
         column_order = ['Name', 'Actual', 'Predicted']
+        if proba == True:
+            column_order = ['Name', 'Actual', 'Predicted', 'Probabilities']
+
         results = pd.DataFrame(cv_results_dict, columns=column_order, copy=True)
 
         if prnt == True:
@@ -207,7 +219,7 @@ class ModelTester():
     # includes in new dataframe how many times each graph was mislabeled, and in which category
     # externalData is used to run this code testing other data, not doing cv (like with misc graphs)
     def get_mislabeled_graphs(self, model, externalData=False, repeat=100, percent_return=0.5, minSize=20, dropList=['Graph', 'Collection'],
-                              cv=5):
+                              cv=5, LOO=False):
 
 
         dfNew = self.df.copy()
@@ -270,7 +282,7 @@ class ModelTester():
         if type(externalData) == bool:
           # This trains and test the model 'repeat' number of times, keeping track of how each graph was mislabeled each time
             for i in range(repeat):
-                analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, prnt=False)
+                analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, LOO=LOO, prnt=False)
 
     # Keeps the count
                 for graph in analysis.Name.values:

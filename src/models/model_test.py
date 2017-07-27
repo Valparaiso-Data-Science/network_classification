@@ -43,8 +43,19 @@ forestModel = RandomForestClassifier(n_estimators=30)
 GNBmodel = GaussianNB()
 
 tester = ModelTester(df)
+
+#tester.modelFitTest(forestModel, LOO=True)
+#tester.modelFitTest(GNBmodel, LOO=True)
+
 #print(tester.modelFitTest(forestModel, f1Score=True, prnt=False))
 
+analysisNB = tester.get_mislabel_analysis(GNBmodel, dropList=remove, LOO=True, proba=True)
+print(analysisNB)
+#mislabelNB = tester.get_mislabeled_graphs(GNBmodel, dropList=remove, LOO=True)
+#print(mislabelNB)
+
+
+sys.exit("I'm done'")
 
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
 combTester = ModelTester(combined)
@@ -85,11 +96,14 @@ renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Netw
 
 #miscComb = combTester.train_predict(forestModel, renamedMisc)
 
+
+
+
 miscScore = []
 for i in range(100):
-    miscTest = combTester.train_predict(GNBmodel, renamedMisc, dropList=remove)
+    miscTest = combTester.train_predict(forestModel, renamedMisc)
     correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
-    score = correct / 50
+    score = correct / 32
     miscScore.append(score)
 
 print(miscTest[miscTest.Hypothesis == miscTest.Predicted])
@@ -103,7 +117,6 @@ print('average score: ', np.mean(miscScore))
 #miscAnalysis = combTester.get_mislabeled_graphs(forestModel, externalData=renamedMisc, minSize=16)
 #print(miscAnalysis)
 
-sys.exit("I'm done'")
 
 infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
 df_er = pd.read_csv(infile_er, index_col=0)
