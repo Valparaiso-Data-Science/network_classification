@@ -196,11 +196,24 @@ class ModelTester():
         if proba == True:
             cv_pred_proba = cross_val_predict(model, X, y, cv=iterator, method='predict_proba')
             maxProba = np.max(cv_pred_proba, axis=1)
-            cv_results_dict = {'Name': names, 'Actual': y, 'Predicted': cv_pred, 'Probabilities': maxProba}
+            maxPositions = np.argmax(cv_pred_proba, axis=1)
+
+            sortProba = np.sort(cv_pred_proba)
+            newProba = np.delete(sortProba, 5, axis=1)
+            print(newProba)
+            SecondMaxProba = np.max(newProba, axis=1)
+            SecondPred = []
+            for i in range(len(SecondMaxProba)):
+                # pos is the position of the 2nd highest max from original cv_pred_proba, which corresponds to collection
+                pos = list(cv_pred_proba[i]).index( SecondMaxProba[i])
+                # this adds the class prediction for the second highest probability to SecondPred
+                SecondPred.append( np.unique(scaleDF.Collection.values)[pos])
+            print('collections: ',np.unique(scaleDF.Collection.values))
+            cv_results_dict = {'Name': names, 'Actual': y, 'Predicted': cv_pred, 'Highest Probability': maxProba, '2nd Prediction': SecondPred, '2nd Highest Probability': SecondMaxProba}
 
         column_order = ['Name', 'Actual', 'Predicted']
         if proba == True:
-            column_order = ['Name', 'Actual', 'Predicted', 'Probabilities']
+            column_order = ['Name', 'Actual', 'Predicted', 'Highest Probability', '2nd Prediction', '2nd Highest Probability']
 
         results = pd.DataFrame(cv_results_dict, columns=column_order, copy=True)
 
