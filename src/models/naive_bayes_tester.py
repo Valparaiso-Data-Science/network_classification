@@ -43,10 +43,11 @@ def rfe(model, iterations=100, initialFeatures=['Nodes']):
         scores.append(score)
     bestScore = np.mean(score)
 
+# checks if adding a feature improves score
     bestFeature = None
     for feature in list( diff ):
         newDiff = diff.difference({feature})
-        #make 100x mean
+
         scores =[]
         for i in range(iterations):
             score = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff), prnt=False)
@@ -55,9 +56,31 @@ def rfe(model, iterations=100, initialFeatures=['Nodes']):
         if newScore > bestScore:
             bestScore = newScore
             bestFeature = feature
+
     if bestFeature == None:
-        print('best score: ', bestScore)
-        print('features used: ', sFeatures.difference(diff))
+        # checks if taking away one feature improves score
+        worstFeature = None
+        for feature in initialFeatures:
+            newInitial = sInitial.difference({feature})
+            newDiff = sFeatures.difference(newInitial)
+            for i in range(iterations):
+                score = tester.modelFitTest(model, dropList=['Graph', 'Collection'] + list(newDiff), prnt=False)
+                scores.append(score)
+            newScore = np.mean(scores)
+
+            if newScore > bestScore:
+                bestScore = newScore
+                worstFeature = feature
+
+# if taking away one feature didn't improve the score at all
+        if worstFeature == None:
+            print('best score: ', bestScore)
+            print('features used: ', sFeatures.difference(diff))
+
+        else:
+            print('removed ', worstFeature)
+            nextInitial = sInitial.difference({worstFeature})
+            bestScore = rfe(model, initialFeatures=list(nextInitial))
 
     else:
         print('added ', bestFeature)
@@ -67,8 +90,8 @@ def rfe(model, iterations=100, initialFeatures=['Nodes']):
 
 #rfe(GaussianNB(), initialFeatures=[])
 
-#result = rfe(GaussianNB(), initialFeatures=['Density', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'])
-#print(result)
+result = rfe(GaussianNB(), initialFeatures=['Density', 'Avg. clustering coef.', 'Frac. closed triangles', 'Maximum k-core', 'Max. clique (lb)'])
+print(result)
 
 
 #for i in range(100):
