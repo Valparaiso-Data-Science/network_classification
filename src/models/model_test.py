@@ -49,12 +49,16 @@ tester = ModelTester(df)
 
 #print(tester.modelFitTest(forestModel, f1Score=True, prnt=False))
 
-analysisNB = tester.get_mislabel_analysis(GNBmodel, dropList=remove, LOO=True, proba=True)
-print(analysisNB)
-#mislabelRF = tester.get_mislabeled_graphs(forestModel, LOO=True)
-#print(mislabelRF)
+#analysisNB = tester.get_mislabel_analysis(GNBmodel, dropList=remove, LOO=True, proba=True)
+#print(analysisNB)
+mislabelRF = tester.get_mislabeled_graphs(forestModel, LOO=True)
+mislabelRF.to_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/models/RandomForest_mislabeled_LOOcv.csv')
 
-analysisNB.to_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/models/NB_RF_comparison.csv')
+mislabelGNB = tester.get_mislabeled_graphs(GNBmodel, dropList=remove, LOO=True)
+mislabelGNB.to_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/models/GaussianNB_mislabeled_LOOcv.csv')
+
+
+#analysisNB.to_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/models/GNB_vs_RF_mislabel_comparison.csv')
 sys.exit("I'm done'")
 
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')

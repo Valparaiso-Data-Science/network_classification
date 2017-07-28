@@ -222,9 +222,9 @@ class ModelTester():
             print('Excluding features: ', dropList)
 
 
-# Commented out is the part that makes this return only the incorrect classifications
-        # this will probably work either way with get_mislabeled_graphs
-        return results#[results.Actual != results.Predicted]
+# Can comment out the part that makes this return only the incorrect classifications
+        # this will work either way with get_mislabeled_graphs
+        return results[results.Actual != results.Predicted]
 
 
 
