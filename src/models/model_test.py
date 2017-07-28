@@ -51,10 +51,10 @@ tester = ModelTester(df)
 
 analysisNB = tester.get_mislabel_analysis(GNBmodel, dropList=remove, LOO=True, proba=True)
 print(analysisNB)
-#mislabelNB = tester.get_mislabeled_graphs(GNBmodel, dropList=remove, LOO=True)
-#print(mislabelNB)
+#mislabelRF = tester.get_mislabeled_graphs(forestModel, LOO=True)
+#print(mislabelRF)
 
-
+analysisNB.to_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/models/NB_RF_comparison.csv')
 sys.exit("I'm done'")
 
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')

@@ -222,9 +222,9 @@ class ModelTester():
             print('Excluding features: ', dropList)
 
 
-
-
-        return results[results.Actual != results.Predicted]
+# Commented out is the part that makes this return only the incorrect classifications
+        # this will probably work either way with get_mislabeled_graphs
+        return results#[results.Actual != results.Predicted]
 
 
 
@@ -297,6 +297,7 @@ class ModelTester():
           # This trains and test the model 'repeat' number of times, keeping track of how each graph was mislabeled each time
             for i in range(repeat):
                 analysis = self.get_mislabel_analysis(model, minSize, dropList, cv, LOO=LOO, prnt=False)
+                analysis = analysis[analysis.Actual != analysis.Predicted]
 
     # Keeps the count
                 for graph in analysis.Name.values:
