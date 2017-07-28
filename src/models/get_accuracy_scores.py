@@ -35,11 +35,67 @@ tester = ModelTester(df)
 forestModel = RandomForestClassifier(30)
 NBModel = GaussianNB()
 
+#*******************************************************************
+# For LOO scores using different sized collections, different models
+#*******************************************************************
+start = time.time()
+allScores = np.zeros(8)
+for i in range(100):
+    print('iteration ', i)
+    currentRF0 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=0 )
+    currentRF1 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=10)
+    #currentRF2 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=20)
+    currentGNB0 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=0 )
+    currentGNB1 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=10)
+   # currentGNB2 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=20)
+    currentDT0 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=0 )
+    currentDT1 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=10)
+    #currentDT2 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=20)
+    currentLin0 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=0 )
+    currentLin1 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=10)
+    #currentLin2 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=20)
 
+    ar = np.array([currentRF0,
+          currentRF1 ,
+          #currentRF2 ,
+          currentGNB0,
+          currentGNB1,
+          #currentGNB2,
+          currentDT0 ,
+          currentDT1 ,
+         # currentDT2 ,
+          currentLin0,
+          currentLin1,
+          #currentLin2
+                     ])
 
+    if i == 49:
+        mid = time.time()
+        print('halfway time: ', mid-start)
 
+    allScores += ar
+avScores = allScores / 100
 
+print('RF')
+print('>0 -- ', avScores[0])
+print('>10 -- ', avScores[1])
+#print('>20 -- ', avScores[2])
+print('GNB')
+print('>0 -- ', avScores[3])
+print('>10 -- ', avScores[4])
+#print('>20 -- ', avScores[5])
+print('DT')
+print('>0 -- ', avScores[6])
+print('>10 -- ', avScores[7])
+#print('>20 -- ', avScores[8])
+print('LinSVC')
+print('>0 -- ', avScores[9])
+print('>10 -- ', avScores[10])
+#print('>20 -- ', avScores[11])
 
+end = time.time()
+print('total time: ', end-start)
+sys.exit()
 #*************************************************************
 # For getting f1 score among collections for different models
 #*************************************************************
@@ -48,21 +104,25 @@ start = time.time()
 scoresRF = np.zeros(6)
 scoresGNB = np.zeros(6)
 scoresDT = np.zeros(6)
+scoresLin = np.zeros(6)
 for i in range(100):
     print('iteration ', i)
 
    # currentRF = tester.modelFitTest(forestModel, f1Score=True, LOO=True, prnt=False)
-    currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
+   # currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
    # currentDT = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, f1Score=True, prnt=False)
+    currentLin = tester.modelFitTest(LinearSVC(), LOO=True, f1Score=True, prnt=False)
 
    # scoresRF += np.array(currentRF)
-    scoresGNB += np.array(currentGNB)
+   # scoresGNB += np.array(currentGNB)
    # scoresDT += np.array(currentDT)
+    scoresLin += np.array(currentLin)
 
 
 averageRF = scoresRF/100
 averageGNB = scoresGNB/100
 averageDT = scoresDT/100
+averageLin = scoresLin/100
 
 #print('Random Forest')
 #print('Brain: ', averageRF[0])
@@ -87,16 +147,20 @@ print('Web: ', averageGNB[5])
 #print('Social: ', averageDT[4])
 #print('Web: ', averageDT[5])
 
+print('Linear SVC')
+print('Brain: ', averageLin[0])
+print('Chem: ', averageLin[1])
+print('Facebook: ', averageLin[2])
+print('Retweet: ', averageLin[3])
+print('Social: ', averageLin[4])
+print('Web: ', averageLin[5])
+
 end = time.time()
 print('time: ', end-start)
 
+sys.exit("I'm done")
 
-#start = time.time()
-
-
-
-
-
+start = time.time()
 
 #***********************************************
 # For getting accuracy of combined collections
