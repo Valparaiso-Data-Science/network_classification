@@ -8,13 +8,13 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
 import matplotlib.pyplot as plt
-from sklearn.manifold import TSNE
-import scipy
+
 
 
 # Read file
 tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
 
+tsne_data = tsne_data[tsne_data['Category Name'] != 'Temporal Reachability']
 
 # Make a copy of the data
 tsne_new = pd.DataFrame.copy(tsne_data)
@@ -51,6 +51,7 @@ def inertia_plot(data_array):
 
     # Plot ks vs inertias
     plt.plot(ks, inertias, '-o')
+    plt.title('Inertia vs. k')
     plt.xlabel('number of clusters, k')
     plt.ylabel('inertia')
     plt.xticks(ks)
@@ -68,9 +69,9 @@ kmeans.fit_transform(tsne_array)
 labels = kmeans.predict(tsne_array)
 centroids = kmeans.cluster_centers_
 
-#****************
+#**************************
 #write out labels for use in boxplots/table
-#****************
+#**************************
 
 #tsne_data['Label'] = labels
 #tsne_data.to_csv('~/PycharmProjects/network_classification/src/data/tsne_label_data.csv')
@@ -107,10 +108,11 @@ hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 # Creating the figure for the scatter plot
 p=figure(title = 't-Distributed Stochastic Neighbor Embedding', plot_width=1000)
 p.title.text_font_size = '25pt'
+
 # Create scatter points and color the plot by collection
 for i, graph in enumerate(all_categories):
     source = ColumnDataSource(df[df['Category Name'] == graph])
-    p.circle(x='x', y='y', source = source, color = d3['Category20'][16][i], size = 8, legend = graph)
+    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][i], size = 8, legend = graph)
 
 # Creating scatter points of centroids
 p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
@@ -119,9 +121,10 @@ p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid
 p.add_tools(hover)
 p.legend.location = "top_left"
 p.legend.click_policy="hide"
-p.legend.label_text_font_size = "16pt"
-p.legend.background_fill_alpha = 0
+#p.legend.label_text_font_size = "16pt"
+#p.legend.background_fill_alpha = 0
 
 # Save file and show plot
 output_file('kmeans_centroids_plot.html')
 show(p)
+
