@@ -35,37 +35,112 @@ tester = ModelTester(df)
 forestModel = RandomForestClassifier(30)
 NBModel = GaussianNB()
 
+
+
+#**************************************************************
+# For getting accuracy of 6 models
+#**************************************************************
+start = time.time()
+# Currently changed to find std. dev.
+scoresArr = np.array([[0]*12])
+for i in range(100):
+    print('iteration ', i)
+    RF = tester.modelFitTest(forestModel, prnt=False)
+    RFLOO = tester.modelFitTest(forestModel, LOO=True, prnt=False)
+    NB = tester.modelFitTest(NBModel, dropList=remove, prnt=False)
+    NBLOO = tester.modelFitTest(NBModel, LOO=True, dropList=remove, prnt=False)
+    DT = tester.modelFitTest(DecisionTreeClassifier(), prnt=False)
+    DTLOO = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False)
+    Lin = tester.modelFitTest(LinearSVC(), prnt=False)
+    LinLOO = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False)
+    svc = tester.modelFitTest(SVC(), prnt=False)
+    svcLOO = tester.modelFitTest(SVC(), LOO=True, prnt=False)
+    Log = tester.modelFitTest(LogisticRegression(), prnt=False)
+    LogLOO = tester.modelFitTest(LogisticRegression(), LOO=True, prnt=False)
+
+    currentScores = [RF, RFLOO,
+                 NB, NBLOO,
+                 DT, DTLOO,
+                 Lin, LinLOO,
+                 svc, svcLOO,
+                 Log, LogLOO
+                 ]
+    arr = np.array([currentScores])
+    scoresArr = np.concatenate((scoresArr, arr), axis=0)
+    #print(scoresArr)
+    #scoresArr += currentScores
+
+    if i == 49:
+        mid = time.time()
+        print('half way time: ', mid-start)
+#scoresAv = scoresArr / 100
+
+#print(scoresAv)
+scoresArr = np.delete(scoresArr, 0, 0)
+scoresStdDev = np.std(scoresArr, axis=0)
+
+print('RF: ', scoresStdDev[0])
+print('RFLOO: ', scoresStdDev[1])
+print('NB: ', scoresStdDev[2])
+print('NBLOO: ', scoresStdDev[3])
+print('DT: ', scoresStdDev[4])
+print('DTLOO: ', scoresStdDev[5])
+print('Lin: ', scoresStdDev[6])
+print('LinLOO: ', scoresStdDev[7])
+print('svc: ', scoresStdDev[8])
+print('svcLOO: ', scoresStdDev[9])
+print('Log: ', scoresStdDev[10])
+print('LogLOO: ', scoresStdDev[11])
+
+#print('RF: ', scoresAv[0])
+#print('RFLOO: ', scoresAv[1])
+#print('NB: ', scoresAv[2])
+#print('NBLOO: ', scoresAv[3])
+#print('DT: ', scoresAv[4])
+#print('DTLOO: ', scoresAv[5])
+#print('Lin: ', scoresAv[6])
+#print('LinLOO: ', scoresAv[7])
+#print('svc: ', scoresAv[8])
+#print('svcLOO: ', scoresAv[9])
+#print('Log: ', scoresAv[10])
+#print('LogLOO: ', scoresAv[11])
+
+
+end = time.time()
+print('total time: ', end-start)
+
+
 #*******************************************************************
 # For LOO scores using different sized collections, different models
 #*******************************************************************
 start = time.time()
-allScores = np.zeros(8)
+allScores = np.zeros(2)
 for i in range(100):
     print('iteration ', i)
-    currentRF0 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=0 )
-    currentRF1 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=10)
+    #currentRF0 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=0 )
+    #currentRF1 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=10)
     #currentRF2 = tester.modelFitTest(forestModel, LOO=True, prnt=False, minSize=20)
     currentGNB0 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=0 )
-    currentGNB1 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=10)
+    #currentGNB1 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=10)
    # currentGNB2 = tester.modelFitTest(NBModel, dropList=remove, LOO=True, prnt=False, minSize=20)
-    currentDT0 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=0 )
+    #currentDT0 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=0 )
     currentDT1 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=10)
     #currentDT2 = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False, minSize=20)
-    currentLin0 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=0 )
-    currentLin1 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=10)
+    #currentLin0 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=0 )
+    #currentLin1 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=10)
     #currentLin2 = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False, minSize=20)
 
-    ar = np.array([currentRF0,
-          currentRF1 ,
+    ar = np.array([#currentRF0,
+          #currentRF1 ,
           #currentRF2 ,
           currentGNB0,
-          currentGNB1,
+          #currentGNB1,
           #currentGNB2,
-          currentDT0 ,
+          #currentDT0 ,
           currentDT1 ,
-         # currentDT2 ,
-          currentLin0,
-          currentLin1,
+          #currentDT2 ,
+          #currentLin0,
+          #currentLin1,
           #currentLin2
                      ])
 
@@ -77,20 +152,20 @@ for i in range(100):
 avScores = allScores / 100
 
 print('RF')
-print('>0 -- ', avScores[0])
-print('>10 -- ', avScores[1])
+#print('>0 -- ', avScores[0])
+#print('>10 -- ', avScores[1])
 #print('>20 -- ', avScores[2])
 print('GNB')
-print('>0 -- ', avScores[3])
-print('>10 -- ', avScores[4])
+print('>0 -- ', avScores[0])
+#print('>10 -- ', avScores[4])
 #print('>20 -- ', avScores[5])
 print('DT')
-print('>0 -- ', avScores[6])
-print('>10 -- ', avScores[7])
+#print('>0 -- ', avScores[6])
+print('>10 -- ', avScores[1])
 #print('>20 -- ', avScores[8])
 print('LinSVC')
-print('>0 -- ', avScores[9])
-print('>10 -- ', avScores[10])
+#print('>0 -- ', avScores[9])
+#print('>10 -- ', avScores[10])
 #print('>20 -- ', avScores[11])
 
 end = time.time()
@@ -160,7 +235,6 @@ print('time: ', end-start)
 
 sys.exit("I'm done")
 
-start = time.time()
 
 #***********************************************
 # For getting accuracy of combined collections
@@ -196,54 +270,6 @@ print('BrainBio: ', scoresAv[1])
 print('Both: ', scoresAv[2])
 
 sys.exit('Im done')
-
-#**************************************************************
-# For getting accuracy of 6 models
-#**************************************************************
-
-scoresArr = np.zeros(12)
-for i in range(100):
-    RF = tester.modelFitTest(forestModel, prnt=False)
-    #RFLOO = tester.modelFitTest(forestModel, LOO=True, prnt=False)
-    NB = tester.modelFitTest(NBModel, dropList=remove, prnt=False)
-    #NBLOO = tester.modelFitTest(NBModel, LOO=True, dropList=remove, prnt=False)
-    DT = tester.modelFitTest(DecisionTreeClassifier(), prnt=False)
-    #DTLOO = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, prnt=False)
-    Lin = tester.modelFitTest(LinearSVC(), prnt=False)
-    #LinLOO = tester.modelFitTest(LinearSVC(), LOO=True, prnt=False)
-    svc = tester.modelFitTest(SVC(), prnt=False)
-    #svcLOO = tester.modelFitTest(SVC(), LOO=True, prnt=False)
-    Log = tester.modelFitTest(LogisticRegression(), prnt=False)
-    #LogLOO = tester.modelFitTest(LogisticRegression(), LOO=True, prnt=False)
-
-    currentScores = [RF,# RFLOO,
-                 NB,# NBLOO,
-                 DT,# DTLOO,
-                 Lin,# LinLOO,
-                 svc,# svcLOO,
-                 Log,# LogLOO
-                 ]
-    arr = np.array(currentScores)
-    scoresArr += arr
-scoresAv = scoresArr / 100
-
-print(scoresAv)
-
-end = time.time()
-print(end-start)
-
-print('RF: ', scoresAv[0])
-print('RFLOO: ', scoresAv[1])
-print('NB: ', scoresAv[2])
-print('NBLOO: ', scoresAv[3])
-print('DT: ', scoresAv[4])
-print('DTLOO: ', scoresAv[5])
-print('Lin: ', scoresAv[6])
-print('LinLOO: ', scoresAv[7])
-print('svc: ', scoresAv[8])
-print('svcLOO: ', scoresAv[9])
-print('Log: ', scoresAv[10])
-print('LogLOO: ', scoresAv[11])
 
 
 
