@@ -80,8 +80,10 @@ centroids = kmeans.cluster_centers_
 centroids_x = centroids[:,0]
 centroids_y = centroids[:,1]
 
+df_labels = pd.read_csv('~/Downloads/network_classification/src/data/tsne_label_data.csv')
+
 # Create cross tabulation of tsne data and print
-df1 = pd.DataFrame({'labels':labels, 'Collection':tsne_data['Category Name']})
+df1 = pd.DataFrame({'labels':df_labels[], 'Collection':tsne_data['Category Name']})
 print("Crosstab for t-SNE data:\n")
 ct = pd.crosstab(df1['Collection'], df1['labels'])
 print(ct)
