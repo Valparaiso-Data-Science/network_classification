@@ -45,8 +45,8 @@ GNBmodel = GaussianNB()
 tester = ModelTester(df)
 
 #tester.modelFitTest(forestModel, LOO=True)
-tester.modelFitTest(GNBmodel, LOO=True, minSize=10)
-tester.modelFitTest(GNBmodel, LOO=True, minSize=0)
+#tester.modelFitTest(forestModel, LOO=True)
+#tester.modelFitTest(GNBmodel, LOO=True, dropList=remove)
 
 #print(tester.modelFitTest(forestModel, f1Score=True, prnt=False))
 
@@ -60,7 +60,7 @@ tester.modelFitTest(GNBmodel, LOO=True, minSize=0)
 
 
 #analysisNB.to_csv('C:/Users/Owner/Documents/VERUM/Network stuff/git/src/models/GNB_vs_RF_mislabel_comparison.csv')
-sys.exit("I'm done'")
+#sys.exit()
 
 combined = tester.combine_collections(['Brain Networks', 'Biological Networks'], 'Brain-Bio')
 combTester = ModelTester(combined)
@@ -106,13 +106,13 @@ renamedMisc = miscObject.combine_collections(['Brain Networks', 'Biological Netw
 
 miscScore = []
 for i in range(100):
-    miscTest = combTester.train_predict(forestModel, renamedMisc)
+    miscTest = combTester.train_predict(GNBmodel, renamedMisc, dropList=remove)
     correct = len(miscTest[miscTest.Hypothesis == miscTest.Predicted].Name.values)
     score = correct / 32
     miscScore.append(score)
-
-print(miscTest[miscTest.Hypothesis == miscTest.Predicted])
-print(miscScore)
+#
+#print(miscTest[miscTest.Hypothesis == miscTest.Predicted])
+#print(miscScore)
 print('average score: ', np.mean(miscScore))
 
 #miscTest = combTester.train_predict(forestModel, renamedMisc, minSize=16)
@@ -124,15 +124,29 @@ print('average score: ', np.mean(miscScore))
 
 
 infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
-df_er = pd.read_csv(infile_er, index_col=0)
+df_er = pd.read_csv(infile_er)
 
-dfSyn = pd.concat([df, df_er])
+
+for i in df_er.index:
+    df_er.Collection.iloc[i] = 'Synthetic Erdos Renyi'
+
+infile_b1b2 = 'C:/Users/Owner/Documents/VERUM/Network stuff/synthetic_features_b1b2.csv'
+df_b1b2 = pd.read_csv(infile_b1b2)
+
+for i in df_b1b2.index:
+    df_b1b2.Collection.iloc[i] = 'Synthetic Barabasi'
+
+print(df_b1b2.head())
+
+dfSyn = pd.concat([df, df_er, df_b1b2])
+print(np.unique(dfSyn.Collection.values))
 testerSyn = ModelTester(dfSyn)
-tester.modelFitTest(forestModel)
-tester.modelFitTest(GNBmodel, dropList=remove)
+
+#tester.modelFitTest(forestModel)
+#tester.modelFitTest(GNBmodel, dropList=remove)
 testerSyn.modelFitTest(forestModel, LOO=False)
-testerSyn.modelFitTest(GNBmodel, dropList=remove)
-#print(tester.get_mislabeled_graphs(GNBmodel, dropList=remove))
+testerSyn.modelFitTest(GNBmodel, LOO=True ,dropList=remove)
+print(testerSyn.get_mislabeled_graphs(GNBmodel, dropList=remove))
 #print(tester.get_mislabeled_graphs(forestModel))
 
 

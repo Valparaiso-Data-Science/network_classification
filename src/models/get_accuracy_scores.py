@@ -36,11 +36,88 @@ forestModel = RandomForestClassifier(30)
 NBModel = GaussianNB()
 
 
+#*************************************************************
+# For getting f1 score among collections for different models
+#*************************************************************
+start = time.time()
+
+scoresRF = np.zeros(6)
+scoresGNB = np.zeros(6)
+scoresDT = np.zeros(6)
+scoresLin = np.zeros(6)
+for i in range(100):
+    print('iteration ', i)
+
+   # currentRF = tester.modelFitTest(forestModel, f1Score=True, LOO=True, prnt=False)
+    currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
+   # currentDT = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, f1Score=True, prnt=False)
+   # currentLin = tester.modelFitTest(LinearSVC(), LOO=True, f1Score=True, prnt=False)
+    print(currentGNB)
+   # scoresRF += np.array(currentRF)
+    scoresGNB += np.array(currentGNB)
+   # scoresDT += np.array(currentDT)
+   # scoresLin += np.array(currentLin)
+
+
+averageRF = scoresRF/100
+averageGNB = scoresGNB/100
+averageDT = scoresDT/100
+averageLin = scoresLin/100
+
+#print('Random Forest')
+#print('Brain: ', averageRF[0])
+#print('Chem: ', averageRF[1])
+#print('Facebook: ', averageRF[2])
+#print('Retweet: ', averageRF[3])
+#print('Social: ', averageRF[4])
+#print('Web: ', averageRF[5])
+#print('Gaussian Naive Bayes')
+print('Brain: ', averageGNB[0])
+print('Chem: ', averageGNB[1])
+print('Facebook: ', averageGNB[2])
+print('Retweet: ', averageGNB[3])
+print('Social: ', averageGNB[4])
+print('Web: ', averageGNB[5])
+
+#print('Decision Tree')
+#print('Brain: ', averageDT[0])
+#print('Chem: ', averageDT[1])
+#print('Facebook: ', averageDT[2])
+#print('Retweet: ', averageDT[3])
+#print('Social: ', averageDT[4])
+#print('Web: ', averageDT[5])
+
+#print('Linear SVC')
+#print('Brain: ', averageLin[0])
+#print('Chem: ', averageLin[1])
+#print('Facebook: ', averageLin[2])
+#print('Retweet: ', averageLin[3])
+#print('Social: ', averageLin[4])
+#print('Web: ', averageLin[5])
+
+end = time.time()
+print('time: ', end-start)
+
+sys.exit("I'm done")
 
 #**************************************************************
 # For getting accuracy of 6 models
 #**************************************************************
 start = time.time()
+
+
+# This top section is for including synthetic graphs
+# Erdos Renyi
+infile_er = 'C:/Users/Owner/Documents/VERUM/Network stuff/git/src/data/synthetic_e1e2e3_complete.csv'
+df_er = pd.read_csv(infile_er)
+for i in df_er.index:
+    df_er.Collection.iloc[i] = 'Synthetic Erdos Renyi'
+# Barabasi
+infile_b1b2 = 'C:/Users/Owner/Documents/VERUM/Network stuff/synthetic_features_b1b2.csv'
+df_b1b2 = pd.read_csv(infile_b1b2)
+for i in df_b1b2.index:
+    df_b1b2.Collection.iloc[i] = 'Synthetic Barabasi'
+
 # Currently changed to find std. dev.
 scoresArr = np.array([[0]*12])
 for i in range(100):
@@ -171,69 +248,8 @@ print('LinSVC')
 end = time.time()
 print('total time: ', end-start)
 sys.exit()
-#*************************************************************
-# For getting f1 score among collections for different models
-#*************************************************************
-start = time.time()
-
-scoresRF = np.zeros(6)
-scoresGNB = np.zeros(6)
-scoresDT = np.zeros(6)
-scoresLin = np.zeros(6)
-for i in range(100):
-    print('iteration ', i)
-
-   # currentRF = tester.modelFitTest(forestModel, f1Score=True, LOO=True, prnt=False)
-   # currentGNB = tester.modelFitTest(NBModel, dropList=remove, LOO=True, f1Score=True, prnt=False)
-   # currentDT = tester.modelFitTest(DecisionTreeClassifier(), LOO=True, f1Score=True, prnt=False)
-    currentLin = tester.modelFitTest(LinearSVC(), LOO=True, f1Score=True, prnt=False)
-
-   # scoresRF += np.array(currentRF)
-   # scoresGNB += np.array(currentGNB)
-   # scoresDT += np.array(currentDT)
-    scoresLin += np.array(currentLin)
 
 
-averageRF = scoresRF/100
-averageGNB = scoresGNB/100
-averageDT = scoresDT/100
-averageLin = scoresLin/100
-
-#print('Random Forest')
-#print('Brain: ', averageRF[0])
-#print('Chem: ', averageRF[1])
-#print('Facebook: ', averageRF[2])
-#print('Retweet: ', averageRF[3])
-#print('Social: ', averageRF[4])
-#print('Web: ', averageRF[5])
-#print('Gaussian Naive Bayes')
-print('Brain: ', averageGNB[0])
-print('Chem: ', averageGNB[1])
-print('Facebook: ', averageGNB[2])
-print('Retweet: ', averageGNB[3])
-print('Social: ', averageGNB[4])
-print('Web: ', averageGNB[5])
-
-#print('Decision Tree')
-#print('Brain: ', averageDT[0])
-#print('Chem: ', averageDT[1])
-#print('Facebook: ', averageDT[2])
-#print('Retweet: ', averageDT[3])
-#print('Social: ', averageDT[4])
-#print('Web: ', averageDT[5])
-
-print('Linear SVC')
-print('Brain: ', averageLin[0])
-print('Chem: ', averageLin[1])
-print('Facebook: ', averageLin[2])
-print('Retweet: ', averageLin[3])
-print('Social: ', averageLin[4])
-print('Web: ', averageLin[5])
-
-end = time.time()
-print('time: ', end-start)
-
-sys.exit("I'm done")
 
 
 #***********************************************
