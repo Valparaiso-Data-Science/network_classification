@@ -83,7 +83,7 @@ centroids_y = centroids[:,1]
 df_labels = pd.read_csv('~/Downloads/network_classification/src/data/tsne_label_data.csv')
 
 # Create cross tabulation of tsne data and print
-df1 = pd.DataFrame({'labels':df_labels[], 'Collection':tsne_data['Category Name']})
+df1 = pd.DataFrame({'labels':df_labels['Label'], 'Collection':df_labels['Category Name']})
 print("Crosstab for t-SNE data:\n")
 ct = pd.crosstab(df1['Collection'], df1['labels'])
 print(ct)
@@ -98,7 +98,7 @@ all_categories = category.unique().tolist()
 # Assign the columns of tsne_array
 xs = tsne_array[:,0]
 ys = tsne_array[:, 1]
-data = {'x': xs, 'y': ys, 'Category Name' : category, 'Graph': names}
+data = {'x': xs, 'y': ys, 'Category Name' : category, 'Graph': names, 'Label' : labels}
 
 # Create new pandas dataframe
 df=pd.DataFrame(data)
@@ -112,9 +112,16 @@ p=figure(title = 't-Distributed Stochastic Neighbor Embedding', plot_width=1000)
 p.title.text_font_size = '25pt'
 
 # Create scatter points and color the plot by collection
-for i, graph in enumerate(all_categories):
-    source = ColumnDataSource(df[df['Category Name'] == graph])
-    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][i], size = 8, legend = graph)
+#for i, graph in enumerate(all_categories):
+#    source = ColumnDataSource(df[df['Category Name'] == graph])
+#    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][i], size = 8, legend = graph)
+
+
+
+#Color by label
+for label in range(14):
+    source = ColumnDataSource(df[df['Label'] == label])
+    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][label], size = 8)
 
 # Creating scatter points of centroids
 p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')

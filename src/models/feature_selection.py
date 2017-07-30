@@ -59,12 +59,12 @@ def rfe_function(model, model_name, num_of_features, X, Y):
 
 
 # Calling function to run RFE with different models
-rfe_function(LogisticRegression(), "Logistic Regression", num_of_features, X, Y)
-rfe_function(Lasso(alpha = 0.1), "Lasso Regression", num_of_features, X, Y)
-rfe_function(LinearSVC(), "Linear SVC", num_of_features, X, Y)
-rfe_function(LinearRegression(), "Linear Regression", num_of_features, X, Y)
-rfe_function(tree.DecisionTreeClassifier(random_state=42), "Decision Tree", num_of_features, X, Y)
-rfe_function(RandomForestClassifier(random_state=42), "Random Forest", num_of_features, X, Y)
+#rfe_function(LogisticRegression(), "Logistic Regression", num_of_features, X, Y)
+#rfe_function(Lasso(alpha = 0.1), "Lasso Regression", num_of_features, X, Y)
+#rfe_function(LinearSVC(), "Linear SVC", num_of_features, X, Y)
+#rfe_function(LinearRegression(), "Linear Regression", num_of_features, X, Y)
+#rfe_function(tree.DecisionTreeClassifier(random_state=42), "Decision Tree", num_of_features, X, Y)
+#rfe_function(RandomForestClassifier(random_state=42), "Random Forest", num_of_features, X, Y)
 
 
 
@@ -128,7 +128,9 @@ def rfecv(model, name):
 
     print('New List: ' + str(list))
 
-        # Plot number of features VS. cross-validation scores
+
+
+    # Plot number of features VS. cross-validation scores
     plt.figure()
     plt.title(name, {'size': '22'})
     plt.xlabel("Number of features selected", {'size': '18'})
@@ -136,11 +138,17 @@ def rfecv(model, name):
     plt.plot(range(1, len(list) + 1), list)
     plt.show()
 
-
+    return list
 
 
 
 # Calling RFECV function for all three models
 #rfecv(LinearSVC(), "RFECV - Linear SVC")
-rfecv(tree.DecisionTreeClassifier(), "RFECV - Decision Tree")
-#rfecv(RandomForestClassifier(), "RFECV - Random Forest")
+#rfecv(tree.DecisionTreeClassifier(), "RFECV - Decision Tree")
+rfecv(RandomForestClassifier(), "RFECV - Random Forest")
+
+
+# Used to save rfecv data
+# Change file name as desired
+list = pd.DataFrame(list)
+list.to_csv('~/Downloads/network_classification/src/data/rfecv_random_tree_data.csv')
