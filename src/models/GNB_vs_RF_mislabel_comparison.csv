@@ -1,30 +1,30 @@
-,Name,Actual,GNB Prediction,Prediction Probability,2nd Prediction,2nd Highest Probability,RF Prediction
-2,web-EPA,Web Graphs,Retweet Networks,1.000,Social Networks,2.22E-06,Retweet Networks
-5,web-baidu-baike-related,Web Graphs,Social Networks,0.958,Web Graphs,4.20E-02,Social Networks
-6,web-baidu-baike,Web Graphs,Social Networks,0.999,Web Graphs,9.08E-04,Social Networks
-8,web-frwikinews-user-edits,Web Graphs,Brain Networks,1.000,Cheminformatics,0.00E+00,Social Networks
-14,web-italycnr-2000,Web Graphs,Social Networks,0.813,Web Graphs,1.87E-01,Web Graphs
-15,web-polblogs,Web Graphs,Social Networks,0.971,Facebook Networks,2.95E-02,Social Networks
-17,web-spam,Web Graphs,Facebook Networks,0.949,Social Networks,5.01E-02,Social/Facebook) Networks
-18,web-uk-2005,Web Graphs,Brain Networks,1.000,Web Graphs,1.48E-117,Brain Networks
-19,web-webbase-2001,Web Graphs,Social Networks,0.956,Facebook Networks,2.59E-02,Social/Retweet Networks
-20,web-wiki-ch-internal,Web Graphs,Social Networks,0.997,Web Graphs,2.67E-03,Social Networks
-21,web-wikipedia2009,Web Graphs,Facebook Networks,0.642,Social Networks,3.57E-01,Social Networks
-26,socfb-B-anon,Facebook Networks,Social Networks,0.718,Facebook Networks,2.81E-01,Social Networks
-38,socfb-Caltech36,Facebook Networks,Social Networks,0.999,Brain Networks,1.05E-03,Facebook Networks
-133,socfb-nips-ego,Facebook Networks,Retweet Networks,1.000,Social Networks,5.11E-09,Retweet Networks
-151,soc-douban,Social Networks,Retweet Networks,1.000,Social Networks,1.26E-06,Retweet/Web Networks
-154,soc-flickr-und,Social Networks,Web Graphs,1.000,Social Networks,4.29E-05,Social Networks
-163,soc-livejournal,Social Networks,Web Graphs,0.761,Social Networks,2.39E-01,Social Networks
-175,soc-tribes,Social Networks,Brain Networks,1.000,Social Networks,3.33E-33,Social Networks
-176,soc-twitter-follows-mun,Social Networks,Retweet Networks,1.000,Social Networks,1.55E-04,Social Networks
-177,soc-twitter-follows,Social Networks,Retweet Networks,1.000,Social Networks,3.03E-05,Social Networks
-178,soc-twitter-higgs,Social Networks,Web Graphs,0.646,Social Networks,3.53E-01,Social Networks
-181,soc-wiki-elec,Social Networks,Facebook Networks,0.977,Social Networks,2.25E-02,Facebook Networks
-185,rt-pol,Retweet Networks,Social Networks,0.986,Web Graphs,1.40E-02,Social Networks
-186,rt-retweet-crawl,Retweet Networks,Social Networks,0.982,Web Graphs,1.75E-02,Social Networks
-187,rt-retweet,Retweet Networks,Social Networks,1.000,Brain Networks,3.44E-06,Brain Networks
-274,bn-macaque-rhesus-brain-1,Brain Networks,Social Networks,0.952,Brain Networks,4.82E-02,Social Networks
-280,bn-mouse-visual-cortex-1,Brain Networks,Social Networks,1.000,Brain Networks,5.64E-07,Cheminformatics Networks
-281,bn-mouse-visual-cortex-2,Brain Networks,Retweet Networks,1.000,Social Networks,5.39E-06,Retweet Networks
-355,ENZYMES-g136,Cheminformatics,Brain Networks,1.000,Cheminformatics,1.25E-58,Cheminformatics
+Graph,Actual Collecion,GNB Prediction,Probability,2nd Prediction,2nd Probability,RF Prediction
+web-EPA,Web Graphs,Retweet Networks,1.000,Social Networks,0.0000,Retweet Networks
+web-baidu-baike-related,Web Graphs,Social Networks,0.958,Web Graphs,0.0420,Social Networks
+web-baidu-baike,Web Graphs,Social Networks,0.999,Web Graphs,0.0009,Social Networks
+web-frwikinews-user-edits,Web Graphs,Brain Networks,1.000,Cheminformatics,0.0000,Social Networks
+web-italycnr-2000,Web Graphs,Social Networks,0.813,Web Graphs,0.1870,Web Graphs
+web-polblogs,Web Graphs,Social Networks,0.971,Facebook Networks,0.0295,Social Networks
+web-spam,Web Graphs,Facebook Networks,0.949,Social Networks,0.0501,Social Networks
+web-uk-2005,Web Graphs,Brain Networks,1.000,Web Graphs,0.0000,Brain Networks
+web-webbase-2001,Web Graphs,Social Networks,0.956,Facebook Networks,0.0259,Social Networks
+web-wiki-ch-internal,Web Graphs,Social Networks,0.997,Web Graphs,0.0027,Social Networks
+web-wikipedia2009,Web Graphs,Facebook Networks,0.642,Social Networks,0.3570,Social Networks
+socfb-B-anon,Facebook Networks,Social Networks,0.718,Facebook Networks,0.2810,Social Networks
+socfb-Caltech36,Facebook Networks,Social Networks,0.999,Brain Networks,0.0011,Facebook Networks
+socfb-nips-ego,Facebook Networks,Retweet Networks,1.000,Social Networks,0.0000,Retweet Networks
+soc-douban,Social Networks,Retweet Networks,1.000,Social Networks,0.0000,Retweet Networks
+soc-flickr-und,Social Networks,Web Graphs,1.000,Social Networks,0.0000,Social Networks
+soc-livejournal,Social Networks,Web Graphs,0.761,Social Networks,0.2390,Social Networks
+soc-tribes,Social Networks,Brain Networks,1.000,Social Networks,0.0000,Social Networks
+soc-twitter-follows-mun,Social Networks,Retweet Networks,1.000,Social Networks,0.0002,Social Networks
+soc-twitter-follows,Social Networks,Retweet Networks,1.000,Social Networks,0.0000,Social Networks
+soc-twitter-higgs,Social Networks,Web Graphs,0.646,Social Networks,0.3530,Social Networks
+soc-wiki-elec,Social Networks,Facebook Networks,0.977,Social Networks,0.0225,Facebook Networks
+rt-pol,Retweet Networks,Social Networks,0.986,Web Graphs,0.0140,Social Networks
+rt-retweet-crawl,Retweet Networks,Social Networks,0.982,Web Graphs,0.0175,Social Networks
+rt-retweet,Retweet Networks,Social Networks,1.000,Brain Networks,0.0000,Brain Networks
+bn-macaque-rhesus-brain-1,Brain Networks,Social Networks,0.952,Brain Networks,0.0482,Social Networks
+bn-mouse-visual-cortex-1,Brain Networks,Social Networks,1.000,Brain Networks,0.0000,Cheminformatics 
+bn-mouse-visual-cortex-2,Brain Networks,Retweet Networks,1.000,Social Networks,0.0000,Retweet Networks
+ENZYMES-g136,Cheminformatics,Brain Networks,1.000,Cheminformatics,0.0000,Cheminformatics
