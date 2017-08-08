@@ -28,20 +28,32 @@ raw_array = raw_new.values
 
 
 # Create KMeans with 8 clusters and fit data to model
-kmeans = KMeans(n_clusters = 8)
-kmeans.fit_transform(raw_array)
-labels = kmeans.predict(raw_array)
-centroids = kmeans.cluster_centers_
+def kmeans_function(array):
+    kmeans = KMeans(n_clusters = 8)
+    kmeans.fit_transform(array)
+    labels = kmeans.predict(array)
+    centroids = kmeans.cluster_centers_
+    #I DONT KNOW HOW RETURNS WORK IN PYTHON. CHECK THIS FOR ALL FUNCTIONS WITH RETURNS
+    return labels, centroids
 
+kmeans_function(raw_array)
 
 # Create cross tabulation of raw data and print
-df2 = pd.DataFrame({'labels':labels, 'Collection':raw['Collection']})
-print("\nCrosstab for raw data:\n")
-ct = pd.crosstab(df2['Collection'], df2['labels'])
-print(ct)
+def crosstab(labels, file):
+    df = pd.DataFrame({'Labels':labels, 'Collection':file['Collection']})
+    print("\nCrosstab for raw data:\n")
+    ct = pd.crosstab(df['Collection'], df['Labels'])
+    print(ct)
 
+crosstab(labels, raw)
 
-# Get names of the columns
+#df2 = pd.DataFrame({'labels':labels, 'Collection':file['Collection']})
+#print("\nCrosstab for raw data:\n")
+#ct = pd.crosstab(df2['Collection'], df2['labels'])
+#print(ct)
+#
+
+# Get names of the numerical columns
 column = raw_new.keys()
 
 # Create new data frame with the centroids data from the kmeans in raw data
@@ -65,9 +77,6 @@ raw_with_cent_copy = pd.DataFrame.copy(raw_with_cent)
 del raw_with_cent_copy['Graph']
 del raw_with_cent_copy['Collection']
 
-# Delete Nodes and Edges (Will this make a change?)
-#del raw_with_cent_copy['Nodes']
-#del raw_with_cent_copy['Edges']
 
 # Get all the category names and graph names
 category_new = raw_with_cent['Collection']
@@ -76,15 +85,27 @@ all_new_categories = category_new.unique().tolist()
 
 
 # Run tsne on the new data frame
-tsne = TSNE(metric=scipy.spatial.distance.canberra)
-tsne_features = tsne.fit_transform(raw_with_cent_copy.values)
-xs_new = tsne_features[:, 0]
-ys_new = tsne_features[:, 1]
+def tsne_function(file):
+    tsne = TSNE()
+    tsne_features = tsne.fit_transform(file.values)
+    xs_new = tsne_features[:, 0]
+    ys_new = tsne_features[:, 1]
+    data_new = {'x': xs_new, 'y': ys_new, 'Category Name': category_new, 'Graph': names_new}
+    df_new = pd.DataFrame(data_new)
 
-data_new = {'x': xs_new, 'y': ys_new, 'Category Name' : category_new, 'Graph': names_new}
+    return df_new
 
-# Create new pandas dataframe
-df_new = pd.DataFrame(data_new)
+#tsne = TSNE()
+#tsne_features = tsne.fit_transform(raw_with_cent_copy.values)
+#xs_new = tsne_features[:, 0]
+#ys_new = tsne_features[:, 1]
+#
+#data_new = {'x': xs_new, 'y': ys_new, 'Category Name' : category_new, 'Graph': names_new}
+#
+## Create new pandas dataframe
+#df_new = pd.DataFrame(data_new)
+#
+#df_new.to_csv('~/Downloads/network_classification/src/models/tsne_14d_data.csv')
 
 # Create new values that will use for label of centroids
 values = np.array([-1, -1, -1, -1, -1, -1, -1, -1])
@@ -100,7 +121,7 @@ hover = HoverTool()
 hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
 
 # Creating the figure for the scatter plot
-p=figure(title = 'Scaled Data ', plot_width=1000)
+p=figure(title = 't-SNE in all dimensions', plot_width=1000)
 
 all_new_labels = df_new['Label'].unique().tolist()
 
@@ -110,28 +131,11 @@ for i, graph in enumerate(all_new_categories):
     source = ColumnDataSource(df_new[df_new['Category Name'] == graph])
     if graph != 'Centroid':
         p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        if (df_new['Category Name'][j] == graph).all():
-#            p.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Category Name'][j] == graph).all():
-#            p.triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Category Name'][j] == graph).all():
-#            p.diamond(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Category Name'][j] == graph).all():
-#            p.asterisk(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Category Name'][j] == graph).all():
-#            p.cross(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Category Name'][j] == graph).all():
-#            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        elif (df_new['Category Name'][j] == graph).all():
-#            p.inverted_triangle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        else:
-#            p.square(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
-#        j += 1
+    # Plot the centroids
     else:
-        # Plot the centroids
         p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
 
-#p.square(x = 'x', y = 'y', source = source, color = 'black', size = 12, legend = graph)
+
 
 # Add tools and interactive legend
 p.add_tools(hover)
@@ -139,5 +143,5 @@ p.legend.location = "top_left"
 p.legend.click_policy="hide"
 
 # Save file and show plot
-output_file('raw_data_kmeans_centroids_plot.html')
+output_file('tsne_14d_plot.html')
 show(p)

@@ -1,6 +1,6 @@
 # This code uses feature selection algorithms with differente models
 # to obtain the most important features of our data
-
+# Algorithms used are stability selection, rfe and rfecv
 
 # Import relevant packages
 import pandas as pd
@@ -31,7 +31,7 @@ col_names = df.keys()
 # Create array of the values and define X and Y
 df_array = df.values
 X = df_array[:, 1:15]
-Y = df_array[:, 0]
+Y = df_array[:, 0] #target variable (collection)
 
 # Number of important features we want to extract
 # Using 1 will give us the ranking of all of the features
@@ -44,7 +44,8 @@ num_of_features = 1
 #**************************************
 
 # Define function that runs RFE in different models
-def rfe_function(model, model_name, num_of_features, X, Y):
+def rfe_function(model, model_name, nu
+    m_of_features, X, Y):
     rfe = RFE(model, num_of_features)
     fit = rfe.fit(X,Y)
     print("\n" + model_name)
@@ -72,22 +73,15 @@ rfe_function(RandomForestClassifier(random_state=42), "Random Forest", num_of_fe
 # Stability Selection Method
 # *******************************************
 
-#  Create Randomized Lasso Regression Model with RFE
-model_1 = RandomizedLasso(alpha=0.01)
-model_1.fit(X, Y)
-print("\nRandomized Lasso Regression")
-print("Features sorted by their score:")
-print(sorted(zip(map(lambda x: round(x, 4), model_1.scores_), col_names), reverse=True))
+def stability_select(model, model_name, X, Y)
+    model.fit(X,Y)
+    print(model_name)
+    print("Features sorted by their score:")
+    print(sorted(zip(map(lambda x: round(x, 4), model_1.scores_), col_names), reverse=True))
 
 
-#  Create Randomized Logistic Regression Model with RFE
-model_2 = RandomizedLogisticRegression()
-model_2.fit(X, Y)
-print("\nRandomized Logistic Regression")
-print("Features sorted by their score:")
-print(sorted(zip(map(lambda x: round(x, 4), model_2.scores_), col_names), reverse=True))
-
-
+stability_select(RandomizedLasso(alpha=0.01), "\nRandomized Lasso Regression", X, Y)
+stability_select(RandomizedLogisticRegression(), "\nRandomized Logistic Regression", X, Y)
 
 #**************************************
 # RFECV feature selection
@@ -128,7 +122,9 @@ def rfecv(model, name):
 
     print('New List: ' + str(list))
 
-        # Plot number of features VS. cross-validation scores
+
+
+    # Plot number of features VS. cross-validation scores
     plt.figure()
     plt.title(name, {'size': '22'})
     plt.xlabel("Number of features selected", {'size': '18'})
@@ -136,11 +132,17 @@ def rfecv(model, name):
     plt.plot(range(1, len(list) + 1), list)
     plt.show()
 
-
+    return list
 
 
 
 # Calling RFECV function for all three models
-#rfecv(LinearSVC(), "RFECV - Linear SVC")
+rfecv(LinearSVC(), "RFECV - Linear SVC")
 rfecv(tree.DecisionTreeClassifier(), "RFECV - Decision Tree")
-#rfecv(RandomForestClassifier(), "RFECV - Random Forest")
+rfecv(RandomForestClassifier(), "RFECV - Random Forest")
+
+
+# Used to save rfecv data
+# Change file or path name as desired
+list = pd.DataFrame(list)
+#list.to_csv('~/Downloads/network_classification/src/data/rfecv_random_tree_data.csv')

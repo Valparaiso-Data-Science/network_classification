@@ -3,43 +3,104 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import Normalizer, Imputer
 from sklearn.pipeline import make_pipeline
+from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
+from bokeh.plotting import figure, output_file, show
+from bokeh.models import HoverTool, ColumnDataSource
+from bokeh.palettes import d3
+import scipy
 
-net = pd.read_csv('~/PycharmProjects/network_classification/data/interim/data_without_dimacs_or_bhoslib.csv')
-
-# getting rid of cheminformatics for fun?
-net = net[net['Collection'] != 'Cheminformatics']
-
-#i need a list of the collections as numbers-useful in coloring tsne
-graph_categories = []
-all_categories = net['Collection'].values
-#creates a list of the existing categories, no repeats
-for category in all_categories:
-    if not category in graph_categories:
-        graph_categories.append( category )
-#re-assigns each collection name in all_categories to an integer, corresponding with its position in graph_categories
-for i in range(len( all_categories )):
-    all_categories[i] = graph_categories.index( all_categories[i] )
+# Read file
+tsne_data = pd.read_csv('~/PycharmProjects/network_classification/src/data/data_minmaxscale.csv', index_col=0)
 
 
-del net['Graph']
-del net['Collection']
-del net['Chromatic Number']
+# Make a copy of the data
+tsne_new = pd.DataFrame.copy(tsne_data)
 
-net_array = net.values
 
-imp = Imputer(missing_values='NaN', strategy='most_frequent', axis=0)
-norm = Normalizer()
+# Delete categorical columns
+del tsne_new['Collection']
+del tsne_new['Graph']
+#del tsne_new['Category Number']
 
-lrates = [300, 400, 500, 600, 700, 800, 900, 1000]
+
+# Create array of data (only numerical columns)
+tsne_array = tsne_new.values
+
+# Get category and graph names for new dataframe
+category = tsne_data['Collection']
+names = tsne_data['Graph']
+
+# Get all categories without repetitions
+all_categories = category.unique().tolist()
+
+lrates = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
 for l in lrates:
-    tsne = TSNE(learning_rate=l)
-    pipeline = make_pipeline(imp, norm, tsne)
+    tsne = TSNE(learning_rate=l, metric=scipy.spatial.distance.canberra)
 
-    tsne_features = pipeline.fit_transform(net_array)
+
+
+    tsne_features = tsne.fit_transform(tsne_array)
     xs = tsne_features[:,0]
     ys = tsne_features[:,1]
-    plt.scatter(xs, ys, c=all_categories)
-    plt.title('TSNE with Learning Rate '+str(l))
-    plt.show()
+
+
+
+    # **************************
+    # Creating plot of kmeans
+    # using tsne data in bokeh
+    # **************************
+    # Create KMeans with 8 clusters and fit data to model
+    kmeans = KMeans(n_clusters=7)
+    kmeans.fit_transform(tsne_features)
+    labels = kmeans.predict(tsne_features)
+    centroids = kmeans.cluster_centers_
+
+    # **************************
+    # write out labels for use in boxplots/table
+    # **************************
+
+    # tsne_data['Label'] = labels
+    # tsne_data.to_csv('~/PycharmProjects/network_classification/src/data/tsne_label_data.csv')
+
+    # Assign the columns of centroids: centroids_x, centroids_y
+    centroids_x = centroids[:, 0]
+    centroids_y = centroids[:, 1]
+
+    df_labels = pd.read_csv('~/Downloads/network_classification/src/data/tsne_label_data.csv')
+
+    # Create cross tabulation of tsne data and print
+    df1 = pd.DataFrame({'labels': df_labels['Label'], 'Collection': df_labels['Category Name']})
+    print("Crosstab for t-SNE data:\n")
+    ct = pd.crosstab(df1['Collection'], df1['labels'])
+    print(ct)
+
+    data = {'x': xs, 'y': ys, 'Collection': category, 'Graph': names}
+    df = pd.DataFrame(data)
+
+    df.to_csv('~/Downloads/network_classification/src/data/tsne_canberra_coord_700_2.csv')
+
+    # Create hover tool
+    hover = HoverTool()
+    hover.tooltips = [("Graph", "@Graph"), ("Category", "@{Collection}")]
+
+    # Creating the scatter plot of the x and y coordinates
+    m = figure(title = 't-SNE using Canberra Distance', plot_width=1000)
+
+    # Color the plot by collection
+    category = df['Collection']
+    all_categories = category.unique().tolist()
+    for i, graph in enumerate(all_categories):
+        source = ColumnDataSource(df[df['Collection'] == graph])
+        m.circle(x='x', y='y', source=source, color=d3['Category20'][16][i], size=8, legend=graph)
+
+    # Creating scatter plot of centroids
+    m.square_cross(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
+
+    # Add tools and interactive legend
+    m.add_tools(hover)
+    m.legend.location = "top_left"
+    m.legend.click_policy = "hide"
+    # Save file and show plot
+    output_file(str(l) + '.html')
+    show(m)

@@ -16,6 +16,7 @@ tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_da
 
 tsne_data = tsne_data[tsne_data['Category Name'] != 'Temporal Reachability']
 
+
 # Make a copy of the data
 tsne_new = pd.DataFrame.copy(tsne_data)
 
@@ -63,6 +64,7 @@ def inertia_plot(data_array):
 # Creating plot of kmeans
 # using tsne data in bokeh
 #**************************
+
 # Create KMeans with 8 clusters and fit data to model
 kmeans = KMeans(n_clusters = 8)
 kmeans.fit_transform(tsne_array)
@@ -83,7 +85,7 @@ centroids_y = centroids[:,1]
 df_labels = pd.read_csv('~/Downloads/network_classification/src/data/tsne_label_data.csv')
 
 # Create cross tabulation of tsne data and print
-df1 = pd.DataFrame({'labels':df_labels[], 'Collection':tsne_data['Category Name']})
+df1 = pd.DataFrame({'labels':df_labels['Label'], 'Collection':df_labels['Category Name']})
 print("Crosstab for t-SNE data:\n")
 ct = pd.crosstab(df1['Collection'], df1['labels'])
 print(ct)
@@ -98,23 +100,53 @@ all_categories = category.unique().tolist()
 # Assign the columns of tsne_array
 xs = tsne_array[:,0]
 ys = tsne_array[:, 1]
-data = {'x': xs, 'y': ys, 'Category Name' : category, 'Graph': names}
+data = {'x': xs, 'y': ys, 'Category Name' : category, 'Graph': names, 'Label' : labels}
 
 # Create new pandas dataframe
 df=pd.DataFrame(data)
 
 # Create hover tool
 hover = HoverTool()
-hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}")]
+hover.tooltips = [("Graph", "@Graph"),("Category", "@{Category Name}"), ("Cluster", "@Label")]
 
 # Creating the figure for the scatter plot
 p=figure(title = 't-Distributed Stochastic Neighbor Embedding', plot_width=1000)
 p.title.text_font_size = '25pt'
 
 # Create scatter points and color the plot by collection
-for i, graph in enumerate(all_categories):
-    source = ColumnDataSource(df[df['Category Name'] == graph])
-    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][i], size = 8, legend = graph)
+#for i, graph in enumerate(all_categories):
+#    source = ColumnDataSource(df[df['Category Name'] == graph])
+#    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][i], size = 8, legend = graph)
+
+
+
+#Color by label
+#for label in range(14):
+#    source = ColumnDataSource(df[df['Label'] == label])
+#    p.circle(x='x', y='y', source = source, color = d3['Category20'][17][label], size = 8)
+
+
+colormap = {'Web Graphs':d3['Category20'][16][0], 'Technological Networks':d3['Category20'][16][1],
+            'Facebook Networks':d3['Category20'][16][2], 'Social Networks':d3['Category20'][16][3],
+            'Scientific Computing':d3['Category20'][16][4], 'Retweet Networks':d3['Category20'][16][5],
+            'Recommendation Networks':d3['Category20'][16][6], 'Massive Network Data':d3['Category20'][16][7],
+            'Infrastructure Networks':d3['Category20'][16][8], 'Interaction Networks':d3['Category20'][16][9],
+            'Ecology Networks': d3['Category20'][16][10], 'Collaboration Networks':d3['Category20'][16][11],
+            'Brain Networks': d3['Category20'][16][12], 'Biological Networks':d3['Category20'][16][13],
+            'Cheminformatics': d3['Category20'][16][14],}
+
+colors = [colormap[x] for x in df['Category Name']]
+#colors = [colormap[x] for all_categories(x).index in (for x in df['Category Name']) ]
+
+p.circle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 0]), size=8)
+p.triangle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 1]), color=colors, size=8)
+p.diamond(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 2]), color=colors, size=8)
+p.asterisk(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 3]), color=colors, size=8)
+p.cross(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 4]), color=colors, size=8)
+p.square(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 5]), color=colors, size=8)
+p.inverted_triangle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 6]), color=colors, size=8)
+p.square(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 7]), color=colors, size=8)
+
 
 # Creating scatter points of centroids
 p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid')
