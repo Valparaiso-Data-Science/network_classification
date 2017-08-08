@@ -38,3 +38,23 @@ show(p1,p2)
 # Show plot
 #plt.show()
 
+# Plot in bokeh
+
+
+#dict_old = ColumnDataSource(dict(x=df_old['Collection'].value_counts(), y = df_old['Collection'].unique(),))
+
+#p=figure(title = 'Collections of graphs ', plot_width=1000)
+#p.vbar(bottom=0, top=df['Collection'].value_counts(), x=df['Collection'].unique(), width=100)
+#p.vbar(bottom=0, top=df_old['Collection'].value_counts(), x=df_old['Collection'].unique(), width=100)
+
+#amounts = [119,114,62,48,36,22,19,16,13,11,9,9,8,6,2]
+#names = ['Cheminformatics', 'Facebook Networks', 'Retweet Networks', 'Social Networks', 'Brain Networks',
+#        'Web Graphs', 'Interaction Networks', 'Collaboration Networks', 'Recommendation Networks',
+#         'Scientific Computing', 'Technological Networks', 'Biological Networks', 'Infrastructure Networks',
+#         'Ecology Networks', 'Massive Network Data']
+
+#source = ColumnDataSource(dict(x=amounts, y = names))
+
+#p = Bar(df, values=amounts, label='Collection',group='Collection', title="Total MPG by CYL")
+
+#show(p)
