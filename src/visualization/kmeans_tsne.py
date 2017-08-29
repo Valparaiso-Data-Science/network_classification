@@ -8,11 +8,11 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.palettes import d3
 import matplotlib.pyplot as plt
-
+from bokeh.io import export_svgs
 
 
 # Read file
-tsne_data = pd.read_csv('~/Downloads/network_classification/src/data/new_tsne_data.csv', index_col=0)
+tsne_data = pd.read_csv('../data/new_tsne_data.csv', index_col=0)
 
 tsne_data = tsne_data[tsne_data['Category Name'] != 'Temporal Reachability']
 
@@ -82,7 +82,7 @@ centroids = kmeans.cluster_centers_
 centroids_x = centroids[:,0]
 centroids_y = centroids[:,1]
 
-df_labels = pd.read_csv('~/Downloads/network_classification/src/data/tsne_label_data.csv')
+df_labels = pd.read_csv('../data/tsne_label_data.csv')
 
 # Create cross tabulation of tsne data and print
 df1 = pd.DataFrame({'labels':df_labels['Label'], 'Collection':df_labels['Category Name']})
@@ -135,17 +135,29 @@ colormap = {'Web Graphs':d3['Category20'][16][0], 'Technological Networks':d3['C
             'Brain Networks': d3['Category20'][16][12], 'Biological Networks':d3['Category20'][16][13],
             'Cheminformatics': d3['Category20'][16][14],}
 
-colors = [colormap[x] for x in df['Category Name']]
-#colors = [colormap[x] for all_categories(x).index in (for x in df['Category Name']) ]
 
-p.circle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 0]), size=8)
-p.triangle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 1]), color=colors, size=8)
-p.diamond(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 2]), color=colors, size=8)
-p.asterisk(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 3]), color=colors, size=8)
-p.cross(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 4]), color=colors, size=8)
-p.square(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 5]), color=colors, size=8)
-p.inverted_triangle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 6]), color=colors, size=8)
-p.square(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 7]), color=colors, size=8)
+
+#colors = [colormap[x] for x in df['Category Name']]
+#colors = [colormap[x] for all_categories(x).index in (for x in df['Category Name']) ]
+df = df.assign(colors = [colormap[x] for x in df['Category Name']])
+
+source0=df[df['Label']==0]
+source1=df[df['Label']==1]
+source2=df[df['Label']==2]
+source3=df[df['Label']==3]
+source4=df[df['Label']==4]
+source5=df[df['Label']==5]
+
+#p.circle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 0]), legend='Category Name', size=8)
+p.triangle(x='x', y='y', source=ColumnDataSource(source0), legend='Category Name',color='colors', size=8)
+#p.triangle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 1]), color=colors, legend='Category Name', size=8)
+p.circle(x='x', y='y', source=ColumnDataSource(source1), legend='Category Name', color='colors', size=8)
+p.diamond(x='x', y='y', source=ColumnDataSource(source2), color='colors', legend='Category Name', size=8)
+p.asterisk(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 3]), color='colors', legend='Category Name', size=8)
+p.cross(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 4]), color='colors', legend='Category Name', size=8)
+p.square(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 5]), color='colors', legend='Category Name', size=8)
+p.inverted_triangle(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 6]), color='colors', legend='Category Name', size=8)
+p.square(x='x', y='y', source=ColumnDataSource(df[df['Label'] == 7]), color='colors', legend='Category Name', size=8)
 
 
 # Creating scatter points of centroids
@@ -155,6 +167,8 @@ p.square(centroids_x, centroids_y, color ='black', size = 12, legend = 'Centroid
 p.add_tools(hover)
 p.legend.location = "top_left"
 p.legend.click_policy="hide"
+#p.output_backend="svg"
+#export_svgs(p, filename="tsnesvg.svg")
 #p.legend.label_text_font_size = "16pt"
 #p.legend.background_fill_alpha = 0
 
