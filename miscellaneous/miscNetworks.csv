@@ -1,0 +1,36 @@
+Metadata,Description Network,Category,Collection,Tags,Short,Vertex Type,Edge Type,Format,Edge Weights,Description,Citation/Link,DOI
+Miscellaneous Network Names,,,,,,,,,,,,
+08Blocks,Symmetric Powers of Graphs,,SuiteSparse Matrix Collection,combinatorial problem,,,,,Weighted,"Symmetric powers of graphs from Gordon Royle, univ of Western Australia",http://research-repository.uwa.edu.au/en/publications/symmetric-squares-of-graphs(bbd0b99f-9ad3-4d8c-8c8c-b55b5429668b)/export.html,10.1016/j.jctb.2006.04.002
+1138-Bus,Power Network,,,"power network problem, weighted network",,,,,Weighted,,https://sparse.tamu.edu/HB/494_bus,
+12month1,Undirected Bipartite Graph,,,undirected bipartite graph,,,,,Unweighted,,https://sparse.tamu.edu/Buss/12month1,
+130BIT,Combinatorial problem,,,Combinatorial problem,,,,,Unweighted,,https://www.cise.ufl.edu/research/sparse/matrices/Priebel/130bit.html,
+144,undirected DIMACS10 set,,UF Sparse Matrix Collection,undirected graph,,,,,unweighted,DIMACS10 set,https://www.cise.ufl.edu/research/sparse/matrices/DIMACS10/144.html,
+145bit,Combinatorial Problem,,UF Sparse Matrix Collection,combinatorial problem,,,,,Unweighted,"Quadratic sieve; factoring a 145bit number. D. Priebel, Tenn. Tech Univ",https://www.cise.ufl.edu/research/sparse/matrices/Priebel/145bit.html,
+162bit,Combinatorial Problem,,SuiteSparse Matrix Collection,combinatorial problem,,,,,Unweighted,"Quadratic sieve; factoring a 162bit number. D. Priebel, Tenn. Tech Univ",https://sparse.tamu.edu/Priebel/162bit,
+176bit,Combinatorial Problem,,UF Sparse Matrix Collection,combinatorial problem,,,,,Unweighted,"Quadratic sieve; factoring a 176bit number. D. Priebel, Tenn. Tech Univ",https://www.cise.ufl.edu/research/sparse/matrices/Priebel/176bit.html,
+192bit,Combinatorial Problem,,UF Sparse Matrix Collection,combinatorial problem,,,,,Unweighted,"Quadratic sieve; factoring a 192bit number. D. Priebel, Tenn. Tech Univ",https://www.cise.ufl.edu/research/sparse/matrices/Priebel/192bit.html,
+208bit,Combinatorial Problem,,SuiteSparse Matrix Collection,combinatorial problem,,,,,Unweighted,"Quadratic sieve; factoring a 208bit number. D. Priebel, Tenn. Tech Uni",https://sparse.tamu.edu/Priebel/208bit,
+2D-27628-bjtcai,Semiconductor Device Problem,,SuiteSparse Matrix Collection,"semiconductor device problem, weighted network",,,,,Weighted,"Olaf Schenk, Univ. Basel",https://sparse.tamu.edu/Schenk_IBMSDS/2D_27628_bjtcai,
+2D-54019-highK,Semiconductor Device Problem,,SuiteSparse Matrix Collection,"semiconductor device problem, weighted network",,,,,Weighted,"Olaf Schenk, Univ. Basel",https://sparse.tamu.edu/Schenk_IBMSDS/2D_54019_highK,
+2cubes-sphere,Electromagnetics Problem,,SuiteSparse Matrix Collection,"electromagnetics problem, weighted network",,,,,Weighted,"FEM, electromagnetics, 2 cubes in a sphere. Evan Um, Geophysics, Stanford",https://sparse.tamu.edu/Um/2cubes_sphere,
+3D-28984-TETRA,Semiconductor Device Problem,,,"semiconductor device problem, weighted network",,,,,Weighted,"Olaf Schenk, Univ. Basel",,
+3D-51448-3D,Semiconductor Device Problem,,,"semiconductor device problem, weighted network",,,,,Weighted,"Olaf Schenk, Univ. Basel",,
+3Dspectralwave,Materials Problem,,UF Sparse Matrix Collection,"materials problem, weighted network",,,,,Weighted,"3-D spectral-element elastic wave modelling in freq. domain, C. Sinclair, Univ. Adelaide",https://www.cise.ufl.edu/research/sparse/matrices/Sinclair/3Dspectralwave.html,
+3Dspectralwave2,Materials Problem,,UF Sparse Matrix Collection,"materials problem, weighted network",,,,,Weighted,"3-D spectral-element elastic wave modelling in freq. domain, C. Sinclair, Univ. Adelaide",https://www.cise.ufl.edu/research/sparse/matrices/Sinclair/3Dspectralwave2.html,
+3Dtube,Computational Fluid Dynamics Problem,,UF Sparse Matrix Collection,computational fluid dynamics problem,,,,,Unweighted,3-D pressure tube,https://www.cise.ufl.edu/research/sparse/matrices/Rothberg/3dtube.html,
+3elt,2D/3D Problem,,UF Sparse Matrix Collection,2D/3D Problem,,,,,Unweighted,2D finite element problem,https://www.cise.ufl.edu/research/sparse/matrices/AG-Monien/3elt.html,
+3elt-dual,2D/3D Problem,,UF Sparse Matrix Collection,2D/3D Problem,,,,,Unweighted,2D finite element problem,,
+494-bus,Power Network Problem,,UF Sparse Matrix Collection,"power network problem, weighted network",,,,,Weighted,"S ADMITTANCE MATRIX 494 BUS POWER SYSTEM, D.J.TYLAVSKY, JULY 1985.",https://www.cise.ufl.edu/research/sparse/matrices/HB/494_bus.html,
+598a,Undirected Graph,,UF Sparse Matrix Collection,undirected graph,,,,,Unweighted,DIMACS10 set,https://www.cise.ufl.edu/research/sparse/matrices/DIMACS10/598a.html,
+662-bus,Power Network Problem,,UF Sparse Matrix Collection,"power network problem, weighted network",,,,,Weighted,"S ADMITTANCE MATRIX 662 BUS POWER SYSTEM, D.J.TYLAVSKY, JULY 1985.",https://www.cise.ufl.edu/research/sparse/matrices/HB/662_bus.html,10.1109/59.99398
+Benzene,Theoretical/quantum chemistry problem,,,"theoretical/quantum chemistry problem, weighted network",,,,,Weighted,Real-space pesydopotential method,https://www.cise.ufl.edu/research/sparse/matrices/PARSEC/Na5.html,
+ABACUS-SHELL-HD,Model Reduction Problem,,,,,,,,,,,
+CAG-MAT1916,Combinatorial Problem,,UF Sparse Matrix Collection,"combinatorial problem, weighted network",,,,,Weighted,"CAG matrix set from Michael Monagan, Simon Fraser Univ., Canada",https://www.cise.ufl.edu/research/sparse/matrices/JGD_CAG/CAG_mat72.html,
+CAG-MAT364,Combinatorial Problem,,UF Sparse Matrix Collection,"combinatorial problem, weighted network",,,,,Weighted,"CAG matrix set from Michael Monagan, Simon Fraser Univ., Canada",https://www.cise.ufl.edu/research/sparse/matrices/JGD_CAG/CAG_mat364.html,
+California,Directed Graph,,,Directed Graph,,,,,Unweighted,Pajek network,"""https://www.cise.ufl.edu/research/sparse/matrices/Pajek/California.html""",
+Chem97ZtZ,Statistical/mathematical problem,,,"Statistical/mathematical problem, weighted networks",,,,,Weighted ,Mixed Effects Model,"""https://www.cise.ufl.edu/research/sparse/matrices/Bates/Chem97ZtZ.html""",
+Cities,Weighted Bipartite Graph,,,,,,,,Weighted,Pajek network,"""https://sparse.tamu.edu/Pajek/Cities""",
+D6-6,Combinatorial Problem,,,"Combinatorial problem, weighted network ",,,,,Weighted ,Simplicial complexes from Homology,"""https://sparse.tamu.edu/JGD_Homology/D6-6""",
+Dubcova1,2D/3D Problem,,,"2D/3D Problem, weighted network ",,,,,Weighted,,"""https://www.cise.ufl.edu/research/sparse/matrices/UTEP/Dubcova1.html""",10.1007/s00607-012-0243-7
+Erdos972,Undirected Graph,,,undirected graph,,,,,Unweighted,pajek network,"""https://www.cise.ufl.edu/research/sparse/matrices/Pajek/Erdos972.html""",10.1016/S0378-8733(00)00023-X
+FullChip,Circuit Simulation Problem,,,"Circuit Simulation Problem, weighted",,,,,Weighted,Circuit Simulation,"""https://www.cise.ufl.edu/research/sparse/matrices/Freescale/FullChip.html""",10.1007/978-94-007-0149-6_2
