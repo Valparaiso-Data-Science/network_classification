@@ -1,0 +1,113 @@
+Invalid argument --all, ignoring.
+
+
+File Name ------------------------ edges/NC_edges.txt
+[mcpack parallel]  4 worker nodes
+
+======================================================================================
+         Parameterized Parallel Maximum Clique Framework
+======================================================================================
+problem = mc
+--------------------------------------------------------------------------------
+heuristic type = pruned
+heuristic global ordering = degree, largest to smallest
+heuristic local ordering = deg_vol, smallest to largest
+--------------------------------------------------------------------------------
+global ordering = degree, smallest to largest
+global pruning = kcore
+global representation = csc
+global edge ordering = degree, largest to smallest
+--------------------------------------------------------------------------------
+local ordering = coloring, largest to smallest 
+local pruning = kcore
+local representation = hybrid
+--------------------------------------------------------------------------------
+search method = repair
+search ordering = coloring, largest to smallest 
+search pruning = coloring
+search representation = hybrid
+--------------------------------------------------------------------------------
+coloring_method (dynamic) = color-centric-pruning
+coloring_type = repair
+--------------------------------------------------------------------------------
+block size = 1
+workers (processing units, cores) = 4
+--------------------------------------------------------------------------------
+dynamic density cutoff = 0.8
+dynamic search threshold = 0.025
+neigh cores (local pruning/ordering) = 0
+time limit = 3600
+reduce time = 4
+adj limit = 10000
+--------------------------------------------------------------------------------
+lb = 0
+ub = 0
+param_ub = 0
+k = 0
+--------------------------------------------------------------------------------
+graph reader: general
+--------------------------------------------------------------------------------
+
+[graphpack: graph reader]  All graphs are assumed to be undirected
+[graphpack: graph reader]  Self-loops and weights (if any) are discarded
+[graphpack: general graph reader]  reading the edge list
+[mcpack]  detected " " as delimiter! 
+number of tokens in line = 2 
+--------------------------------------------------------------------------------
+[graphpack: graph reader]  reading a general edge list
+[graphpack: graph reader]     - multiple edges are removed
+[graphpack: graph reader]     - self-loops are removed
+[graphpack: graph reader]     - weight/time is stored in the third column, 4th col is igored if it exists
+[graphpack: graph reader]     - vertex ids are adjusted to start from 0 (if not already)
+[graphpack: graph reader]     - gaps in vertex ids are removed (on the fly)
+[graphpack: graph reader]     - vertex/edge wts, time, and the vertex lookup table are not stored, unless specified
+--------------------------------------------------------------------------------
+[graphpack: graph reader]  largest vertex id is 887629
+[graphpack: graph reader]  vertex ids begin at 0
+vert_list size: 887617
+self-loops: 3227
+Reading time 1.04203
+|V|: 887617
+|E|: 1006619
+p: 2.55531e-06
+d_max: 7
+d_avg: 2
+[graphpack: SPARSE graph detected]  optimizing internal data structures 
+triangles: 36290 (time: 0.034791), 
+max triangle core = 2
+0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 max triangle core: 4 (time: 0.0277882), 
+computing fast triangles *** 
+cc_avg: 0.0132978, cc_global: 0.0217008, T_max: 6, T_avg: 0, |T|=36102 
+graph: edges/NC_edges.txt
+alg: 0
+-------------------------------
+Graph Stats for Max-Clique:
+-------------------------------
+|V|: 887617
+|E|: 1006619
+d_max: 7
+d_avg: 2
+p: 2.55531e-06
+|T|: 36102
+T_avg: 0
+T_max: 6
+cc_avg: 0.0132978
+cc_global: 0.0217008
+--------------------------
+Maximum Clique Bounds:
+--------------------------
+d_max: 7
+T_ub: 6.95335e-310
+sqrt(2Tmaxi) computed in 0.0177519 seconds
+K: 4
+Kcores computed in 0.039952 seconds
+T: 4
+Tcores computed in 0.0884311 seconds
+explicit reduce is set to 4 seconds
+K: 4
+K_time: 0.038656
+[computing ordering]  0, direction = smallest to largest
+[graphpack: heuristic]  small to large, PRUNED 
+Heuristic found clique of size 4 in 0.120323 seconds
+[graphpack: heuristic]  Maximum clique: 469170 469175 469172 469173 
+Heuristic found optimal solution.
